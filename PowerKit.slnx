@@ -8,4 +8,5 @@
   </Folder>
 
   <Project Path="PowerKit/PowerKit.csproj" />
+  <Project Path="PowerKit.Tests/PowerKit.Tests.csproj" />
 </Solution>
