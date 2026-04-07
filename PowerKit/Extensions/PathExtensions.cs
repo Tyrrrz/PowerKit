@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -34,12 +33,9 @@ internal static class PathExtensions
             foreach (var c in path)
                 buffer.Append(!InvalidFileNameChars.Contains(c) ? c : '_');
 
-            // File names cannot end with a dot on Windows
-            if (OperatingSystem.IsWindows())
-            {
-                while (buffer.Length > 0 && buffer[^1] == '.')
-                    buffer.Remove(buffer.Length - 1, 1);
-            }
+            // File names cannot end with a dot (invalid on Windows, ambiguous on other filesystems)
+            while (buffer.Length > 0 && buffer[buffer.Length - 1] == '.')
+                buffer.Remove(buffer.Length - 1, 1);
 
             return buffer.ToString();
         }

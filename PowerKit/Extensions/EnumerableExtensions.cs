@@ -3,16 +3,8 @@ using System.Linq;
 
 namespace PowerKit.Extensions;
 
-internal static class CollectionExtensions
+internal static class EnumerableExtensions
 {
-    extension<T>(T obj)
-    {
-        public IEnumerable<T> ToSingletonEnumerable()
-        {
-            yield return obj;
-        }
-    }
-
     extension<T>(IEnumerable<T?> source)
         where T : class
     {
@@ -46,7 +38,7 @@ internal static class CollectionExtensions
             foreach (var item in source)
             {
                 if (!string.IsNullOrWhiteSpace(item))
-                    yield return item;
+                    yield return item!;
             }
         }
     }
@@ -65,7 +57,7 @@ internal static class CollectionExtensions
         public T? ElementAtOrNull(int index)
         {
             var list = source as IReadOnlyList<T> ?? source.ToArray();
-            return index < list.Count ? list[index] : null;
+            return index >= 0 && index < list.Count ? list[index] : null;
         }
     }
 }

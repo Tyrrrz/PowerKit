@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PowerKit.Extensions;
 
-internal static class GenericExtensions
+internal static class FunctionalExtensions
 {
     extension<TIn>(TIn input)
     {

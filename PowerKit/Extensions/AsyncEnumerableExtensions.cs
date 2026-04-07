@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
-internal static class AsyncCollectionExtensions
+internal static class AsyncEnumerableExtensions
 {
     extension<T>(IAsyncEnumerable<T> source)
     {

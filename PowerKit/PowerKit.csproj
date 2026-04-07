@@ -1,8 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="PowerKit.props" />
-
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
@@ -13,7 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="PowerKit.props" Pack="true" PackagePath="build" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
+    <PackageReference Include="PolyShim" Version="2.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content
       Include="**/*.cs"
       Exclude="obj/**/*.cs"
