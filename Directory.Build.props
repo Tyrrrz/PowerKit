@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.0.0-dev</Version>
+    <Company>Tyrrrz</Company>
+    <Copyright>Copyright (C) Oleksii Holub</Copyright>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>$(Company)</Authors>
+    <Description>Collection of shared utility extensions for Tyrrrz projects.</Description>
+    <PackageTags>utils extensions utilities source</PackageTags>
+    <PackageProjectUrl>https://github.com/Tyrrrz/PowerKit</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Tyrrrz/PowerKit/releases</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+</Project>
