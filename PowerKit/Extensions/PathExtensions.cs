@@ -26,11 +26,11 @@ internal static class PathExtensions
 
     extension(Path)
     {
-        public static string EscapeFileName(string path)
+        public static string EscapeFileName(string fileName)
         {
-            var buffer = new StringBuilder(path.Length);
+            var buffer = new StringBuilder(fileName.Length);
 
-            foreach (var c in path)
+            foreach (var c in fileName)
                 buffer.Append(!InvalidFileNameChars.Contains(c) ? c : '_');
 
             // File names cannot end with a dot (invalid on Windows, ambiguous on other filesystems)

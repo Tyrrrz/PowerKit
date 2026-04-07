@@ -60,7 +60,9 @@ internal static class StreamExtensions
                     .ConfigureAwait(false);
 
                 totalBytesRead += bytesRead;
-                progress?.Report(1.0 * totalBytesRead / source.Length);
+
+                if (progress is not null && source.CanSeek && source.Length > 0)
+                    progress.Report(1.0 * totalBytesRead / source.Length);
             }
         }
     }

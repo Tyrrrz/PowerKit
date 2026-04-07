@@ -14,9 +14,16 @@ internal static class AsyncEnumerableExtensions
             [EnumeratorCancellation] CancellationToken cancellationToken = default
         )
         {
+            if (count <= 0)
+                yield break;
+
             var currentCount = 0;
 
-            await foreach (var item in source.WithCancellation(cancellationToken))
+            await foreach (
+                var item in source
+                    .WithCancellation(cancellationToken)
+                    .ConfigureAwait(false)
+            )
             {
                 if (currentCount >= count)
                     yield break;
@@ -31,7 +38,11 @@ internal static class AsyncEnumerableExtensions
             [EnumeratorCancellation] CancellationToken cancellationToken = default
         )
         {
-            await foreach (var item in source.WithCancellation(cancellationToken))
+            await foreach (
+                var item in source
+                    .WithCancellation(cancellationToken)
+                    .ConfigureAwait(false)
+            )
                 foreach (var result in transform(item))
                     yield return result;
         }
@@ -42,7 +53,11 @@ internal static class AsyncEnumerableExtensions
         {
             var list = new List<T>();
 
-            await foreach (var item in source.WithCancellation(cancellationToken))
+            await foreach (
+                var item in source
+                    .WithCancellation(cancellationToken)
+                    .ConfigureAwait(false)
+            )
                 list.Add(item);
 
             return list;
