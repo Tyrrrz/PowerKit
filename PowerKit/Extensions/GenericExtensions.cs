@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PowerKit.Utils.Extensions;
+namespace PowerKit.Extensions;
 
 internal static class GenericExtensions
 {

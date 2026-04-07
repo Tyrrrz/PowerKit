@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PowerKit.Utils;
+namespace PowerKit;
 
 internal partial class Disposable(Action dispose) : IDisposable
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace PowerKit.Utils.Extensions;
+namespace PowerKit.Extensions;
 
 internal static class TimeSpanExtensions
 {

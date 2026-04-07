@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace PowerKit.Utils.Extensions;
+namespace PowerKit.Extensions;
 
 internal static class PathExtensions
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PowerKit.Utils.Extensions;
+namespace PowerKit.Extensions;
 
 internal static class ExceptionExtensions
 {

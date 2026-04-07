@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace PowerKit.Utils.Extensions;
+namespace PowerKit.Extensions;
 
 internal static class TextReaderExtensions
 {
