@@ -1,4 +1,5 @@
 using System.IO;
+using FluentAssertions;
 using PowerKit.Extensions;
 
 namespace PowerKit.Tests;
@@ -6,56 +7,65 @@ namespace PowerKit.Tests;
 public class PathExtensionsTests
 {
     [Fact]
-    public void EscapeFileName_ValidName_ReturnsUnchanged()
+    public void EscapeFileName_Test()
     {
-        Assert.Equal("hello world.txt", Path.EscapeFileName("hello world.txt"));
+        // Act & assert
+        Path.EscapeFileName("hello world.txt").Should().Be("hello world.txt");
     }
 
     [Fact]
-    public void EscapeFileName_ReplacesForwardSlash()
+    public void EscapeFileName_ForwardSlash_Test()
     {
-        Assert.Equal("a_b", Path.EscapeFileName("a/b"));
+        // Act & assert
+        Path.EscapeFileName("a/b").Should().Be("a_b");
     }
 
     [Fact]
-    public void EscapeFileName_ReplacesBackslash()
+    public void EscapeFileName_Backslash_Test()
     {
-        Assert.Equal("a_b", Path.EscapeFileName("a\\b"));
+        // Act & assert
+        Path.EscapeFileName("a\\b").Should().Be("a_b");
     }
 
     [Fact]
-    public void EscapeFileName_ReplacesColon()
+    public void EscapeFileName_Colon_Test()
     {
-        Assert.Equal("C_drive", Path.EscapeFileName("C:drive"));
+        // Act & assert
+        Path.EscapeFileName("C:drive").Should().Be("C_drive");
     }
 
     [Fact]
-    public void EscapeFileName_ReplacesAllInvalidChars()
+    public void EscapeFileName_AllInvalidChars_Test()
     {
-        Assert.Equal("a_b_c_d_e_f_g_h_i", Path.EscapeFileName("a\0b/c\\d:e*f?g\"h<i"));
+        // Act & assert
+        Path.EscapeFileName("a\0b/c\\d:e*f?g\"h<i").Should().Be("a_b_c_d_e_f_g_h_i");
     }
 
     [Fact]
-    public void EscapeFileName_StripsTrailingDots()
+    public void EscapeFileName_TrailingDots_Test()
     {
-        Assert.Equal("hello", Path.EscapeFileName("hello..."));
+        // Act & assert
+        Path.EscapeFileName("hello...").Should().Be("hello");
     }
 
     [Fact]
-    public void EscapeFileName_DotsInMiddle_PreservesDots()
+    public void EscapeFileName_DotsInMiddle_Test()
     {
-        Assert.Equal("hello.world", Path.EscapeFileName("hello.world"));
+        // Act & assert
+        Path.EscapeFileName("hello.world").Should().Be("hello.world");
     }
 
     [Fact]
-    public void EscapeFileName_OnlyDots_ReturnsEmpty()
+    public void EscapeFileName_OnlyDots_Test()
     {
-        Assert.Equal("", Path.EscapeFileName("..."));
+        // Act & assert
+        Path.EscapeFileName("...").Should().Be("");
     }
 
     [Fact]
-    public void EscapeFileName_EmptyString_ReturnsEmpty()
+    public void EscapeFileName_Empty_Test()
     {
-        Assert.Equal("", Path.EscapeFileName(""));
+        // Act & assert
+        Path.EscapeFileName("").Should().Be("");
     }
 }

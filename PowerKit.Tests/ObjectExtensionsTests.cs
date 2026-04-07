@@ -1,3 +1,4 @@
+using FluentAssertions;
 using PowerKit.Extensions;
 
 namespace PowerKit.Tests;
@@ -5,25 +6,35 @@ namespace PowerKit.Tests;
 public class ObjectExtensionsTests
 {
     [Fact]
-    public void ToSingletonEnumerable_ReturnsEnumerableWithSingleElement()
+    public void ToSingletonEnumerable_Test()
     {
+        // Act
         var result = 42.ToSingletonEnumerable().ToList();
-        Assert.Single(result, 42);
+
+        // Assert
+        result.Should().Equal(42);
     }
 
     [Fact]
-    public void ToSingletonEnumerable_WorksWithReferenceType()
+    public void ToSingletonEnumerable_ReferenceType_Test()
     {
-        var obj = "hello";
-        var result = obj.ToSingletonEnumerable().ToList();
-        Assert.Single(result, "hello");
+        // Act
+        var result = "hello".ToSingletonEnumerable().ToList();
+
+        // Assert
+        result.Should().Equal("hello");
     }
 
     [Fact]
-    public void ToSingletonEnumerable_WorksWithNull()
+    public void ToSingletonEnumerable_Null_Test()
     {
+        // Arrange
         string? obj = null;
+
+        // Act
         var result = obj.ToSingletonEnumerable().ToList();
-        Assert.Single(result, (string?)null);
+
+        // Assert
+        result.Should().Equal((string?)null);
     }
 }

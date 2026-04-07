@@ -1,4 +1,5 @@
 using System.IO;
+using FluentAssertions;
 using PowerKit.Extensions;
 
 namespace PowerKit.Tests;
@@ -6,26 +7,41 @@ namespace PowerKit.Tests;
 public class TextReaderExtensionsTests
 {
     [Fact]
-    public async Task ReadLinesAsync_ReadsAllLines()
+    public async Task ReadLinesAsync_Test()
     {
+        // Arrange
         using var reader = new StringReader("line1\nline2\nline3");
+
+        // Act
         var lines = await reader.ReadLinesAsync().ToListAsync();
-        Assert.Equal(["line1", "line2", "line3"], lines);
+
+        // Assert
+        lines.Should().Equal("line1", "line2", "line3");
     }
 
     [Fact]
-    public async Task ReadLinesAsync_EmptyReader_ReturnsEmpty()
+    public async Task ReadLinesAsync_Empty_Test()
     {
+        // Arrange
         using var reader = new StringReader("");
+
+        // Act
         var lines = await reader.ReadLinesAsync().ToListAsync();
-        Assert.Empty(lines);
+
+        // Assert
+        lines.Should().BeEmpty();
     }
 
     [Fact]
-    public async Task ReadLinesAsync_SingleLine_ReturnsSingleLine()
+    public async Task ReadLinesAsync_SingleLine_Test()
     {
+        // Arrange
         using var reader = new StringReader("hello");
+
+        // Act
         var lines = await reader.ReadLinesAsync().ToListAsync();
-        Assert.Single(lines, "hello");
+
+        // Assert
+        lines.Should().Equal("hello");
     }
 }

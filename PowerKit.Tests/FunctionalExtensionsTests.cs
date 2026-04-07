@@ -1,3 +1,4 @@
+using FluentAssertions;
 using PowerKit.Extensions;
 
 namespace PowerKit.Tests;
@@ -5,57 +6,79 @@ namespace PowerKit.Tests;
 public class FunctionalExtensionsTests
 {
     [Fact]
-    public void Pipe_TransformsValue()
+    public void Pipe_Test()
     {
+        // Act
         var result = 5.Pipe(x => x * 2);
-        Assert.Equal(10, result);
+
+        // Assert
+        result.Should().Be(10);
     }
 
     [Fact]
-    public void Pipe_ChainedCalls_AppliesInOrder()
+    public void Pipe_Chained_Test()
     {
+        // Act
         var result = "hello".Pipe(s => s.ToUpper()).Pipe(s => s + "!");
-        Assert.Equal("HELLO!", result);
+
+        // Assert
+        result.Should().Be("HELLO!");
     }
 
     [Fact]
-    public void NullIf_PredicateMatches_ReturnsNull()
+    public void NullIf_PredicateMatches_Test()
     {
-        int value = 0;
-        Assert.Null(value.NullIf(v => v == 0));
+        // Act
+        var result = 0.NullIf(v => v == 0);
+
+        // Assert
+        result.Should().BeNull();
     }
 
     [Fact]
-    public void NullIf_PredicateDoesNotMatch_ReturnsValue()
+    public void NullIf_PredicateDoesNotMatch_Test()
     {
-        int value = 5;
-        Assert.Equal(5, value.NullIf(v => v == 0));
+        // Act
+        var result = 5.NullIf(v => v == 0);
+
+        // Assert
+        result.Should().Be(5);
     }
 
     [Fact]
-    public void NullIfDefault_DefaultValue_ReturnsNull()
+    public void NullIfDefault_Default_Test()
     {
-        int value = 0;
-        Assert.Null(value.NullIfDefault());
+        // Act
+        var result = 0.NullIfDefault();
+
+        // Assert
+        result.Should().BeNull();
     }
 
     [Fact]
-    public void NullIfDefault_NonDefaultValue_ReturnsValue()
+    public void NullIfDefault_NonDefault_Test()
     {
-        int value = 42;
-        Assert.Equal(42, value.NullIfDefault());
+        // Act
+        var result = 42.NullIfDefault();
+
+        // Assert
+        result.Should().Be(42);
     }
 
     [Fact]
-    public void NullIfDefault_DefaultGuid_ReturnsNull()
+    public void NullIfDefault_DefaultGuid_Test()
     {
-        Assert.Null(Guid.Empty.NullIfDefault());
+        // Act & assert
+        Guid.Empty.NullIfDefault().Should().BeNull();
     }
 
     [Fact]
-    public void NullIfDefault_NonDefaultGuid_ReturnsValue()
+    public void NullIfDefault_NonDefaultGuid_Test()
     {
+        // Arrange
         var id = Guid.NewGuid();
-        Assert.Equal(id, id.NullIfDefault());
+
+        // Act & assert
+        id.NullIfDefault().Should().Be(id);
     }
 }

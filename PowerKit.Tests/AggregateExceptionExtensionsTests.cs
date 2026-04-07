@@ -1,3 +1,4 @@
+using FluentAssertions;
 using PowerKit.Extensions;
 
 namespace PowerKit.Tests;
@@ -5,38 +6,58 @@ namespace PowerKit.Tests;
 public class AggregateExceptionExtensionsTests
 {
     [Fact]
-    public void TryGetSingle_SingleInnerException_ReturnsIt()
+    public void TryGetSingle_Test()
     {
+        // Arrange
         var inner = new Exception("only");
         var aggregate = new AggregateException(inner);
 
-        Assert.Same(inner, aggregate.TryGetSingle());
+        // Act
+        var result = aggregate.TryGetSingle();
+
+        // Assert
+        result.Should().BeSameAs(inner);
     }
 
     [Fact]
-    public void TryGetSingle_MultipleInnerExceptions_ReturnsNull()
+    public void TryGetSingle_Multiple_Test()
     {
+        // Arrange
         var aggregate = new AggregateException(new Exception("a"), new Exception("b"));
 
-        Assert.Null(aggregate.TryGetSingle());
+        // Act
+        var result = aggregate.TryGetSingle();
+
+        // Assert
+        result.Should().BeNull();
     }
 
     [Fact]
-    public void TryGetSingle_NestedAggregateWithOneLeaf_ReturnsLeaf()
+    public void TryGetSingle_NestedSingleLeaf_Test()
     {
+        // Arrange
         var leaf = new Exception("leaf");
         var nested = new AggregateException(leaf);
         var outer = new AggregateException(nested);
 
-        Assert.Same(leaf, outer.TryGetSingle());
+        // Act
+        var result = outer.TryGetSingle();
+
+        // Assert
+        result.Should().BeSameAs(leaf);
     }
 
     [Fact]
-    public void TryGetSingle_NestedAggregateWithMultipleLeaves_ReturnsNull()
+    public void TryGetSingle_NestedMultipleLeaves_Test()
     {
+        // Arrange
         var nested = new AggregateException(new Exception("a"), new Exception("b"));
         var outer = new AggregateException(nested);
 
-        Assert.Null(outer.TryGetSingle());
+        // Act
+        var result = outer.TryGetSingle();
+
+        // Assert
+        result.Should().BeNull();
     }
 }

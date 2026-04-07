@@ -1,3 +1,4 @@
+using FluentAssertions;
 using PowerKit.Extensions;
 
 namespace PowerKit.Tests;
@@ -5,104 +6,121 @@ namespace PowerKit.Tests;
 public class StringExtensionsTests
 {
     [Fact]
-    public void NullIfWhiteSpace_NonWhitespaceString_ReturnsSame()
+    public void NullIfWhiteSpace_Test()
     {
-        Assert.Equal("hello", "hello".NullIfWhiteSpace());
+        // Act & assert
+        "hello".NullIfWhiteSpace().Should().Be("hello");
     }
 
     [Fact]
-    public void NullIfWhiteSpace_WhitespaceOnly_ReturnsNull()
+    public void NullIfWhiteSpace_Whitespace_Test()
     {
-        Assert.Null("   ".NullIfWhiteSpace());
+        // Act & assert
+        "   ".NullIfWhiteSpace().Should().BeNull();
     }
 
     [Fact]
-    public void NullIfWhiteSpace_EmptyString_ReturnsNull()
+    public void NullIfWhiteSpace_Empty_Test()
     {
-        Assert.Null("".NullIfWhiteSpace());
+        // Act & assert
+        "".NullIfWhiteSpace().Should().BeNull();
     }
 
     [Fact]
-    public void SubstringUntil_SubstringFound_ReturnsBeforeIt()
+    public void SubstringUntil_Test()
     {
-        Assert.Equal("hello", "hello world".SubstringUntil(" "));
+        // Act & assert
+        "hello world".SubstringUntil(" ").Should().Be("hello");
     }
 
     [Fact]
-    public void SubstringUntil_SubstringNotFound_ReturnsFullString()
+    public void SubstringUntil_NotFound_Test()
     {
-        Assert.Equal("hello", "hello".SubstringUntil("x"));
+        // Act & assert
+        "hello".SubstringUntil("x").Should().Be("hello");
     }
 
     [Fact]
-    public void SubstringUntil_SubstringAtStart_ReturnsEmpty()
+    public void SubstringUntil_AtStart_Test()
     {
-        Assert.Equal("", "xhello".SubstringUntil("x"));
+        // Act & assert
+        "xhello".SubstringUntil("x").Should().Be("");
     }
 
     [Fact]
-    public void SubstringAfter_SubstringFound_ReturnsAfterIt()
+    public void SubstringAfter_Test()
     {
-        Assert.Equal("world", "hello world".SubstringAfter(" "));
+        // Act & assert
+        "hello world".SubstringAfter(" ").Should().Be("world");
     }
 
     [Fact]
-    public void SubstringAfter_SubstringNotFound_ReturnsEmpty()
+    public void SubstringAfter_NotFound_Test()
     {
-        Assert.Equal("", "hello".SubstringAfter("x"));
+        // Act & assert
+        "hello".SubstringAfter("x").Should().Be("");
     }
 
     [Fact]
-    public void SubstringAfter_SubstringAtEnd_ReturnsEmpty()
+    public void SubstringAfter_AtEnd_Test()
     {
-        Assert.Equal("", "hellox".SubstringAfter("x"));
+        // Act & assert
+        "hellox".SubstringAfter("x").Should().Be("");
     }
 
     [Fact]
-    public void Truncate_StringShorterThanLimit_ReturnsFull()
+    public void Truncate_ShorterThanLimit_Test()
     {
-        Assert.Equal("hi", "hi".Truncate(10));
+        // Act & assert
+        "hi".Truncate(10).Should().Be("hi");
     }
 
     [Fact]
-    public void Truncate_StringExactlyAtLimit_ReturnsFull()
+    public void Truncate_ExactlyAtLimit_Test()
     {
-        Assert.Equal("hello", "hello".Truncate(5));
+        // Act & assert
+        "hello".Truncate(5).Should().Be("hello");
     }
 
     [Fact]
-    public void Truncate_StringLongerThanLimit_ReturnsTruncated()
+    public void Truncate_LongerThanLimit_Test()
     {
-        Assert.Equal("hel", "hello".Truncate(3));
+        // Act & assert
+        "hello".Truncate(3).Should().Be("hel");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_PascalCase_InsertsSpacesBeforeUppercase()
+    public void ToSpaceSeparatedWords_Test()
     {
-        Assert.Equal("Hello World", "HelloWorld".ToSpaceSeparatedWords());
+        // Act & assert
+        "HelloWorld".ToSpaceSeparatedWords().Should().Be("Hello World");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_SingleWord_ReturnsUnchanged()
+    public void ToSpaceSeparatedWords_SingleWord_Test()
     {
-        Assert.Equal("Hello", "Hello".ToSpaceSeparatedWords());
+        // Act & assert
+        "Hello".ToSpaceSeparatedWords().Should().Be("Hello");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_AllLowercase_ReturnsUnchanged()
+    public void ToSpaceSeparatedWords_AllLowercase_Test()
     {
-        Assert.Equal("hello", "hello".ToSpaceSeparatedWords());
+        // Act & assert
+        "hello".ToSpaceSeparatedWords().Should().Be("hello");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_EmptyString_ReturnsEmpty()
+    public void ToSpaceSeparatedWords_Empty_Test()
     {
-        Assert.Equal("", "".ToSpaceSeparatedWords());
+        // Act & assert
+        "".ToSpaceSeparatedWords().Should().Be("");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_MultipleWords_SplitsCorrectly()
+    public void ToSpaceSeparatedWords_Multiple_Test()
     {
-        Assert.Equal("Foo Bar Baz", "FooBarBaz".ToSpaceSeparatedWords());
+        // Act & assert
+        "FooBarBaz".ToSpaceSeparatedWords().Should().Be("Foo Bar Baz");
     }
 }

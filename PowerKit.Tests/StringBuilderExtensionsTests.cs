@@ -1,4 +1,5 @@
 using System.Text;
+using FluentAssertions;
 using PowerKit.Extensions;
 
 namespace PowerKit.Tests;
@@ -6,26 +7,41 @@ namespace PowerKit.Tests;
 public class StringBuilderExtensionsTests
 {
     [Fact]
-    public void AppendIfNotEmpty_EmptyBuilder_DoesNotAppend()
+    public void AppendIfNotEmpty_Empty_Test()
     {
+        // Arrange
         var builder = new StringBuilder();
+
+        // Act
         builder.AppendIfNotEmpty(',');
-        Assert.Equal("", builder.ToString());
+
+        // Assert
+        builder.ToString().Should().Be("");
     }
 
     [Fact]
-    public void AppendIfNotEmpty_NonEmptyBuilder_Appends()
+    public void AppendIfNotEmpty_Test()
     {
+        // Arrange
         var builder = new StringBuilder("hello");
+
+        // Act
         builder.AppendIfNotEmpty(',');
-        Assert.Equal("hello,", builder.ToString());
+
+        // Assert
+        builder.ToString().Should().Be("hello,");
     }
 
     [Fact]
-    public void AppendIfNotEmpty_ReturnsBuilder_AllowsChaining()
+    public void AppendIfNotEmpty_Chaining_Test()
     {
+        // Arrange
         var builder = new StringBuilder("a");
+
+        // Act
         builder.AppendIfNotEmpty(',').Append("b");
-        Assert.Equal("a,b", builder.ToString());
+
+        // Assert
+        builder.ToString().Should().Be("a,b");
     }
 }

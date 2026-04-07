@@ -1,3 +1,4 @@
+using FluentAssertions;
 using PowerKit.Extensions;
 
 namespace PowerKit.Tests;
@@ -5,42 +6,61 @@ namespace PowerKit.Tests;
 public class TimeSpanExtensionsTests
 {
     [Fact]
-    public void Clamp_ValueWithinRange_ReturnsValue()
+    public void Clamp_Test()
     {
+        // Arrange
         var value = TimeSpan.FromSeconds(5);
+
+        // Act
         var result = value.Clamp(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10));
-        Assert.Equal(value, result);
+
+        // Assert
+        result.Should().Be(value);
     }
 
     [Fact]
-    public void Clamp_ValueBelowMin_ReturnsMin()
+    public void Clamp_BelowMin_Test()
     {
+        // Arrange
         var min = TimeSpan.FromSeconds(3);
+
+        // Act
         var result = TimeSpan.FromSeconds(1).Clamp(min, TimeSpan.FromSeconds(10));
-        Assert.Equal(min, result);
+
+        // Assert
+        result.Should().Be(min);
     }
 
     [Fact]
-    public void Clamp_ValueAboveMax_ReturnsMax()
+    public void Clamp_AboveMax_Test()
     {
+        // Arrange
         var max = TimeSpan.FromSeconds(7);
+
+        // Act
         var result = TimeSpan.FromSeconds(20).Clamp(TimeSpan.FromSeconds(1), max);
-        Assert.Equal(max, result);
+
+        // Assert
+        result.Should().Be(max);
     }
 
     [Fact]
-    public void Clamp_ValueEqualToMin_ReturnsMin()
+    public void Clamp_EqualToMin_Test()
     {
+        // Arrange
         var min = TimeSpan.FromSeconds(3);
-        var result = min.Clamp(min, TimeSpan.FromSeconds(10));
-        Assert.Equal(min, result);
+
+        // Act & assert
+        min.Clamp(min, TimeSpan.FromSeconds(10)).Should().Be(min);
     }
 
     [Fact]
-    public void Clamp_ValueEqualToMax_ReturnsMax()
+    public void Clamp_EqualToMax_Test()
     {
+        // Arrange
         var max = TimeSpan.FromSeconds(10);
-        var result = max.Clamp(TimeSpan.FromSeconds(1), max);
-        Assert.Equal(max, result);
+
+        // Act & assert
+        max.Clamp(TimeSpan.FromSeconds(1), max).Should().Be(max);
     }
 }
