@@ -30,6 +30,7 @@ public class FunctionalExtensionsTests
         0.NullIfDefault().Should().BeNull();
         42.NullIfDefault().Should().Be(42);
         Guid.Empty.NullIfDefault().Should().BeNull();
+        Guid.NewGuid().NullIfDefault().Should().NotBeNull();
     }
 
     [Fact]
