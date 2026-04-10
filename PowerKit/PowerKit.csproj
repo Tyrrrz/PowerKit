@@ -11,8 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolyShim" Version="2.8.1" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" PrivateAssets="all" />
+    <PackageReference Include="PolyShim" Version="2.8.2" />
   </ItemGroup>
 
   <ItemGroup>
