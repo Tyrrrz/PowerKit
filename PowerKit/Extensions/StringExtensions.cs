@@ -29,14 +29,16 @@ internal static class StringExtensions
 
         public string Truncate(int charCount) => str.Length > charCount ? str[..charCount] : str;
 
-        public string ToSpaceSeparatedWords()
+        public string SeparateWords(char separator)
         {
             var builder = new StringBuilder(str.Length * 2);
 
             foreach (var c in str)
             {
                 if (char.IsUpper(c) && builder.Length > 0)
-                    builder.Append(' ');
+                {
+                    builder.Append(separator);
+                }
 
                 builder.Append(c);
             }

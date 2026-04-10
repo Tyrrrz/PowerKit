@@ -69,37 +69,44 @@ public class StringExtensionsTests
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_Test()
+    public void SeparateWords_Test()
     {
         // Act & assert
-        "HelloWorld".ToSpaceSeparatedWords().Should().Be("Hello World");
+        "HelloWorld".SeparateWords(' ').Should().Be("Hello World");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_SingleWord_Test()
+    public void SeparateWords_SingleWord_Test()
     {
         // Act & assert
-        "Hello".ToSpaceSeparatedWords().Should().Be("Hello");
+        "Hello".SeparateWords(' ').Should().Be("Hello");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_AllLowercase_Test()
+    public void SeparateWords_AllLowercase_Test()
     {
         // Act & assert
-        "hello".ToSpaceSeparatedWords().Should().Be("hello");
+        "hello".SeparateWords(' ').Should().Be("hello");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_Empty_Test()
+    public void SeparateWords_Empty_Test()
     {
         // Act & assert
-        "".ToSpaceSeparatedWords().Should().Be("");
+        "".SeparateWords(' ').Should().Be("");
     }
 
     [Fact]
-    public void ToSpaceSeparatedWords_Multiple_Test()
+    public void SeparateWords_Multiple_Test()
     {
         // Act & assert
-        "FooBarBaz".ToSpaceSeparatedWords().Should().Be("Foo Bar Baz");
+        "FooBarBaz".SeparateWords(' ').Should().Be("Foo Bar Baz");
+    }
+
+    [Fact]
+    public void SeparateWords_CustomSeparator_Test()
+    {
+        // Act & assert
+        "FooBarBaz".SeparateWords('-').Should().Be("Foo-Bar-Baz");
     }
 }
