@@ -18,4 +18,11 @@ internal static class FunctionalExtensions
         public T? NullIfDefault() =>
             value.NullIf(v => EqualityComparer<T>.Default.Equals(v, default));
     }
+
+    extension(string value)
+    {
+        public string? NullIfEmpty() => !string.IsNullOrEmpty(value) ? value : null;
+
+        public string? NullIfWhiteSpace() => !string.IsNullOrWhiteSpace(value) ? value : null;
+    }
 }

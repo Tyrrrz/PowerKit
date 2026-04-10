@@ -49,9 +49,23 @@ internal static class EnumerableExtensions
         public T? FirstOrNull()
         {
             foreach (var item in source)
+            {
                 return item;
+            }
 
             return null;
+        }
+
+        public T? LastOrNull()
+        {
+            var last = default(T?);
+
+            foreach (var item in source)
+            {
+                last = item;
+            }
+
+            return last;
         }
 
         public T? ElementAtOrNull(int index)

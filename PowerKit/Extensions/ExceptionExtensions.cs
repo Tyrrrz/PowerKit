@@ -9,10 +9,6 @@ internal static class ExceptionExtensions
     {
         public IReadOnlyList<Exception> GetSelfAndDescendants()
         {
-            var result = new List<Exception> { exception };
-            PopulateDescendants(exception, result);
-            return result;
-
             static void PopulateDescendants(Exception ex, ICollection<Exception> result)
             {
                 if (ex is AggregateException aggregateException)
@@ -29,6 +25,10 @@ internal static class ExceptionExtensions
                     PopulateDescendants(ex.InnerException, result);
                 }
             }
+
+            var result = new List<Exception> { exception };
+            PopulateDescendants(exception, result);
+            return result;
         }
     }
 }

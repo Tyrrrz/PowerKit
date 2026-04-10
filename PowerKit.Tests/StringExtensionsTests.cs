@@ -6,27 +6,6 @@ namespace PowerKit.Tests;
 public class StringExtensionsTests
 {
     [Fact]
-    public void NullIfWhiteSpace_Test()
-    {
-        // Act & assert
-        "hello".NullIfWhiteSpace().Should().Be("hello");
-    }
-
-    [Fact]
-    public void NullIfWhiteSpace_Whitespace_Test()
-    {
-        // Act & assert
-        "   ".NullIfWhiteSpace().Should().BeNull();
-    }
-
-    [Fact]
-    public void NullIfWhiteSpace_Empty_Test()
-    {
-        // Act & assert
-        "".NullIfWhiteSpace().Should().BeNull();
-    }
-
-    [Fact]
     public void SubstringUntil_Test()
     {
         // Act & assert

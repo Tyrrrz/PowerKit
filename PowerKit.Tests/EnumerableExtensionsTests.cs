@@ -132,4 +132,31 @@ public class EnumerableExtensionsTests
         // Act & assert
         Array.Empty<int>().ElementAtOrNull(0).Should().BeNull();
     }
+
+    [Fact]
+    public void LastOrNull_Test()
+    {
+        // Arrange
+        int[] source = [5, 10, 15];
+
+        // Act
+        var result = source.LastOrNull();
+
+        // Assert
+        result.Should().Be(15);
+    }
+
+    [Fact]
+    public void LastOrNull_Single_Test()
+    {
+        // Act & assert
+        new[] { 42 }.LastOrNull().Should().Be(42);
+    }
+
+    [Fact]
+    public void LastOrNull_Empty_Test()
+    {
+        // Act & assert
+        Array.Empty<int>().LastOrNull().Should().BeNull();
+    }
 }

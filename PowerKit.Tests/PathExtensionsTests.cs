@@ -49,6 +49,20 @@ public class PathExtensionsTests
     }
 
     [Fact]
+    public void EscapeFileName_TrailingWhitespace_Test()
+    {
+        // Act & assert
+        Path.EscapeFileName("hello   ").Should().Be("hello");
+    }
+
+    [Fact]
+    public void EscapeFileName_TrailingDotsAndWhitespace_Test()
+    {
+        // Act & assert
+        Path.EscapeFileName("hello. . ").Should().Be("hello");
+    }
+
+    [Fact]
     public void EscapeFileName_DotsInMiddle_Test()
     {
         // Act & assert

@@ -81,4 +81,46 @@ public class FunctionalExtensionsTests
         // Act & assert
         id.NullIfDefault().Should().Be(id);
     }
+
+    [Fact]
+    public void NullIfEmpty_Test()
+    {
+        // Act & assert
+        "hello".NullIfEmpty().Should().Be("hello");
+    }
+
+    [Fact]
+    public void NullIfEmpty_Empty_Test()
+    {
+        // Act & assert
+        "".NullIfEmpty().Should().BeNull();
+    }
+
+    [Fact]
+    public void NullIfEmpty_Whitespace_Test()
+    {
+        // Act & assert
+        "   ".NullIfEmpty().Should().Be("   ");
+    }
+
+    [Fact]
+    public void NullIfWhiteSpace_Test()
+    {
+        // Act & assert
+        "hello".NullIfWhiteSpace().Should().Be("hello");
+    }
+
+    [Fact]
+    public void NullIfWhiteSpace_Whitespace_Test()
+    {
+        // Act & assert
+        "   ".NullIfWhiteSpace().Should().BeNull();
+    }
+
+    [Fact]
+    public void NullIfWhiteSpace_Empty_Test()
+    {
+        // Act & assert
+        "".NullIfWhiteSpace().Should().BeNull();
+    }
 }
