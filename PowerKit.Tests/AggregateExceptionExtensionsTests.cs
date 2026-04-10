@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
@@ -9,56 +10,30 @@ public class AggregateExceptionExtensionsTests
     [Fact]
     public void TryGetSingle_Test()
     {
-        // Arrange
-        var inner = new Exception("only");
-        var aggregate = new AggregateException(inner);
+        {
+            // Act & assert
+            var inner = new Exception("only");
+            new AggregateException(inner).TryGetSingle().Should().BeSameAs(inner);
+        }
 
-        // Act
-        var result = aggregate.TryGetSingle();
+        new AggregateException(new Exception("a"), new Exception("b"))
+            .TryGetSingle()
+            .Should()
+            .BeNull();
 
-        // Assert
-        result.Should().BeSameAs(inner);
-    }
+        {
+            var leaf = new Exception("leaf");
+            new AggregateException(new AggregateException(leaf))
+                .TryGetSingle()
+                .Should()
+                .BeSameAs(leaf);
+        }
 
-    [Fact]
-    public void TryGetSingle_Multiple_Test()
-    {
-        // Arrange
-        var aggregate = new AggregateException(new Exception("a"), new Exception("b"));
-
-        // Act
-        var result = aggregate.TryGetSingle();
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Fact]
-    public void TryGetSingle_NestedSingleLeaf_Test()
-    {
-        // Arrange
-        var leaf = new Exception("leaf");
-        var nested = new AggregateException(leaf);
-        var outer = new AggregateException(nested);
-
-        // Act
-        var result = outer.TryGetSingle();
-
-        // Assert
-        result.Should().BeSameAs(leaf);
-    }
-
-    [Fact]
-    public void TryGetSingle_NestedMultipleLeaves_Test()
-    {
-        // Arrange
-        var nested = new AggregateException(new Exception("a"), new Exception("b"));
-        var outer = new AggregateException(nested);
-
-        // Act
-        var result = outer.TryGetSingle();
-
-        // Assert
-        result.Should().BeNull();
+        new AggregateException(
+                new AggregateException(new Exception("a"), new Exception("b"))
+            )
+            .TryGetSingle()
+            .Should()
+            .BeNull();
     }
 }

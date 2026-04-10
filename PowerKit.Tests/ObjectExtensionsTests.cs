@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
@@ -9,33 +10,9 @@ public class ObjectExtensionsTests
     [Fact]
     public void ToSingletonEnumerable_Test()
     {
-        // Act
-        var result = 42.ToSingletonEnumerable().ToList();
-
-        // Assert
-        result.Should().Equal(42);
-    }
-
-    [Fact]
-    public void ToSingletonEnumerable_ReferenceType_Test()
-    {
-        // Act
-        var result = "hello".ToSingletonEnumerable().ToList();
-
-        // Assert
-        result.Should().Equal("hello");
-    }
-
-    [Fact]
-    public void ToSingletonEnumerable_Null_Test()
-    {
-        // Arrange
-        string? obj = null;
-
-        // Act
-        var result = obj.ToSingletonEnumerable().ToList();
-
-        // Assert
-        result.Should().Equal((string?)null);
+        // Act & assert
+        42.ToSingletonEnumerable().ToList().Should().Equal(42);
+        "hello".ToSingletonEnumerable().ToList().Should().Equal("hello");
+        ((string?)null).ToSingletonEnumerable().ToList().Should().Equal((string?)null);
     }
 }

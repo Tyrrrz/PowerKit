@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
@@ -7,74 +8,39 @@ namespace PowerKit.Tests;
 public class ExceptionExtensionsTests
 {
     [Fact]
-    public void GetSelfAndDescendants_NoInner_Test()
+    public void GetSelfAndDescendants_Test()
     {
-        // Arrange
-        var ex = new Exception("root");
+        {
+            // Act & assert
+            var ex = new Exception("root");
+            ex.GetSelfAndDescendants().Should().Equal(ex);
+        }
 
-        // Act
-        var result = ex.GetSelfAndDescendants();
+        {
+            var inner = new Exception("inner");
+            var outer = new Exception("outer", inner);
+            outer.GetSelfAndDescendants().Should().Equal(outer, inner);
+        }
 
-        // Assert
-        result.Should().Equal(ex);
-    }
+        {
+            var leaf = new Exception("leaf");
+            var middle = new Exception("middle", leaf);
+            var root = new Exception("root", middle);
+            root.GetSelfAndDescendants().Should().Equal(root, middle, leaf);
+        }
 
-    [Fact]
-    public void GetSelfAndDescendants_WithInner_Test()
-    {
-        // Arrange
-        var inner = new Exception("inner");
-        var outer = new Exception("outer", inner);
+        {
+            var inner1 = new Exception("inner1");
+            var inner2 = new Exception("inner2");
+            var aggregate = new AggregateException("aggregate", inner1, inner2);
+            aggregate.GetSelfAndDescendants().Should().Equal(aggregate, inner1, inner2);
+        }
 
-        // Act
-        var result = outer.GetSelfAndDescendants();
-
-        // Assert
-        result.Should().Equal(outer, inner);
-    }
-
-    [Fact]
-    public void GetSelfAndDescendants_Chained_Test()
-    {
-        // Arrange
-        var leaf = new Exception("leaf");
-        var middle = new Exception("middle", leaf);
-        var root = new Exception("root", middle);
-
-        // Act
-        var result = root.GetSelfAndDescendants();
-
-        // Assert
-        result.Should().Equal(root, middle, leaf);
-    }
-
-    [Fact]
-    public void GetSelfAndDescendants_Aggregate_Test()
-    {
-        // Arrange
-        var inner1 = new Exception("inner1");
-        var inner2 = new Exception("inner2");
-        var aggregate = new AggregateException("aggregate", inner1, inner2);
-
-        // Act
-        var result = aggregate.GetSelfAndDescendants();
-
-        // Assert
-        result.Should().Equal(aggregate, inner1, inner2);
-    }
-
-    [Fact]
-    public void GetSelfAndDescendants_NestedAggregate_Test()
-    {
-        // Arrange
-        var leaf = new Exception("leaf");
-        var inner = new AggregateException("inner", leaf);
-        var root = new AggregateException("root", inner);
-
-        // Act
-        var result = root.GetSelfAndDescendants();
-
-        // Assert
-        result.Should().Equal(root, inner, leaf);
+        {
+            var leaf = new Exception("leaf");
+            var inner = new AggregateException("inner", leaf);
+            var root = new AggregateException("root", inner);
+            root.GetSelfAndDescendants().Should().Equal(root, inner, leaf);
+        }
     }
 }

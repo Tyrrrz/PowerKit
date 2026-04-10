@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using PowerKit;
 using Xunit;
@@ -18,47 +20,16 @@ public class DisposableTests
     {
         // Arrange
         var invoked = false;
-
-        // Act
         var disposable = Disposable.Create(() => invoked = true);
-        disposable.Dispose();
 
-        // Assert
+        // Act & assert
+        invoked.Should().BeFalse();
+        disposable.Dispose();
         invoked.Should().BeTrue();
     }
 
     [Fact]
-    public void Create_NotDisposed_Test()
-    {
-        // Arrange
-        var invoked = false;
-
-        // Act
-        Disposable.Create(() => invoked = true);
-
-        // Assert
-        invoked.Should().BeFalse();
-    }
-
-    [Fact]
     public void Merge_Test()
-    {
-        // Arrange
-        var count = 0;
-        var disposables = Enumerable
-            .Range(0, 3)
-            .Select(_ => Disposable.Create(() => count++))
-            .ToArray();
-
-        // Act
-        Disposable.Merge(disposables).Dispose();
-
-        // Assert
-        count.Should().Be(3);
-    }
-
-    [Fact]
-    public void Merge_Order_Test()
     {
         // Arrange
         var order = new List<int>();
