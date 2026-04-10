@@ -5,6 +5,14 @@ namespace PowerKit.Extensions;
 
 internal static class EnumerableExtensions
 {
+    extension<T>(T obj)
+    {
+        public IEnumerable<T> ToSingletonEnumerable()
+        {
+            yield return obj;
+        }
+    }
+
     extension<T>(IEnumerable<T?> source)
         where T : class
     {

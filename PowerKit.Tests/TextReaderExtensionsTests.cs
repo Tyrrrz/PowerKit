@@ -11,17 +11,39 @@ public class TextReaderExtensionsTests
     [Fact]
     public async Task ReadLinesAsync_Test()
     {
-        // Act & assert
-        (await new StringReader("line1\nline2\nline3").ReadLinesAsync().ToListAsync())
-            .Should()
-            .Equal("line1", "line2", "line3");
+        // Arrange
+        using var reader = new StringReader("line1\nline2\nline3");
 
-        (await new StringReader("").ReadLinesAsync().ToListAsync())
-            .Should()
-            .BeEmpty();
+        // Act
+        var result = await reader.ReadLinesAsync().ToListAsync();
 
-        (await new StringReader("hello").ReadLinesAsync().ToListAsync())
-            .Should()
-            .Equal("hello");
+        // Assert
+        result.Should().Equal("line1", "line2", "line3");
+    }
+
+    [Fact]
+    public async Task ReadLinesAsync_Empty_Test()
+    {
+        // Arrange
+        using var reader = new StringReader("");
+
+        // Act
+        var result = await reader.ReadLinesAsync().ToListAsync();
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task ReadLinesAsync_SingleLine_Test()
+    {
+        // Arrange
+        using var reader = new StringReader("hello");
+
+        // Act
+        var result = await reader.ReadLinesAsync().ToListAsync();
+
+        // Assert
+        result.Should().Equal("hello");
     }
 }

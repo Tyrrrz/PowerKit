@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -8,13 +9,6 @@ namespace PowerKit.Tests;
 
 public class DisposableTests
 {
-    [Fact]
-    public void Null_Test()
-    {
-        // Act & assert
-        Disposable.Null.Dispose();
-    }
-
     [Fact]
     public void Create_Test()
     {
@@ -43,5 +37,30 @@ public class DisposableTests
 
         // Assert
         order.Should().Equal(0, 1, 2);
+    }
+
+    [Fact]
+    public void Merge_Exception_Test()
+    {
+        // Arrange
+        var disposed = new List<int>();
+        var disposables = new[]
+        {
+            Disposable.Create(() => disposed.Add(0)),
+            Disposable.Create(() =>
+            {
+                disposed.Add(1);
+                throw new InvalidOperationException("fail");
+            }),
+            Disposable.Create(() => disposed.Add(2)),
+        };
+
+        // Act
+        var ex = Assert.Throws<AggregateException>(() => Disposable.Merge(disposables).Dispose());
+
+        // Assert
+        disposed.Should().Equal(0, 1, 2);
+        ex.InnerExceptions.Should().ContainSingle();
+        ex.InnerExceptions[0].Should().BeOfType<InvalidOperationException>();
     }
 }

@@ -73,7 +73,7 @@ internal static class StreamExtensions
         public async ValueTask CopyToAsync(
             Stream destination,
             long contentLength,
-            IProgress<double>? progress = null,
+            IProgress<double> progress,
             CancellationToken cancellationToken = default
         )
         {
@@ -98,7 +98,7 @@ internal static class StreamExtensions
 
                 totalBytesRead += bytesRead;
 
-                if (progress is not null && contentLength > 0)
+                if (contentLength > 0)
                 {
                     progress.Report(1.0 * totalBytesRead / contentLength);
                 }

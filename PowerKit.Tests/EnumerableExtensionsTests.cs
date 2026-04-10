@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
@@ -7,6 +8,15 @@ namespace PowerKit.Tests;
 
 public class EnumerableExtensionsTests
 {
+    [Fact]
+    public void ToSingletonEnumerable_Test()
+    {
+        // Act & assert
+        42.ToSingletonEnumerable().ToList().Should().Equal(42);
+        "hello".ToSingletonEnumerable().ToList().Should().Equal("hello");
+        ((string?)null).ToSingletonEnumerable().ToList().Should().Equal((string?)null);
+    }
+
     [Fact]
     public void WhereNotNull_Test()
     {
@@ -31,6 +41,7 @@ public class EnumerableExtensionsTests
     {
         // Act & assert
         new[] { 5, 10, 15 }.FirstOrNull().Should().Be(5);
+        new[] { 42 }.FirstOrNull().Should().Be(42);
         Array.Empty<int>().FirstOrNull().Should().BeNull();
     }
 
