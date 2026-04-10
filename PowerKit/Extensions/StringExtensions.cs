@@ -45,5 +45,9 @@ internal static class StringExtensions
 
             return builder.ToString();
         }
+
+        public string ToKebabCase() => str.SeparateWords('-').ToLowerInvariant();
+
+        public string ToSnakeCase() => str.SeparateWords('_').ToLowerInvariant();
     }
 }

@@ -44,4 +44,26 @@ public class StringExtensionsTests
         "FooBarBaz".SeparateWords(' ').Should().Be("Foo Bar Baz");
         "FooBarBaz".SeparateWords('-').Should().Be("Foo-Bar-Baz");
     }
+
+    [Fact]
+    public void ToKebabCase_Test()
+    {
+        // Act & assert
+        "HelloWorld".ToKebabCase().Should().Be("hello-world");
+        "FooBarBaz".ToKebabCase().Should().Be("foo-bar-baz");
+        "Hello".ToKebabCase().Should().Be("hello");
+        "hello".ToKebabCase().Should().Be("hello");
+        "".ToKebabCase().Should().Be("");
+    }
+
+    [Fact]
+    public void ToSnakeCase_Test()
+    {
+        // Act & assert
+        "HelloWorld".ToSnakeCase().Should().Be("hello_world");
+        "FooBarBaz".ToSnakeCase().Should().Be("foo_bar_baz");
+        "Hello".ToSnakeCase().Should().Be("hello");
+        "hello".ToSnakeCase().Should().Be("hello");
+        "".ToSnakeCase().Should().Be("");
+    }
 }
