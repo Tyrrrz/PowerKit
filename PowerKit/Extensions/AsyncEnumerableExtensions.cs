@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -34,7 +35,7 @@ internal static class AsyncEnumerableExtensions
         }
 
         public async IAsyncEnumerable<TResult> SelectManyAsync<TResult>(
-            System.Func<T, IEnumerable<TResult>> transform,
+            Func<T, IEnumerable<TResult>> transform,
             [EnumeratorCancellation] CancellationToken cancellationToken = default
         )
         {

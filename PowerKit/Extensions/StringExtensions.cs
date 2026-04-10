@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 namespace PowerKit.Extensions;
@@ -10,7 +11,7 @@ internal static class StringExtensions
 
         public string SubstringUntil(
             string sub,
-            System.StringComparison comparison = System.StringComparison.Ordinal
+            StringComparison comparison = StringComparison.Ordinal
         ) =>
             str.IndexOf(sub, comparison) switch
             {
@@ -20,7 +21,7 @@ internal static class StringExtensions
 
         public string SubstringAfter(
             string sub,
-            System.StringComparison comparison = System.StringComparison.Ordinal
+            StringComparison comparison = StringComparison.Ordinal
         ) =>
             str.IndexOf(sub, comparison) switch
             {
