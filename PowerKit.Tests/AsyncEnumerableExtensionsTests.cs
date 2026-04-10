@@ -8,7 +8,10 @@ public class AsyncEnumerableExtensionsTests
     private static async IAsyncEnumerable<T> ToAsyncEnumerable<T>(IEnumerable<T> source)
     {
         foreach (var item in source)
+        {
+            await Task.Yield();
             yield return item;
+        }
     }
 
     [Fact]
