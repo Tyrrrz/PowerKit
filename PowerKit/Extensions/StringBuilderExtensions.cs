@@ -11,14 +11,26 @@ internal static class StringBuilderExtensions
 
         public StringBuilder Trim()
         {
-            while (builder.Length > 0 && char.IsWhiteSpace(builder[builder.Length - 1]))
+            var start = 0;
+            while (start < builder.Length && char.IsWhiteSpace(builder[start]))
             {
-                builder.Remove(builder.Length - 1, 1);
+                start++;
             }
 
-            while (builder.Length > 0 && char.IsWhiteSpace(builder[0]))
+            var end = builder.Length - 1;
+            while (end >= start && char.IsWhiteSpace(builder[end]))
             {
-                builder.Remove(0, 1);
+                end--;
+            }
+
+            if (end < builder.Length - 1)
+            {
+                builder.Remove(end + 1, builder.Length - end - 1);
+            }
+
+            if (start > 0)
+            {
+                builder.Remove(0, start);
             }
 
             return builder;

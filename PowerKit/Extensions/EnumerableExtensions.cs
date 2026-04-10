@@ -58,6 +58,11 @@ internal static class EnumerableExtensions
 
         public T? LastOrNull()
         {
+            if (source is IReadOnlyList<T> list)
+            {
+                return list.Count > 0 ? list[list.Count - 1] : null;
+            }
+
             var last = default(T?);
 
             foreach (var item in source)
