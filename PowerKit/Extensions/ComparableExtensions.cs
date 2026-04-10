@@ -16,5 +16,9 @@ internal static class ComparableExtensions
 
             return value;
         }
+
+        public T Min(T other) => value.CompareTo(other) <= 0 ? value : other;
+
+        public T Max(T other) => value.CompareTo(other) >= 0 ? value : other;
     }
 }

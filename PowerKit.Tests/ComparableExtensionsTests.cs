@@ -82,4 +82,46 @@ public class ComparableExtensionsTests
         // Assert
         result.Should().Be(value);
     }
+
+    [Fact]
+    public void Min_ReturnsSmaller_Test()
+    {
+        // Act & assert
+        5.Min(3).Should().Be(3);
+    }
+
+    [Fact]
+    public void Min_ReturnsValue_WhenSmaller_Test()
+    {
+        // Act & assert
+        2.Min(7).Should().Be(2);
+    }
+
+    [Fact]
+    public void Min_ReturnsEither_WhenEqual_Test()
+    {
+        // Act & assert
+        4.Min(4).Should().Be(4);
+    }
+
+    [Fact]
+    public void Max_ReturnsLarger_Test()
+    {
+        // Act & assert
+        5.Max(3).Should().Be(5);
+    }
+
+    [Fact]
+    public void Max_ReturnsOther_WhenLarger_Test()
+    {
+        // Act & assert
+        2.Max(7).Should().Be(7);
+    }
+
+    [Fact]
+    public void Max_ReturnsEither_WhenEqual_Test()
+    {
+        // Act & assert
+        4.Max(4).Should().Be(4);
+    }
 }

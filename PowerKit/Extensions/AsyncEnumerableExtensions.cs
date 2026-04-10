@@ -44,8 +44,10 @@ internal static class AsyncEnumerableExtensions
                     .WithCancellation(cancellationToken)
                     .ConfigureAwait(false)
             )
+            {
                 foreach (var result in transform(item))
                     yield return result;
+            }
         }
 
         public async ValueTask<List<T>> ToListAsync(
@@ -59,7 +61,9 @@ internal static class AsyncEnumerableExtensions
                     .WithCancellation(cancellationToken)
                     .ConfigureAwait(false)
             )
+            {
                 list.Add(item);
+            }
 
             return list;
         }
