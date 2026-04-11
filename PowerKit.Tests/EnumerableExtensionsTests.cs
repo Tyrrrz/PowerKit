@@ -38,6 +38,7 @@ public class EnumerableExtensionsTests
             .WhereNotNullOrEmpty()
             .Should()
             .Equal("hello", "  ");
+        Array.Empty<string?>().WhereNotNullOrEmpty().Should().BeEmpty();
     }
 
     [Fact]
