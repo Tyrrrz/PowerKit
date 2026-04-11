@@ -82,7 +82,9 @@ internal static class StreamExtensions
         )
         {
             var contentLength = source.CanSeek ? source.Length : -1;
-            await source.CopyToAsync(destination, contentLength, progress, cancellationToken);
+            await source
+                .CopyToAsync(destination, contentLength, progress, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }
