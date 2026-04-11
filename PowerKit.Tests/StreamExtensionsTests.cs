@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Gress;
 using PowerKit.Extensions;
 using Xunit;
 
@@ -34,7 +34,7 @@ public class StreamExtensionsTests
         using var destination = new MemoryStream();
 
         var reports = new List<double>();
-        var progress = new SynchronousProgress<double>(v => reports.Add(v));
+        var progress = new DelegateProgress<double>(v => reports.Add(v));
 
         // Act
         await source.CopyToAsync(destination, progress: progress);
@@ -54,7 +54,7 @@ public class StreamExtensionsTests
         using var destination = new MemoryStream();
 
         var reports = new List<double>();
-        var progress = new SynchronousProgress<double>(v => reports.Add(v));
+        var progress = new DelegateProgress<double>(v => reports.Add(v));
 
         // Act
         await source.CopyToAsync(destination, contentLength: 1024, progress: progress);
@@ -64,9 +64,4 @@ public class StreamExtensionsTests
         reports.Should().AllSatisfy(v => v.Should().BeInRange(0.0, 1.0));
         reports[^1].Should().BeApproximately(1.0, precision: 1e-5);
     }
-}
-
-file class SynchronousProgress<T>(Action<T> handler) : IProgress<T>
-{
-    public void Report(T value) => handler(value);
 }
