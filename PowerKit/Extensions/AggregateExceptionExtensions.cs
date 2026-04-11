@@ -10,7 +10,7 @@ internal static class AggregateExceptionExtensions
         public Exception? TryGetSingle()
         {
             var exceptions = exception.Flatten().InnerExceptions;
-            return exceptions.Count == 1 ? exceptions.Single() : null;
+            return exceptions.Count == 1 ? exceptions[0] : null;
         }
     }
 }
