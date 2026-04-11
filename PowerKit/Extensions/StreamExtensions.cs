@@ -25,14 +25,18 @@ internal static class StreamExtensions
                     .ConfigureAwait(false);
 
                 if (bytesRead <= 0)
+                {
                     break;
+                }
 
                 await destination
                     .WriteAsync(buffer.Memory[..bytesRead], cancellationToken)
                     .ConfigureAwait(false);
 
                 if (autoFlush)
+                {
                     await destination.FlushAsync(cancellationToken).ConfigureAwait(false);
+                }
             }
         }
 
@@ -42,38 +46,14 @@ internal static class StreamExtensions
             CancellationToken cancellationToken = default
         )
         {
-            using var buffer = MemoryPool<byte>.Shared.Rent(81920);
-
-            var totalBytesRead = 0L;
-
-            while (true)
-            {
-                var bytesRead = await source
-                    .ReadAsync(buffer.Memory, cancellationToken)
-                    .ConfigureAwait(false);
-
-                if (bytesRead <= 0)
-                {
-                    break;
-                }
-
-                await destination
-                    .WriteAsync(buffer.Memory[..bytesRead], cancellationToken)
-                    .ConfigureAwait(false);
-
-                totalBytesRead += bytesRead;
-
-                if (progress is not null && source.CanSeek && source.Length > 0)
-                {
-                    progress.Report(1.0 * totalBytesRead / source.Length);
-                }
-            }
+            var contentLength = source.CanSeek ? source.Length : -1;
+            await source.CopyToAsync(destination, contentLength, progress, cancellationToken);
         }
 
         public async ValueTask CopyToAsync(
             Stream destination,
             long contentLength,
-            IProgress<double> progress,
+            IProgress<double>? progress,
             CancellationToken cancellationToken = default
         )
         {
@@ -98,7 +78,7 @@ internal static class StreamExtensions
 
                 totalBytesRead += bytesRead;
 
-                if (contentLength > 0)
+                if (progress is not null && contentLength > 0)
                 {
                     progress.Report(1.0 * totalBytesRead / contentLength);
                 }

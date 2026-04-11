@@ -21,7 +21,9 @@ internal static class EnumerableExtensions
             foreach (var item in source)
             {
                 if (item is not null)
+                {
                     yield return item;
+                }
             }
         }
     }
@@ -34,19 +36,34 @@ internal static class EnumerableExtensions
             foreach (var item in source)
             {
                 if (item is not null)
+                {
                     yield return item.Value;
+                }
             }
         }
     }
 
     extension(IEnumerable<string?> source)
     {
+        public IEnumerable<string> WhereNotNullOrEmpty()
+        {
+            foreach (var item in source)
+            {
+                if (!string.IsNullOrEmpty(item))
+                {
+                    yield return item!;
+                }
+            }
+        }
+
         public IEnumerable<string> WhereNotNullOrWhiteSpace()
         {
             foreach (var item in source)
             {
                 if (!string.IsNullOrWhiteSpace(item))
+                {
                     yield return item!;
+                }
             }
         }
     }

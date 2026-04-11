@@ -17,7 +17,7 @@ internal partial class Disposable
     public static IDisposable Merge(params IEnumerable<IDisposable> disposables) =>
         Create(() =>
         {
-            var exceptions = new List<Exception>();
+            List<Exception>? exceptions = null;
 
             foreach (var disposable in disposables)
             {
@@ -27,11 +27,11 @@ internal partial class Disposable
                 }
                 catch (Exception ex)
                 {
-                    exceptions.Add(ex);
+                    (exceptions ??= []).Add(ex);
                 }
             }
 
-            if (exceptions.Count > 0)
+            if (exceptions?.Count > 0)
             {
                 throw new AggregateException(exceptions);
             }

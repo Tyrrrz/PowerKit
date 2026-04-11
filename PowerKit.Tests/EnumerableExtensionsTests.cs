@@ -27,6 +27,20 @@ public class EnumerableExtensionsTests
     }
 
     [Fact]
+    public void WhereNotNullOrEmpty_Test()
+    {
+        // Act & assert
+        new string?[] { "hello", null, "", "world" }
+            .WhereNotNullOrEmpty()
+            .Should()
+            .Equal("hello", "world");
+        new string?[] { "hello", "  ", "", null }
+            .WhereNotNullOrEmpty()
+            .Should()
+            .Equal("hello", "  ");
+    }
+
+    [Fact]
     public void WhereNotNullOrWhiteSpace_Test()
     {
         // Act & assert
