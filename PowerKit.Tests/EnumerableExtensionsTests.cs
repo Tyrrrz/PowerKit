@@ -12,9 +12,9 @@ public class EnumerableExtensionsTests
     public void ToSingletonEnumerable_Test()
     {
         // Act & assert
-        42.ToSingletonEnumerable().ToList().Should().Equal(42);
-        "hello".ToSingletonEnumerable().ToList().Should().Equal("hello");
-        ((string?)null).ToSingletonEnumerable().ToList().Should().Equal((string?)null);
+        42.ToSingletonEnumerable().ToArray().Should().Equal(42);
+        "hello".ToSingletonEnumerable().ToArray().Should().Equal("hello");
+        ((string?)null).ToSingletonEnumerable().ToArray().Should().Equal((string?)null);
     }
 
     [Fact]
