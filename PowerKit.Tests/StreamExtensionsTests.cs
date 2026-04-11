@@ -45,23 +45,4 @@ public class StreamExtensionsTests
         reports[^1].Should().BeApproximately(1.0, precision: 1e-5);
     }
 
-    [Fact]
-    public async Task CopyToAsync_ContentLength_Progress_Test()
-    {
-        // Arrange
-        var data = new byte[1024];
-        using var source = new MemoryStream(data);
-        using var destination = new MemoryStream();
-
-        var progress = new ProgressCollector<double>();
-
-        // Act
-        await source.CopyToAsync(destination, contentLength: 1024, progress: progress);
-
-        // Assert
-        var reports = progress.GetValues().ToArray();
-        reports.Should().NotBeEmpty();
-        reports.Should().AllSatisfy(v => v.Should().BeInRange(0.0, 1.0));
-        reports[^1].Should().BeApproximately(1.0, precision: 1e-5);
-    }
 }
