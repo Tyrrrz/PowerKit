@@ -42,16 +42,6 @@ internal static class StreamExtensions
 
         public async ValueTask CopyToAsync(
             Stream destination,
-            IProgress<double>? progress = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            var contentLength = source.CanSeek ? source.Length : -1;
-            await source.CopyToAsync(destination, contentLength, progress, cancellationToken);
-        }
-
-        public async ValueTask CopyToAsync(
-            Stream destination,
             long contentLength,
             IProgress<double>? progress,
             CancellationToken cancellationToken = default
@@ -83,6 +73,16 @@ internal static class StreamExtensions
                     progress.Report(1.0 * totalBytesRead / contentLength);
                 }
             }
+        }
+
+        public async ValueTask CopyToAsync(
+            Stream destination,
+            IProgress<double>? progress = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var contentLength = source.CanSeek ? source.Length : -1;
+            await source.CopyToAsync(destination, contentLength, progress, cancellationToken);
         }
     }
 }

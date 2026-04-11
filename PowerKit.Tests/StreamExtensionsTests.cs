@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Gress;
@@ -33,13 +33,13 @@ public class StreamExtensionsTests
         using var source = new MemoryStream(data);
         using var destination = new MemoryStream();
 
-        var reports = new List<double>();
-        var progress = new DelegateProgress<double>(v => reports.Add(v));
+        var progress = new ProgressCollector<double>();
 
         // Act
         await source.CopyToAsync(destination, progress: progress);
 
         // Assert
+        var reports = progress.GetValues().ToArray();
         reports.Should().NotBeEmpty();
         reports.Should().AllSatisfy(v => v.Should().BeInRange(0.0, 1.0));
         reports[^1].Should().BeApproximately(1.0, precision: 1e-5);
@@ -53,13 +53,13 @@ public class StreamExtensionsTests
         using var source = new MemoryStream(data);
         using var destination = new MemoryStream();
 
-        var reports = new List<double>();
-        var progress = new DelegateProgress<double>(v => reports.Add(v));
+        var progress = new ProgressCollector<double>();
 
         // Act
         await source.CopyToAsync(destination, contentLength: 1024, progress: progress);
 
         // Assert
+        var reports = progress.GetValues().ToArray();
         reports.Should().NotBeEmpty();
         reports.Should().AllSatisfy(v => v.Should().BeInRange(0.0, 1.0));
         reports[^1].Should().BeApproximately(1.0, precision: 1e-5);
