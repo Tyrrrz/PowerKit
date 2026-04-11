@@ -34,13 +34,10 @@ public class StreamExtensionsTests
         using var destination = new MemoryStream();
 
         var reports = new List<double>();
-        var progress = new Progress<double>(v => reports.Add(v));
+        var progress = new SynchronousProgress<double>(v => reports.Add(v));
 
         // Act
         await source.CopyToAsync(destination, progress: progress);
-
-        // Allow Progress<T> callbacks to fire on the thread pool
-        await Task.Delay(50);
 
         // Assert
         reports.Should().NotBeEmpty();
@@ -57,17 +54,19 @@ public class StreamExtensionsTests
         using var destination = new MemoryStream();
 
         var reports = new List<double>();
-        var progress = new Progress<double>(v => reports.Add(v));
+        var progress = new SynchronousProgress<double>(v => reports.Add(v));
 
         // Act
         await source.CopyToAsync(destination, contentLength: 1024, progress: progress);
-
-        // Allow Progress<T> callbacks to fire on the thread pool
-        await Task.Delay(50);
 
         // Assert
         reports.Should().NotBeEmpty();
         reports.Should().AllSatisfy(v => v.Should().BeInRange(0.0, 1.0));
         reports[^1].Should().BeApproximately(1.0, precision: 1e-5);
     }
+}
+
+file class SynchronousProgress<T>(Action<T> handler) : IProgress<T>
+{
+    public void Report(T value) => handler(value);
 }
