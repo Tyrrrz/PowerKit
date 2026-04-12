@@ -38,9 +38,9 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            if (offset > stream.Length)
+            if (offset >= stream.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(offset));
+                return [];
             }
 
             var buffer = new byte[checked((int)(stream.Length - offset))];
@@ -94,9 +94,9 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            if (offset > stream.Length)
+            if (offset >= stream.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(offset));
+                return [];
             }
 
             var buffer = new byte[checked((int)(stream.Length - offset))];

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -86,8 +85,8 @@ public class FileExtensionsTests
             File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
 
             // Act & Assert
-            var act = () => File.ReadAllBytes(path, offset: 10L);
-            act.Should().Throw<ArgumentOutOfRangeException>();
+            var bytes = File.ReadAllBytes(path, offset: 10L);
+            bytes.Should().BeEmpty();
         }
         finally
         {
@@ -172,8 +171,8 @@ public class FileExtensionsTests
             File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
 
             // Act & Assert
-            var act = async () => await File.ReadAllBytesAsync(path, offset: 10L);
-            await act.Should().ThrowAsync<ArgumentOutOfRangeException>();
+            var bytes = await File.ReadAllBytesAsync(path, offset: 10L);
+            bytes.Should().BeEmpty();
         }
         finally
         {
