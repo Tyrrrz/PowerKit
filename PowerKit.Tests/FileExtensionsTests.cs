@@ -9,7 +9,7 @@ namespace PowerKit.Tests;
 public class FileExtensionsTests
 {
     [Fact]
-    public void WriteAllZeroes_Test()
+    public async Task WriteAllZeroes_Test()
     {
         // Arrange
         var path = Path.GetTempFileName();
@@ -20,7 +20,7 @@ public class FileExtensionsTests
             File.WriteAllZeroes(path, 1024);
 
             // Assert
-            var bytes = File.ReadAllBytes(path);
+            var bytes = await File.ReadAllBytesAsync(path);
             bytes.Should().HaveCount(1024);
             bytes.Should().AllSatisfy(b => b.Should().Be(0));
         }
