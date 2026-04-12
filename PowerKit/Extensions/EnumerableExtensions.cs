@@ -7,6 +7,9 @@ internal static class EnumerableExtensions
 {
     extension<T>(T obj)
     {
+        /// <summary>
+        /// Wraps the object in an enumerable containing a single element.
+        /// </summary>
         public IEnumerable<T> ToSingletonEnumerable()
         {
             yield return obj;
@@ -16,6 +19,9 @@ internal static class EnumerableExtensions
     extension<T>(IEnumerable<T?> source)
         where T : class
     {
+        /// <summary>
+        /// Filters out <see langword="null"/> elements from the sequence.
+        /// </summary>
         public IEnumerable<T> WhereNotNull()
         {
             foreach (var item in source)
@@ -31,6 +37,9 @@ internal static class EnumerableExtensions
     extension<T>(IEnumerable<T?> source)
         where T : struct
     {
+        /// <summary>
+        /// Filters out <see langword="null"/> elements from the sequence of nullable value types.
+        /// </summary>
         public IEnumerable<T> WhereNotNull()
         {
             foreach (var item in source)
@@ -45,6 +54,9 @@ internal static class EnumerableExtensions
 
     extension(IEnumerable<string?> source)
     {
+        /// <summary>
+        /// Filters out <see langword="null"/> and empty strings from the sequence.
+        /// </summary>
         public IEnumerable<string> WhereNotNullOrEmpty()
         {
             foreach (var item in source)
@@ -56,6 +68,9 @@ internal static class EnumerableExtensions
             }
         }
 
+        /// <summary>
+        /// Filters out <see langword="null"/>, empty, and whitespace-only strings from the sequence.
+        /// </summary>
         public IEnumerable<string> WhereNotNullOrWhiteSpace()
         {
             foreach (var item in source)
@@ -71,6 +86,9 @@ internal static class EnumerableExtensions
     extension<T>(IEnumerable<T> source)
         where T : struct
     {
+        /// <summary>
+        /// Returns the first element of the sequence, or <see langword="null"/> if the sequence is empty.
+        /// </summary>
         public T? FirstOrNull()
         {
             foreach (var item in source)
@@ -81,6 +99,9 @@ internal static class EnumerableExtensions
             return null;
         }
 
+        /// <summary>
+        /// Returns the last element of the sequence, or <see langword="null"/> if the sequence is empty.
+        /// </summary>
         public T? LastOrNull()
         {
             if (source is IReadOnlyList<T> list)
@@ -98,6 +119,9 @@ internal static class EnumerableExtensions
             return last;
         }
 
+        /// <summary>
+        /// Returns the element at the specified index, or <see langword="null"/> if the index is out of range.
+        /// </summary>
         public T? ElementAtOrNull(int index)
         {
             var list = source as IReadOnlyList<T> ?? source.ToArray();

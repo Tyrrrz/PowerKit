@@ -10,6 +10,9 @@ internal static class AsyncEnumerableExtensions
 {
     extension<T>(IAsyncEnumerable<T> source)
     {
+        /// <summary>
+        /// Returns a specified number of elements from the start of the async sequence.
+        /// </summary>
         public async IAsyncEnumerable<T> TakeAsync(
             int count,
             [EnumeratorCancellation] CancellationToken cancellationToken = default
@@ -32,6 +35,10 @@ internal static class AsyncEnumerableExtensions
             }
         }
 
+        /// <summary>
+        /// Projects each element of the async sequence to an <see cref="IEnumerable{T}"/>
+        /// and flattens the resulting sequences into one async sequence.
+        /// </summary>
         public async IAsyncEnumerable<TResult> SelectManyAsync<TResult>(
             Func<T, IEnumerable<TResult>> transform,
             [EnumeratorCancellation] CancellationToken cancellationToken = default
@@ -50,6 +57,9 @@ internal static class AsyncEnumerableExtensions
             }
         }
 
+        /// <summary>
+        /// Materializes the async sequence into a <see cref="List{T}"/>.
+        /// </summary>
         public async ValueTask<List<T>> ToListAsync(
             CancellationToken cancellationToken = default
         )
@@ -68,6 +78,9 @@ internal static class AsyncEnumerableExtensions
             return list;
         }
 
+        /// <summary>
+        /// Enables directly awaiting the async sequence, materializing it into a <see cref="List{T}"/>.
+        /// </summary>
         public ValueTaskAwaiter<List<T>> GetAwaiter() => source.ToListAsync().GetAwaiter();
     }
 }
