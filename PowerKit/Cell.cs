@@ -33,4 +33,10 @@ internal class Cell<T>
         value = default!;
         return false;
     }
+
+    /// <summary>
+    /// Retrieves the value stored in the cell, or <paramref name="defaultValue" /> if no value has been stored.
+    /// </summary>
+    public T OpenOrDefault(T defaultValue = default!) =>
+        TryOpen(out var value) ? value : defaultValue;
 }
