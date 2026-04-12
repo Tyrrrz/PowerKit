@@ -12,7 +12,7 @@ file static class PathEx
     // the OS-specific Path.GetInvalidFileNameChars() returns.
     // This is useful when working with files that may be accessed from
     // different operating systems, such as NTFS drives on Linux.
-    private static readonly char[] CrossPlatformInvalidFileNameChars =
+    public static readonly char[] CrossPlatformInvalidFileNameChars =
     [
         '\0', // Null character - invalid on all filesystems
         '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', // ASCII control characters -
@@ -32,7 +32,7 @@ file static class PathEx
 
     // Path chars are the same as file name chars, except path separators
     // and the colon (drive letter separator) are valid in paths.
-    private static readonly char[] CrossPlatformInvalidPathChars =
+    public static readonly char[] CrossPlatformInvalidPathChars =
         CrossPlatformInvalidFileNameChars
             .Where(ch => ch != '/' && ch != '\\' && ch != ':')
             .ToArray();
