@@ -14,7 +14,10 @@ internal partial class TempFile(string path) : IDisposable
     public string Path { get; } = path;
 
     /// <inheritdoc />
-    public void Dispose() => File.Delete(Path);
+    public void Dispose()
+    {
+        File.Delete(Path);
+    }
 }
 
 internal partial class TempFile
