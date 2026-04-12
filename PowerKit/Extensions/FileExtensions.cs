@@ -37,7 +37,7 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var buffer = new byte[stream.Length - offset];
+            var buffer = new byte[checked((int)(stream.Length - offset))];
             stream.ReadExactly(buffer);
 
             return buffer;
@@ -54,18 +54,16 @@ internal static class FileExtensions
         {
             using var stream = new FileStream(
                 path,
-                new FileStreamOptions
-                {
-                    Mode = FileMode.Open,
-                    Access = FileAccess.Read,
-                    Share = FileShare.ReadWrite,
-                    Options = FileOptions.Asynchronous,
-                }
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite,
+                bufferSize: 4096,
+                FileOptions.Asynchronous
             );
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var buffer = new byte[stream.Length - offset];
+            var buffer = new byte[checked((int)(stream.Length - offset))];
             await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
 
             return buffer;
