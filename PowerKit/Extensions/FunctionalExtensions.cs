@@ -45,7 +45,7 @@ internal static class FunctionalExtensions
 
 // Separate class because C# (CS0111) does not allow two generic methods with identical
 // parameter types that differ only by constraint (class vs struct) in the same class.
-internal static class FunctionalExtensions2
+internal static class ReferenceTypeFunctionalExtensions
 {
     extension<T>(T value)
         where T : class
