@@ -34,7 +34,6 @@ internal static class AssemblyExtensions
                 );
 
             using var reader = new StreamReader(stream, Encoding.UTF8);
-
             return reader.ReadToEnd();
         }
 
@@ -54,7 +53,6 @@ internal static class AssemblyExtensions
                 );
 
             using var reader = new StreamReader(stream, Encoding.UTF8);
-
             return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
         }
 
