@@ -14,9 +14,10 @@ public class CollectionExtensionsTests
         var collection = (ICollection<int>) new List<int> { 1, 2, 3, 4, 5 };
 
         // Act
-        collection.RemoveAll(x => x % 2 == 0);
+        var removed = collection.RemoveAll(x => x % 2 == 0);
 
         // Assert
+        removed.Should().Be(2);
         collection.Should().Equal(1, 3, 5);
     }
 }
