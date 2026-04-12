@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content
+      Include="**/*.cs"
+      Exclude="obj/**/*.cs"
+      Pack="true"
+      PackagePath="contentFiles/cs/any/PowerKit"
+      Visible="false"
+      BuildAction="compile"
+    />
+    <Content
+      Include="**/*.cs"
+      Exclude="obj/**/*.cs"
+      Pack="true"
+      PackagePath="content/PowerKit"
+      Visible="false"
+      BuildAction="compile"
+    />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PolyShim" />
+  </ItemGroup>
+</Project>

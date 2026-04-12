@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Misc/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="License.txt" />
+    <File Path="NuGet.config" />
+    <File Path="README.md" />
+  </Folder>
+
+  <Project Path="PowerKit/PowerKit.csproj" />
+  <Project Path="PowerKit.Tests/PowerKit.Tests.csproj" />
+</Solution>
