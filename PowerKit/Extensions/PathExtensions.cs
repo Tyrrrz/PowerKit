@@ -34,9 +34,9 @@ internal static class PathExtensions
         {
             var buffer = new StringBuilder(fileName.Length);
 
-            foreach (var c in fileName)
+            foreach (var ch in fileName)
             {
-                buffer.Append(!InvalidFileNameChars.Contains(c) ? c : '_');
+                buffer.Append(!InvalidFileNameChars.Contains(ch) ? ch : '_');
             }
 
             // File names cannot end with a dot or whitespace (invalid on Windows, ambiguous on other filesystems)

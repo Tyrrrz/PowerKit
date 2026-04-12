@@ -33,14 +33,14 @@ internal static class StringExtensions
         {
             var builder = new StringBuilder(str.Length * 2);
 
-            foreach (var c in str)
+            foreach (var ch in str)
             {
-                if (char.IsUpper(c) && builder.Length > 0)
+                if (char.IsUpper(ch) && builder.Length > 0)
                 {
                     builder.Append(separator);
                 }
 
-                builder.Append(c);
+                builder.Append(ch);
             }
 
             return builder.ToString();
