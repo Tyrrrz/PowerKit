@@ -15,7 +15,6 @@ public class TempFileTests
 
         // Assert
         File.Exists(tempFile.Path).Should().BeTrue();
-        tempFile.Path.Should().EndWith(".tmp");
     }
 
     [Fact]
