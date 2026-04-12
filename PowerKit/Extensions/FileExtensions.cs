@@ -10,6 +10,30 @@ internal static class FileExtensions
     extension(File)
     {
         /// <summary>
+        /// Checks if it's possible to write to the specified file.
+        /// </summary>
+        public static bool CheckWriteAccess(string path)
+        {
+            var existed = File.Exists(path);
+
+            try
+            {
+                using (new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite)) { }
+
+                if (!existed)
+                {
+                    File.Delete(path);
+                }
+
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Creates a file at the specified path and fills it with zeroes.
         /// </summary>
         public static void WriteAllZeroes(string path, long count)

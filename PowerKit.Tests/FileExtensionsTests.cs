@@ -10,6 +10,55 @@ namespace PowerKit.Tests;
 public class FileExtensionsTests
 {
     [Fact]
+    public void CheckWriteAccess_WritableFile_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+
+        // Act
+        var result = File.CheckWriteAccess(tempFile.Path);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void CheckWriteAccess_ReadOnlyFile_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.SetAttributes(tempFile.Path, File.GetAttributes(tempFile.Path) | FileAttributes.ReadOnly);
+
+        try
+        {
+            // Act
+            var result = File.CheckWriteAccess(tempFile.Path);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+        finally
+        {
+            File.SetAttributes(tempFile.Path, File.GetAttributes(tempFile.Path) & ~FileAttributes.ReadOnly);
+        }
+    }
+
+    [Fact]
+    public void CheckWriteAccess_NonExistentFile_Test()
+    {
+        // Arrange
+        using var tempDir = TempDirectory.Create();
+        var path = Path.Combine(tempDir.Path, "new-file.txt");
+
+        // Act
+        var result = File.CheckWriteAccess(path);
+
+        // Assert
+        result.Should().BeTrue();
+        File.Exists(path).Should().BeFalse();
+    }
+
+    [Fact]
     public async Task WriteAllZeroes_Test()
     {
         // Arrange
