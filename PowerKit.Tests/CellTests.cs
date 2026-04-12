@@ -1,0 +1,52 @@
+using FluentAssertions;
+using PowerKit;
+using Xunit;
+
+namespace PowerKit.Tests;
+
+public class CellTests
+{
+    [Fact]
+    public void TryOpen_ValueNotSet_Test()
+    {
+        // Arrange
+        var cell = new Cell<int?>();
+
+        // Act
+        var result = cell.TryOpen(out var value);
+
+        // Assert
+        result.Should().BeFalse();
+        value.Should().BeNull();
+    }
+
+    [Fact]
+    public void Store_TryOpen_Test()
+    {
+        // Arrange
+        var cell = new Cell<int?>();
+
+        // Act
+        cell.Store(42);
+        var result = cell.TryOpen(out var value);
+
+        // Assert
+        result.Should().BeTrue();
+        value.Should().Be(42);
+    }
+
+    [Fact]
+    public void Store_Null_TryOpen_Test()
+    {
+        // Arrange
+        var cell = new Cell<int?>();
+
+        // Act
+        cell.Store(null);
+        var result = cell.TryOpen(out var value);
+
+        // Assert
+        result.Should().BeTrue();
+        value.Should().BeNull();
+    }
+}
