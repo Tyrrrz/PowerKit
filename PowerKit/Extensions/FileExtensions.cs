@@ -40,10 +40,11 @@ internal static class FileExtensions
 
             var size = checked((int)(stream.Length - offset));
             using var buffer = MemoryPool<byte>.Shared.Rent(size);
+            var slice = buffer.Memory.Span[..size];
 
-            stream.ReadExactly(buffer.Memory.Span[..size]);
+            stream.ReadExactly(slice);
 
-            return buffer.Memory.Span[..size].ToArray();
+            return slice.ToArray();
         }
 
         /// <summary>
@@ -62,10 +63,11 @@ internal static class FileExtensions
 
             var size = checked((int)length);
             using var buffer = MemoryPool<byte>.Shared.Rent(size);
+            var slice = buffer.Memory.Span[..size];
 
-            stream.ReadExactly(buffer.Memory.Span[..size]);
+            stream.ReadExactly(slice);
 
-            return buffer.Memory.Span[..size].ToArray();
+            return slice.ToArray();
         }
 
         /// <summary>
@@ -90,10 +92,11 @@ internal static class FileExtensions
 
             var size = checked((int)(stream.Length - offset));
             using var buffer = MemoryPool<byte>.Shared.Rent(size);
+            var slice = buffer.Memory[..size];
 
-            await stream.ReadExactlyAsync(buffer.Memory[..size], cancellationToken).ConfigureAwait(false);
+            await stream.ReadExactlyAsync(slice, cancellationToken).ConfigureAwait(false);
 
-            return buffer.Memory.Span[..size].ToArray();
+            return slice.Span.ToArray();
         }
 
         /// <summary>
@@ -119,10 +122,11 @@ internal static class FileExtensions
 
             var size = checked((int)length);
             using var buffer = MemoryPool<byte>.Shared.Rent(size);
+            var slice = buffer.Memory[..size];
 
-            await stream.ReadExactlyAsync(buffer.Memory[..size], cancellationToken).ConfigureAwait(false);
+            await stream.ReadExactlyAsync(slice, cancellationToken).ConfigureAwait(false);
 
-            return buffer.Memory.Span[..size].ToArray();
+            return slice.Span.ToArray();
         }
     }
 }
