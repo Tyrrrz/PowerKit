@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 
 namespace PowerKit.Extensions;
 
@@ -11,12 +12,8 @@ internal static class BinaryWriterExtensions
         /// </summary>
         public void WriteNullTerminatedString(string value)
         {
-            foreach (var ch in value)
-            {
-                writer.Write(ch);
-            }
-
-            writer.Write('\0');
+            writer.Write(Encoding.UTF8.GetBytes(value));
+            writer.Write((byte)0);
         }
     }
 }
