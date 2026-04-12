@@ -20,7 +20,18 @@ internal static class ArrayPoolExtensions
 file sealed class ArrayPoolMemoryOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength)
     : IMemoryOwner<T>
 {
+    private bool _disposed;
+
     public Memory<T> Memory { get; } = buffer.AsMemory(0, minimumLength);
 
-    public void Dispose() => pool.Return(buffer);
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+        pool.Return(buffer);
+    }
 }
