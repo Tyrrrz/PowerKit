@@ -23,6 +23,9 @@ on:
 
 jobs:
   main:
+    permissions:
+      actions: write
+      contents: write
     uses: Tyrrrz/.github/.github/workflows/nuget.yml@prime
     with:
       deploy: ${{ inputs.deploy || github.ref_type == 'tag' }}

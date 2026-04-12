@@ -26,28 +26,25 @@ internal static class BinaryReaderExtensions
         }
 
         /// <summary>
-        /// Skips zero bytes, stopping at the first non-zero byte or after reading
-        /// <paramref name="maxSkipLength" /> bytes.
+        /// Skips zero bytes in the stream, up to the specified maximum length.
         /// </summary>
         public void SkipZeroes(long? maxSkipLength = null)
         {
-            var endPosition = maxSkipLength is not null
-                ? reader.BaseStream.Position + maxSkipLength
-                : reader.BaseStream.Length;
-
-            while (reader.BaseStream.Position < endPosition)
+            var skipped = 0L;
+            while (maxSkipLength is null || skipped < maxSkipLength)
             {
-                if (reader.ReadByte() != 0)
+                if (reader.PeekChar() != 0)
                 {
-                    // Go back to the non-zero byte
-                    reader.BaseStream.Seek(-1, SeekOrigin.Current);
-                    return;
+                    break;
                 }
+
+                reader.ReadByte();
+                skipped++;
             }
         }
 
         /// <summary>
-        /// Reads a null-terminated string from the stream.
+        /// Reads a null-terminated string from the binary reader.
         /// </summary>
         public string ReadNullTerminatedString()
         {

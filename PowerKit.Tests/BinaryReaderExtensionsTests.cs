@@ -69,7 +69,7 @@ public class BinaryReaderExtensionsTests
     public void SkipZeroes_Test()
     {
         // Arrange
-        var data = new byte[] { 0x00, 0x00, 0x01, 0x02 };
+        var data = new byte[] { 0, 0, 0, 1, 2, 3 };
         using var stream = new MemoryStream(data);
         using var reader = new BinaryReader(stream);
 
@@ -77,15 +77,15 @@ public class BinaryReaderExtensionsTests
         reader.SkipZeroes();
 
         // Assert
-        stream.Position.Should().Be(2);
-        reader.ReadByte().Should().Be(0x01);
+        stream.Position.Should().Be(3);
+        reader.ReadByte().Should().Be(1);
     }
 
     [Fact]
-    public void SkipZeroes_MaxLength_Test()
+    public void SkipZeroes_WithMaxLength_Test()
     {
         // Arrange
-        var data = new byte[] { 0x00, 0x00, 0x00, 0x01 };
+        var data = new byte[] { 0, 0, 0, 0, 1, 2, 3 };
         using var stream = new MemoryStream(data);
         using var reader = new BinaryReader(stream);
 
@@ -94,6 +94,22 @@ public class BinaryReaderExtensionsTests
 
         // Assert
         stream.Position.Should().Be(2);
+        reader.ReadByte().Should().Be(0);
+    }
+
+    [Fact]
+    public void SkipZeroes_AllZeroes_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0, 0, 0 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        reader.SkipZeroes();
+
+        // Assert
+        stream.Position.Should().Be(3);
     }
 
     [Fact]
@@ -115,7 +131,7 @@ public class BinaryReaderExtensionsTests
     public void ReadNullTerminatedString_Empty_Test()
     {
         // Arrange
-        var data = new byte[] { 0x00 };
+        var data = new byte[] { 0 };
         using var stream = new MemoryStream(data);
         using var reader = new BinaryReader(stream, Encoding.ASCII);
 
@@ -126,3 +142,4 @@ public class BinaryReaderExtensionsTests
         result.Should().BeEmpty();
     }
 }
+
