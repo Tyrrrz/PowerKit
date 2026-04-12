@@ -69,6 +69,6 @@ public class AssemblyExtensionsTests
         await ThisAssembly.ExtractManifestResourceAsync(ResourceName, tempFile.Path);
 
         // Assert
-        File.ReadAllText(tempFile.Path).Should().Be("hello");
+        (await File.ReadAllTextAsync(tempFile.Path)).Should().Be("hello");
     }
 }
