@@ -103,9 +103,22 @@ internal static class StringExtensions
         /// </summary>
         public string Reverse()
         {
-            var chars = str.ToCharArray();
-            Array.Reverse(chars);
-            return new string(chars);
+            if (str.Length <= 1)
+            {
+                return str;
+            }
+
+            return string.Create(
+                str.Length,
+                str,
+                static (chars, source) =>
+                {
+                    for (var i = 0; i < source.Length; i++)
+                    {
+                        chars[i] = source[source.Length - 1 - i];
+                    }
+                }
+            );
         }
     }
 }
