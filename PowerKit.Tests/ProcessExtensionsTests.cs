@@ -9,14 +9,14 @@ namespace PowerKit.Tests;
 public class ProcessExtensionsTests
 {
     [Fact]
-    public void IsRunning_CurrentProcess_Test()
+    public void IsRunning_Running_Test()
     {
         // Act & assert
         Process.IsRunning(Environment.ProcessId).Should().BeTrue();
     }
 
     [Fact]
-    public void IsRunning_ExitedProcess_Test()
+    public void IsRunning_NotRunning_Test()
     {
         // Arrange
         using var process = Process.Start(new ProcessStartInfo("dotnet", "--version")
