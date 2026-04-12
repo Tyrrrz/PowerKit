@@ -16,6 +16,7 @@ public class PathExtensionsTests
         Path.EscapeFileName("a\\b").Should().Be("a_b");
         Path.EscapeFileName("C:drive").Should().Be("C_drive");
         Path.EscapeFileName("a\0b/c\\d:e*f?g\"h<i").Should().Be("a_b_c_d_e_f_g_h_i");
+        Path.EscapeFileName("a\u0001b\u001Fc").Should().Be("a_b_c");
         Path.EscapeFileName("hello...").Should().Be("hello");
         Path.EscapeFileName("hello   ").Should().Be("hello");
         Path.EscapeFileName("hello. . ").Should().Be("hello");
