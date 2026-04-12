@@ -16,6 +16,14 @@ public class FunctionalExtensionsTests
     }
 
     [Fact]
+    public void NullIf_ReferenceType_Test()
+    {
+        // Act & assert
+        "hello".NullIf(v => v == "hello").Should().BeNull();
+        "world".NullIf(v => v == "hello").Should().Be("world");
+    }
+
+    [Fact]
     public void NullIf_Test()
     {
         // Act & assert
