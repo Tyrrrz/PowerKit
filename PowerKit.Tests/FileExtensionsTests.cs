@@ -27,7 +27,7 @@ public class FileExtensionsTests
     public void TryDelete_NonExistingFile_Test()
     {
         // Act
-        var result = File.TryDelete(Path.GetTempFileName() + ".nonexistent");
+        var result = File.TryDelete(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
         // Assert
         result.Should().BeTrue();
