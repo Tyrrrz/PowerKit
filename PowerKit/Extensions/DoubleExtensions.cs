@@ -24,7 +24,7 @@ internal static class DoubleExtensions
             double.ParseOrNull(
                 str,
                 NumberStyles.Float | NumberStyles.AllowThousands,
-                CultureInfo.InvariantCulture
+                CultureInfo.CurrentCulture
             );
     }
 }

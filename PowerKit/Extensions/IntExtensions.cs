@@ -21,6 +21,6 @@ internal static class IntExtensions
         /// Parses the string as an <see cref="int" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static int? ParseOrNull(string? str) =>
-            int.ParseOrNull(str, NumberStyles.Integer, CultureInfo.InvariantCulture);
+            int.ParseOrNull(str, NumberStyles.Integer, CultureInfo.CurrentCulture);
     }
 }

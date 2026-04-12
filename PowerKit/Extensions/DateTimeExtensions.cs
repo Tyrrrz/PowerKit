@@ -21,6 +21,6 @@ internal static class DateTimeExtensions
         /// Parses the string as a <see cref="DateTime" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static DateTime? ParseOrNull(string? str) =>
-            DateTime.ParseOrNull(str, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime.ParseOrNull(str, CultureInfo.CurrentCulture, DateTimeStyles.None);
     }
 }

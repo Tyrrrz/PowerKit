@@ -21,6 +21,6 @@ internal static class LongExtensions
         /// Parses the string as a <see cref="long" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static long? ParseOrNull(string? str) =>
-            long.ParseOrNull(str, NumberStyles.Integer, CultureInfo.InvariantCulture);
+            long.ParseOrNull(str, NumberStyles.Integer, CultureInfo.CurrentCulture);
     }
 }

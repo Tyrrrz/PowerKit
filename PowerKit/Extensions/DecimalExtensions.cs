@@ -21,6 +21,6 @@ internal static class DecimalExtensions
         /// Parses the string as a <see cref="decimal" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static decimal? ParseOrNull(string? str) =>
-            decimal.ParseOrNull(str, NumberStyles.Number, CultureInfo.InvariantCulture);
+            decimal.ParseOrNull(str, NumberStyles.Number, CultureInfo.CurrentCulture);
     }
 }

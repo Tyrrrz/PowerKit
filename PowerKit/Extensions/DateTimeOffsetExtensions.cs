@@ -22,6 +22,6 @@ internal static class DateTimeOffsetExtensions
         /// Parses the string as a <see cref="DateTimeOffset" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static DateTimeOffset? ParseOrNull(string? str) =>
-            DateTimeOffset.ParseOrNull(str, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTimeOffset.ParseOrNull(str, CultureInfo.CurrentCulture, DateTimeStyles.None);
     }
 }

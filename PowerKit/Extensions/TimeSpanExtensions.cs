@@ -18,6 +18,6 @@ internal static class TimeSpanExtensions
         /// Parses the string as a <see cref="TimeSpan" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static TimeSpan? ParseOrNull(string? str) =>
-            TimeSpan.ParseOrNull(str, CultureInfo.InvariantCulture);
+            TimeSpan.ParseOrNull(str, CultureInfo.CurrentCulture);
     }
 }
