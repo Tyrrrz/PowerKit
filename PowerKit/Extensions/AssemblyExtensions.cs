@@ -22,10 +22,10 @@ internal static class AssemblyExtensions
                 ?.InformationalVersion ?? assembly.GetName().Version?.ToString();
 
         /// <summary>
-        /// Reads the specified manifest resource as a UTF-8 string.
+        /// Reads the specified manifest resource as a string using the specified encoding.
         /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
         /// </summary>
-        public string GetManifestResourceString(string resourceName)
+        public string GetManifestResourceString(string resourceName, Encoding encoding)
         {
             using var stream =
                 assembly.GetManifestResourceStream(resourceName)
@@ -33,16 +33,24 @@ internal static class AssemblyExtensions
                     $"Failed to find resource '{resourceName}'."
                 );
 
-            using var reader = new StreamReader(stream, Encoding.UTF8);
+            using var reader = new StreamReader(stream, encoding);
             return reader.ReadToEnd();
         }
 
         /// <summary>
-        /// Reads the specified manifest resource as a UTF-8 string asynchronously.
+        /// Reads the specified manifest resource as a UTF-8 string.
+        /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
+        /// </summary>
+        public string GetManifestResourceString(string resourceName) =>
+            assembly.GetManifestResourceString(resourceName, Encoding.UTF8);
+
+        /// <summary>
+        /// Reads the specified manifest resource as a string using the specified encoding asynchronously.
         /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
         /// </summary>
         public async Task<string> GetManifestResourceStringAsync(
             string resourceName,
+            Encoding encoding,
             CancellationToken cancellationToken = default
         )
         {
@@ -53,9 +61,18 @@ internal static class AssemblyExtensions
                 );
 
             cancellationToken.ThrowIfCancellationRequested();
-            using var reader = new StreamReader(stream, Encoding.UTF8);
+            using var reader = new StreamReader(stream, encoding);
             return await reader.ReadToEndAsync().ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Reads the specified manifest resource as a UTF-8 string asynchronously.
+        /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
+        /// </summary>
+        public Task<string> GetManifestResourceStringAsync(
+            string resourceName,
+            CancellationToken cancellationToken = default
+        ) => assembly.GetManifestResourceStringAsync(resourceName, Encoding.UTF8, cancellationToken);
 
         /// <summary>
         /// Extracts the specified manifest resource to a file at the given path.
