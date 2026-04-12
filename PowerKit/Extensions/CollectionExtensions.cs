@@ -11,15 +11,19 @@ internal static class CollectionExtensions
         /// <summary>
         /// Removes all elements from the collection that match the specified predicate.
         /// </summary>
-        public void RemoveAll(Func<T, bool> predicate)
+        public int RemoveAll(Func<T, bool> predicate)
         {
+            var removedCount = 0;
+
             foreach (var item in source.ToArray())
             {
-                if (predicate(item))
+                if (predicate(item) && source.Remove(item))
                 {
-                    source.Remove(item);
+                    removedCount++;
                 }
             }
+
+            return removedCount;
         }
     }
 }
