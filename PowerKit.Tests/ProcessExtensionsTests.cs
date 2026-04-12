@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
@@ -16,7 +17,7 @@ public class ProcessExtensionsTests
     }
 
     [Fact]
-    public void IsRunning_NotRunning_Test()
+    public async Task IsRunning_NotRunning_Test()
     {
         // Arrange
         using var process = Process.Start(new ProcessStartInfo("dotnet", "--version")
@@ -24,7 +25,7 @@ public class ProcessExtensionsTests
             RedirectStandardOutput = true
         })!;
 
-        process.WaitForExit();
+        await process.WaitForExitAsync();
         var processId = process.Id;
 
         // Act & assert
