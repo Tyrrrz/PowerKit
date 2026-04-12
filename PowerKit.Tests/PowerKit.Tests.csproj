@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="GitHubActionsTestLogger" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Gress" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
