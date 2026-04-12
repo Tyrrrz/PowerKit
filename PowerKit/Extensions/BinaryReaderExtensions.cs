@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 
@@ -12,8 +13,13 @@ internal static class BinaryReaderExtensions
         /// </summary>
         public void SkipZeroes(long? maxSkipLength = null)
         {
+            if (!reader.BaseStream.CanSeek)
+            {
+                throw new InvalidOperationException("The underlying stream must be seekable.");
+            }
+
             var endPosition = maxSkipLength is not null
-                ? reader.BaseStream.Position + maxSkipLength.Value
+                ? Math.Min(reader.BaseStream.Position + maxSkipLength.Value, reader.BaseStream.Length)
                 : reader.BaseStream.Length;
 
             while (reader.BaseStream.Position < endPosition)
