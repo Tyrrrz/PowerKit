@@ -16,11 +16,7 @@ internal partial class TempFile(string path) : IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        try
-        {
-            File.Delete(Path);
-        }
-        catch (FileNotFoundException) { }
+        File.Delete(Path);
     }
 }
 
