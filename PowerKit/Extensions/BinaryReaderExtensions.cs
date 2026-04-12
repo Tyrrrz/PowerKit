@@ -21,9 +21,9 @@ internal static class BinaryReaderExtensions
         {
             while (!reader.IsEndOfStream && reader.BaseStream.Position * 8 % boundaryBits != 0)
             {
-                // Read a character so that it takes up either 1 or 2 bytes,
-                // depending on the encoding of the stream.
-                _ = reader.ReadChar();
+                // Advance by a single byte so padding/alignment logic remains
+                // based on bytes rather than the reader's text encoding.
+                _ = reader.ReadByte();
             }
         }
 
