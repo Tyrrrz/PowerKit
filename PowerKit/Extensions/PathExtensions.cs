@@ -1,18 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace PowerKit.Extensions;
 
 internal static class PathExtensions
 {
-    // Characters that are invalid in file names across all major filesystems
-    // (Windows NTFS/FAT32, Linux ext4/XFS, macOS HFS+/APFS), beyond what
-    // the OS-specific Path.GetInvalidFileNameChars() returns.
-    // This is useful when working with files that may be accessed from
-    // different operating systems, such as NTFS drives on Linux.
-    private static readonly HashSet<char> CrossPlatformInvalidFileNameChars =
+    private static readonly char[] CrossPlatformInvalidFileNameCharsArray =
     [
         '\0', // Null character - invalid on all filesystems
         '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', // ASCII control characters -
@@ -30,7 +24,16 @@ internal static class PathExtensions
         '|', // Pipe on Windows
     ];
 
-    private static readonly HashSet<char> CrossPlatformInvalidPathChars =
+    // Characters that are invalid in file names across all major filesystems
+    // (Windows NTFS/FAT32, Linux ext4/XFS, macOS HFS+/APFS), beyond what
+    // the OS-specific Path.GetInvalidFileNameChars() returns.
+    // This is useful when working with files that may be accessed from
+    // different operating systems, such as NTFS drives on Linux.
+    private static readonly HashSet<char> CrossPlatformInvalidFileNameChars = new(
+        CrossPlatformInvalidFileNameCharsArray
+    );
+
+    private static readonly char[] CrossPlatformInvalidPathCharsArray =
     [
         '\0', // Null character - invalid on all filesystems
         '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', // ASCII control characters -
@@ -45,23 +48,27 @@ internal static class PathExtensions
         '|', // Pipe on Windows
     ];
 
+    private static readonly HashSet<char> CrossPlatformInvalidPathChars = new(
+        CrossPlatformInvalidPathCharsArray
+    );
+
     extension(Path)
     {
         public static char[] GetInvalidFileNameChars(bool crossPlatform) =>
             crossPlatform
-                ? CrossPlatformInvalidFileNameChars.ToArray()
+                ? CrossPlatformInvalidFileNameCharsArray
                 : Path.GetInvalidFileNameChars();
 
         public static char[] GetInvalidPathChars(bool crossPlatform) =>
             crossPlatform
-                ? CrossPlatformInvalidPathChars.ToArray()
+                ? CrossPlatformInvalidPathCharsArray
                 : Path.GetInvalidPathChars();
 
         public static string EscapeFileName(string fileName, bool crossPlatform = true)
         {
             var invalidChars = crossPlatform
-                ? (IReadOnlyCollection<char>)CrossPlatformInvalidFileNameChars
-                : Path.GetInvalidFileNameChars();
+                ? CrossPlatformInvalidFileNameChars
+                : new HashSet<char>(Path.GetInvalidFileNameChars());
 
             var buffer = new StringBuilder(fileName.Length);
 
