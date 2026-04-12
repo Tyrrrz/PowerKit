@@ -17,6 +17,6 @@ public class AssemblyExtensionsTests
         var version = assembly.TryGetVersionString();
 
         // Assert
-        version.Should().NotBeNullOrEmpty();
+        version.Should().NotBeNullOrWhiteSpace();
     }
 }
