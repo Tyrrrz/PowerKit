@@ -7,6 +7,10 @@ internal static class StringExtensions
 {
     extension(string str)
     {
+        /// <summary>
+        /// Returns the substring before the first occurrence of the specified substring.
+        /// If the substring is not found, returns the original string.
+        /// </summary>
         public string SubstringUntil(
             string sub,
             StringComparison comparison = StringComparison.Ordinal
@@ -17,6 +21,10 @@ internal static class StringExtensions
                 _ => str,
             };
 
+        /// <summary>
+        /// Returns the substring before the last occurrence of the specified substring.
+        /// If the substring is not found, returns the original string.
+        /// </summary>
         public string SubstringUntilLast(
             string sub,
             StringComparison comparison = StringComparison.Ordinal
@@ -27,6 +35,10 @@ internal static class StringExtensions
                 _ => str,
             };
 
+        /// <summary>
+        /// Returns the substring after the first occurrence of the specified substring.
+        /// If the substring is not found, returns an empty string.
+        /// </summary>
         public string SubstringAfter(
             string sub,
             StringComparison comparison = StringComparison.Ordinal
@@ -37,6 +49,10 @@ internal static class StringExtensions
                 _ => "",
             };
 
+        /// <summary>
+        /// Returns the substring after the last occurrence of the specified substring.
+        /// If the substring is not found, returns an empty string.
+        /// </summary>
         public string SubstringAfterLast(
             string sub,
             StringComparison comparison = StringComparison.Ordinal
@@ -47,8 +63,14 @@ internal static class StringExtensions
                 _ => "",
             };
 
+        /// <summary>
+        /// Truncates the string to the specified maximum number of characters.
+        /// </summary>
         public string Truncate(int charCount) => str.Length > charCount ? str[..charCount] : str;
 
+        /// <summary>
+        /// Inserts the specified separator before each uppercase letter, splitting PascalCase words.
+        /// </summary>
         public string SeparateWords(char separator)
         {
             var builder = new StringBuilder(str.Length * 2);
@@ -66,8 +88,14 @@ internal static class StringExtensions
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Converts the PascalCase string to kebab-case (e.g., "FooBar" → "foo-bar").
+        /// </summary>
         public string ToKebabCase() => str.SeparateWords('-').ToLowerInvariant();
 
+        /// <summary>
+        /// Converts the PascalCase string to snake_case (e.g., "FooBar" → "foo_bar").
+        /// </summary>
         public string ToSnakeCase() => str.SeparateWords('_').ToLowerInvariant();
     }
 }

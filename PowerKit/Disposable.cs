@@ -3,17 +3,31 @@ using System.Collections.Generic;
 
 namespace PowerKit;
 
+/// <summary>
+/// Provides utility methods for creating and composing <see cref="IDisposable" /> instances.
+/// </summary>
 internal partial class Disposable(Action dispose) : IDisposable
 {
+    /// <inheritdoc />
     public void Dispose() => dispose();
 }
 
 internal partial class Disposable
 {
+    /// <summary>
+    /// Gets a disposable that performs no action when disposed.
+    /// </summary>
     public static IDisposable Null { get; } = Create(() => { });
 
+    /// <summary>
+    /// Creates a disposable that invokes the specified action when disposed.
+    /// </summary>
     public static IDisposable Create(Action dispose) => new Disposable(dispose);
 
+    /// <summary>
+    /// Creates a disposable that disposes all specified disposables when disposed,
+    /// aggregating any exceptions thrown during disposal.
+    /// </summary>
     public static IDisposable Merge(params IEnumerable<IDisposable> disposables) =>
         Create(() =>
         {

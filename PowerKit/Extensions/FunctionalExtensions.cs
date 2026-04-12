@@ -7,22 +7,38 @@ internal static class FunctionalExtensions
 {
     extension<TIn>(TIn input)
     {
+        /// <summary>
+        /// Passes the value through the specified transform function and returns the result.
+        /// </summary>
         public TOut Pipe<TOut>(Func<TIn, TOut> transform) => transform(input);
     }
 
     extension<T>(T value)
         where T : struct
     {
+        /// <summary>
+        /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
+        /// </summary>
         public T? NullIf(Func<T, bool> predicate) => !predicate(value) ? value : null;
 
+        /// <summary>
+        /// Returns <see langword="null" /> if the value equals the default value for its type; otherwise, returns the value.
+        /// </summary>
         public T? NullIfDefault() =>
             value.NullIf(v => EqualityComparer<T>.Default.Equals(v, default));
     }
 
     extension(string value)
     {
+        /// <summary>
+        /// Returns <see langword="null" /> if the string is <see langword="null" /> or empty; otherwise, returns the string.
+        /// </summary>
         public string? NullIfEmpty() => !string.IsNullOrEmpty(value) ? value : null;
 
+        /// <summary>
+        /// Returns <see langword="null" /> if the string is <see langword="null" />, empty, or consists only of whitespace;
+        /// otherwise, returns the string.
+        /// </summary>
         public string? NullIfWhiteSpace() => !string.IsNullOrWhiteSpace(value) ? value : null;
     }
 }

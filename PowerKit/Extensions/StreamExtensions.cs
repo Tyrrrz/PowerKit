@@ -10,6 +10,9 @@ internal static class StreamExtensions
 {
     extension(Stream source)
     {
+        /// <summary>
+        /// Copies the contents of the stream to the destination stream, optionally flushing after each write.
+        /// </summary>
         public async Task CopyToAsync(
             Stream destination,
             bool autoFlush,
@@ -40,6 +43,10 @@ internal static class StreamExtensions
             }
         }
 
+        /// <summary>
+        /// Copies the contents of the stream to the destination stream, reporting progress
+        /// as a ratio of bytes read to <paramref name="contentLength" />.
+        /// </summary>
         public async ValueTask CopyToAsync(
             Stream destination,
             long contentLength,
@@ -75,6 +82,10 @@ internal static class StreamExtensions
             }
         }
 
+        /// <summary>
+        /// Copies the contents of the stream to the destination stream, reporting progress
+        /// based on the source stream's length when available.
+        /// </summary>
         public async ValueTask CopyToAsync(
             Stream destination,
             IProgress<double>? progress = null,

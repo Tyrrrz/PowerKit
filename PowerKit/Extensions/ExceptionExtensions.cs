@@ -7,6 +7,10 @@ internal static class ExceptionExtensions
 {
     extension(Exception exception)
     {
+        /// <summary>
+        /// Returns a flat list containing the exception itself and all of its
+        /// nested inner exceptions, recursively unwrapping <see cref="AggregateException" /> instances.
+        /// </summary>
         public IReadOnlyList<Exception> GetSelfAndDescendants()
         {
             static void PopulateDescendants(Exception ex, ICollection<Exception> result)

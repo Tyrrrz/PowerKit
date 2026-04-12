@@ -6,6 +6,9 @@ internal static class ComparableExtensions
 {
     extension<T>(T value) where T : IComparable<T>
     {
+        /// <summary>
+        /// Clamps the value to the specified range.
+        /// </summary>
         public T Clamp(T min, T max)
         {
             if (value.CompareTo(min) < 0)
@@ -17,8 +20,14 @@ internal static class ComparableExtensions
             return value;
         }
 
+        /// <summary>
+        /// Returns the smaller of the current value and the specified value.
+        /// </summary>
         public T Min(T other) => value.CompareTo(other) <= 0 ? value : other;
 
+        /// <summary>
+        /// Returns the larger of the current value and the specified value.
+        /// </summary>
         public T Max(T other) => value.CompareTo(other) >= 0 ? value : other;
     }
 }

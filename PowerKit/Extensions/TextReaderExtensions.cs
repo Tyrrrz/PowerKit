@@ -9,6 +9,9 @@ internal static class TextReaderExtensions
 {
     extension(TextReader reader)
     {
+        /// <summary>
+        /// Reads all lines from the text reader as an async sequence.
+        /// </summary>
         public async IAsyncEnumerable<string> ReadLinesAsync(
             [EnumeratorCancellation] CancellationToken cancellationToken = default
         )
