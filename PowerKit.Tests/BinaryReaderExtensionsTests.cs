@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 using FluentAssertions;
@@ -9,19 +8,6 @@ namespace PowerKit.Tests;
 
 public class BinaryReaderExtensionsTests
 {
-    [Fact]
-    public void SkipZeroes_NonSeekableStream_Test()
-    {
-        // Arrange
-        var data = new byte[] { 0, 0, 1, 2 };
-        using var stream = new NonSeekableStream(data);
-        using var reader = new BinaryReader(stream);
-
-        // Act & assert
-        var act = () => reader.SkipZeroes();
-        act.Should().Throw<InvalidOperationException>();
-    }
-
     [Fact]
     public void SkipZeroes_Test()
     {
@@ -98,9 +84,4 @@ public class BinaryReaderExtensionsTests
         // Assert
         result.Should().Be("");
     }
-}
-
-file class NonSeekableStream(byte[] data) : MemoryStream(data)
-{
-    public override bool CanSeek => false;
 }
