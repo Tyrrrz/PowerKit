@@ -36,7 +36,7 @@ internal static class AsyncEnumerableExtensions
         }
 
         /// <summary>
-        /// Projects each element of the async sequence to an <see cref="IEnumerable{T}"/>
+        /// Projects each element of the async sequence to an <see cref="IEnumerable{T}" />
         /// and flattens the resulting sequences into one async sequence.
         /// </summary>
         public async IAsyncEnumerable<TResult> SelectManyAsync<TResult>(
@@ -58,7 +58,7 @@ internal static class AsyncEnumerableExtensions
         }
 
         /// <summary>
-        /// Materializes the async sequence into a <see cref="List{T}"/>.
+        /// Materializes the async sequence into a <see cref="List{T}" />.
         /// </summary>
         public async ValueTask<List<T>> ToListAsync(
             CancellationToken cancellationToken = default
@@ -79,7 +79,7 @@ internal static class AsyncEnumerableExtensions
         }
 
         /// <summary>
-        /// Enables directly awaiting the async sequence, materializing it into a <see cref="List{T}"/>.
+        /// Enables directly awaiting the async sequence, materializing it into a <see cref="List{T}" />.
         /// </summary>
         public ValueTaskAwaiter<List<T>> GetAwaiter() => source.ToListAsync().GetAwaiter();
     }

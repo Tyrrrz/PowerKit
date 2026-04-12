@@ -17,12 +17,12 @@ internal static class FunctionalExtensions
         where T : struct
     {
         /// <summary>
-        /// Returns <see langword="null"/> if the value matches the specified predicate; otherwise, returns the value.
+        /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
         /// </summary>
         public T? NullIf(Func<T, bool> predicate) => !predicate(value) ? value : null;
 
         /// <summary>
-        /// Returns <see langword="null"/> if the value equals the default value for its type; otherwise, returns the value.
+        /// Returns <see langword="null" /> if the value equals the default value for its type; otherwise, returns the value.
         /// </summary>
         public T? NullIfDefault() =>
             value.NullIf(v => EqualityComparer<T>.Default.Equals(v, default));
@@ -31,12 +31,12 @@ internal static class FunctionalExtensions
     extension(string value)
     {
         /// <summary>
-        /// Returns <see langword="null"/> if the string is <see langword="null"/> or empty; otherwise, returns the string.
+        /// Returns <see langword="null" /> if the string is <see langword="null" /> or empty; otherwise, returns the string.
         /// </summary>
         public string? NullIfEmpty() => !string.IsNullOrEmpty(value) ? value : null;
 
         /// <summary>
-        /// Returns <see langword="null"/> if the string is <see langword="null"/>, empty, or consists only of whitespace;
+        /// Returns <see langword="null" /> if the string is <see langword="null" />, empty, or consists only of whitespace;
         /// otherwise, returns the string.
         /// </summary>
         public string? NullIfWhiteSpace() => !string.IsNullOrWhiteSpace(value) ? value : null;

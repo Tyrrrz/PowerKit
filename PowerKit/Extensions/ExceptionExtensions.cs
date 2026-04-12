@@ -9,7 +9,7 @@ internal static class ExceptionExtensions
     {
         /// <summary>
         /// Returns a flat list containing the exception itself and all of its
-        /// nested inner exceptions, recursively unwrapping <see cref="AggregateException"/> instances.
+        /// nested inner exceptions, recursively unwrapping <see cref="AggregateException" /> instances.
         /// </summary>
         public IReadOnlyList<Exception> GetSelfAndDescendants()
         {

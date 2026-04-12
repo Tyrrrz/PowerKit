@@ -20,7 +20,7 @@ internal static class EnumerableExtensions
         where T : class
     {
         /// <summary>
-        /// Filters out <see langword="null"/> elements from the sequence.
+        /// Filters out <see langword="null" /> elements from the sequence.
         /// </summary>
         public IEnumerable<T> WhereNotNull()
         {
@@ -38,7 +38,7 @@ internal static class EnumerableExtensions
         where T : struct
     {
         /// <summary>
-        /// Filters out <see langword="null"/> elements from the sequence of nullable value types.
+        /// Filters out <see langword="null" /> elements from the sequence of nullable value types.
         /// </summary>
         public IEnumerable<T> WhereNotNull()
         {
@@ -55,7 +55,7 @@ internal static class EnumerableExtensions
     extension(IEnumerable<string?> source)
     {
         /// <summary>
-        /// Filters out <see langword="null"/> and empty strings from the sequence.
+        /// Filters out <see langword="null" /> and empty strings from the sequence.
         /// </summary>
         public IEnumerable<string> WhereNotNullOrEmpty()
         {
@@ -69,7 +69,7 @@ internal static class EnumerableExtensions
         }
 
         /// <summary>
-        /// Filters out <see langword="null"/>, empty, and whitespace-only strings from the sequence.
+        /// Filters out <see langword="null" />, empty, and whitespace-only strings from the sequence.
         /// </summary>
         public IEnumerable<string> WhereNotNullOrWhiteSpace()
         {
@@ -87,7 +87,7 @@ internal static class EnumerableExtensions
         where T : struct
     {
         /// <summary>
-        /// Returns the first element of the sequence, or <see langword="null"/> if the sequence is empty.
+        /// Returns the first element of the sequence, or <see langword="null" /> if the sequence is empty.
         /// </summary>
         public T? FirstOrNull()
         {
@@ -100,7 +100,7 @@ internal static class EnumerableExtensions
         }
 
         /// <summary>
-        /// Returns the last element of the sequence, or <see langword="null"/> if the sequence is empty.
+        /// Returns the last element of the sequence, or <see langword="null" /> if the sequence is empty.
         /// </summary>
         public T? LastOrNull()
         {
@@ -120,7 +120,7 @@ internal static class EnumerableExtensions
         }
 
         /// <summary>
-        /// Returns the element at the specified index, or <see langword="null"/> if the index is out of range.
+        /// Returns the element at the specified index, or <see langword="null" /> if the index is out of range.
         /// </summary>
         public T? ElementAtOrNull(int index)
         {

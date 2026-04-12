@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace PowerKit;
 
 /// <summary>
-/// Provides utility methods for creating and composing <see cref="IDisposable"/> instances.
+/// Provides utility methods for creating and composing <see cref="IDisposable" /> instances.
 /// </summary>
 internal partial class Disposable(Action dispose) : IDisposable
 {

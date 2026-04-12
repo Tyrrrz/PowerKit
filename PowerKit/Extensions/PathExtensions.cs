@@ -44,7 +44,7 @@ internal static class PathExtensions
     {
         /// <summary>
         /// Gets the characters that are invalid in file names.
-        /// When <paramref name="crossPlatform"/> is <see langword="true"/>, returns characters
+        /// When <paramref name="crossPlatform" /> is <see langword="true" />, returns characters
         /// invalid across all major filesystems; otherwise, returns the OS-specific set.
         /// </summary>
         public static char[] GetInvalidFileNameChars(bool crossPlatform) =>
@@ -54,7 +54,7 @@ internal static class PathExtensions
 
         /// <summary>
         /// Gets the characters that are invalid in paths.
-        /// When <paramref name="crossPlatform"/> is <see langword="true"/>, returns characters
+        /// When <paramref name="crossPlatform" /> is <see langword="true" />, returns characters
         /// invalid across all major filesystems; otherwise, returns the OS-specific set.
         /// </summary>
         public static char[] GetInvalidPathChars(bool crossPlatform) =>
@@ -64,7 +64,7 @@ internal static class PathExtensions
 
         /// <summary>
         /// Replaces invalid file name characters with underscores and strips trailing dots and whitespace.
-        /// When <paramref name="crossPlatform"/> is <see langword="true"/>, considers characters
+        /// When <paramref name="crossPlatform" /> is <see langword="true" />, considers characters
         /// invalid across all major filesystems.
         /// </summary>
         public static string EscapeFileName(string fileName, bool crossPlatform = true)
