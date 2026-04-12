@@ -13,7 +13,7 @@ internal static class BinaryReaderExtensions
         public void SkipZeroes(long? maxSkipLength = null)
         {
             var endPosition = maxSkipLength is not null
-                ? reader.BaseStream.Position + maxSkipLength
+                ? reader.BaseStream.Position + maxSkipLength.Value
                 : reader.BaseStream.Length;
 
             while (reader.BaseStream.Position < endPosition)
