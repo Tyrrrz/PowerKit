@@ -47,9 +47,12 @@ internal static class FunctionalExtensions
 // parameter types that differ only by constraint (class vs struct) in the same class.
 internal static class FunctionalExtensions2
 {
-    /// <summary>
-    /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
-    /// </summary>
-    public static T? NullIf<T>(this T value, Func<T, bool> predicate)
-        where T : class => !predicate(value) ? value : null;
+    extension<T>(T value)
+        where T : class
+    {
+        /// <summary>
+        /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
+        /// </summary>
+        public T? NullIf(Func<T, bool> predicate) => !predicate(value) ? value : null;
+    }
 }
