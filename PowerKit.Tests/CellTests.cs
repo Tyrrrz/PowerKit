@@ -22,7 +22,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TryOpen_ValueNotSet_Test()
+    public void TryOpen_Unset_Test()
     {
         // Arrange
         var cell = new Cell<int?>();
@@ -51,27 +51,49 @@ public class CellTests
     }
 
     [Fact]
-    public void OpenOrDefault_ValueNotSet_Test()
+    public void OpenOrDefault_Test()
     {
         // Arrange
         var cell = new Cell<int?>();
+        cell.Store(42);
 
-        // Act & assert
-        cell.OpenOrDefault().Should().BeNull();
-        cell.OpenOrDefault(42).Should().Be(42);
+        // Act
+        var value = cell.OpenOrDefault();
+        var valueOrFallback = cell.OpenOrDefault(99);
+
+        // Assert
+        value.Should().Be(42);
+        valueOrFallback.Should().Be(42);
     }
 
     [Fact]
-    public void OpenOrDefault_ValueSet_Test()
+    public void OpenOrDefault_Unset_Test()
     {
         // Arrange
         var cell = new Cell<int?>();
 
         // Act
-        cell.Store(42);
+        var value = cell.OpenOrDefault();
+        var valueOrFallback = cell.OpenOrDefault(99);
 
-        // Assert
-        cell.OpenOrDefault().Should().Be(42);
-        cell.OpenOrDefault(99).Should().Be(42);
+        // Act & assert
+        value.Should().BeNull();
+        valueOrFallback.Should().Be(99);
+    }
+
+    [Fact]
+    public void OpenOrDefault_Unset_Test()
+    {
+        // Arrange
+        var cell = new Cell<int?>();
+        cell.Store(null);
+
+        // Act
+        var value = cell.OpenOrDefault();
+        var valueOrFallback = cell.OpenOrDefault(99);
+
+        // Act & assert
+        value.Should().BeNull();
+        valueOrFallback.Should().BeNull();
     }
 }
