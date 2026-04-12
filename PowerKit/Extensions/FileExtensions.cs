@@ -26,7 +26,7 @@ internal static class FileExtensions
         /// <summary>
         /// Reads all bytes from the specified file starting at the given offset.
         /// </summary>
-        public static byte[] ReadAllBytes(string path, int offset)
+        public static byte[] ReadAllBytes(string path, long offset)
         {
             using var stream = new FileStream(
                 path,
@@ -44,11 +44,31 @@ internal static class FileExtensions
         }
 
         /// <summary>
+        /// Reads the specified number of bytes from the file starting at the given offset.
+        /// </summary>
+        public static byte[] ReadAllBytes(string path, long offset, long length)
+        {
+            using var stream = new FileStream(
+                path,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite
+            );
+
+            stream.Seek(offset, SeekOrigin.Begin);
+
+            var buffer = new byte[checked((int)length)];
+            stream.ReadExactly(buffer);
+
+            return buffer;
+        }
+
+        /// <summary>
         /// Reads all bytes from the specified file starting at the given offset asynchronously.
         /// </summary>
         public static async Task<byte[]> ReadAllBytesAsync(
             string path,
-            int offset,
+            long offset,
             CancellationToken cancellationToken = default
         )
         {
@@ -64,6 +84,33 @@ internal static class FileExtensions
             stream.Seek(offset, SeekOrigin.Begin);
 
             var buffer = new byte[checked((int)(stream.Length - offset))];
+            await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
+
+            return buffer;
+        }
+
+        /// <summary>
+        /// Reads the specified number of bytes from the file starting at the given offset asynchronously.
+        /// </summary>
+        public static async Task<byte[]> ReadAllBytesAsync(
+            string path,
+            long offset,
+            long length,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var stream = new FileStream(
+                path,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite,
+                bufferSize: 4096,
+                FileOptions.Asynchronous
+            );
+
+            stream.Seek(offset, SeekOrigin.Begin);
+
+            var buffer = new byte[checked((int)length)];
             await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
 
             return buffer;

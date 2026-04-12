@@ -41,10 +41,32 @@ public class FileExtensionsTests
             File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
 
             // Act
-            var bytes = File.ReadAllBytes(path, offset: 2);
+            var bytes = File.ReadAllBytes(path, offset: 2L);
 
             // Assert
             bytes.Should().Equal(3, 4, 5);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void ReadAllBytes_WithOffsetAndLength_Test()
+    {
+        // Arrange
+        var path = Path.GetTempFileName();
+
+        try
+        {
+            File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
+
+            // Act
+            var bytes = File.ReadAllBytes(path, offset: 1L, length: 3L);
+
+            // Assert
+            bytes.Should().Equal(2, 3, 4);
         }
         finally
         {
@@ -63,10 +85,32 @@ public class FileExtensionsTests
             File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
 
             // Act
-            var bytes = await File.ReadAllBytesAsync(path, offset: 2);
+            var bytes = await File.ReadAllBytesAsync(path, offset: 2L);
 
             // Assert
             bytes.Should().Equal(3, 4, 5);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public async Task ReadAllBytesAsync_WithOffsetAndLength_Test()
+    {
+        // Arrange
+        var path = Path.GetTempFileName();
+
+        try
+        {
+            File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
+
+            // Act
+            var bytes = await File.ReadAllBytesAsync(path, offset: 1L, length: 3L);
+
+            // Assert
+            bytes.Should().Equal(2, 3, 4);
         }
         finally
         {
