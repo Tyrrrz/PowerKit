@@ -13,6 +13,7 @@ internal static class ConsoleExtensions
         {
             var lastColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
+
             return Disposable.Create(() => Console.ForegroundColor = lastColor);
         }
 
@@ -23,6 +24,7 @@ internal static class ConsoleExtensions
         {
             var lastColor = Console.BackgroundColor;
             Console.BackgroundColor = color;
+
             return Disposable.Create(() => Console.BackgroundColor = lastColor);
         }
 
