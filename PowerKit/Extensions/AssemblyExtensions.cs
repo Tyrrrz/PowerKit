@@ -80,14 +80,15 @@ internal static class AssemblyExtensions
         /// </summary>
         public void ExtractManifestResource(string resourceName, string filePath)
         {
-            using var stream =
+            using var source =
                 assembly.GetManifestResourceStream(resourceName)
                 ?? throw new MissingManifestResourceException(
                     $"Failed to find resource '{resourceName}'."
                 );
 
-            using var fileStream = File.Create(filePath);
-            stream.CopyTo(fileStream);
+            using var destination = File.Create(filePath);
+            source.CopyTo(destination);
+            destination.Flush();
         }
 
         /// <summary>
@@ -100,13 +101,13 @@ internal static class AssemblyExtensions
             CancellationToken cancellationToken = default
         )
         {
-            using var stream =
+            using var source =
                 assembly.GetManifestResourceStream(resourceName)
                 ?? throw new MissingManifestResourceException(
                     $"Failed to find resource '{resourceName}'."
                 );
 
-            using var fileStream = new FileStream(
+            using var destination = new FileStream(
                 filePath,
                 FileMode.Create,
                 FileAccess.Write,
@@ -114,7 +115,9 @@ internal static class AssemblyExtensions
                 81920,
                 FileOptions.Asynchronous
             );
-            await stream.CopyToAsync(fileStream, 81920, cancellationToken).ConfigureAwait(false);
+
+            await source.CopyToAsync(destination, 81920, cancellationToken).ConfigureAwait(false);
+            await destination.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 }
