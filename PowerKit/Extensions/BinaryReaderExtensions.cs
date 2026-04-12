@@ -15,14 +15,12 @@ internal static class BinaryReaderExtensions
             : reader.PeekChar() == -1;
 
         /// <summary>
-        /// Skips bytes until the current position is aligned to the specified bit boundary.
+        /// Skips bytes until the current position is aligned to the specified byte boundary.
         /// </summary>
-        public void SkipPadding(int boundaryBits = 32)
+        public void SkipPadding(int boundaryBytes = 4)
         {
-            while (!reader.IsEndOfStream && reader.BaseStream.Position * 8 % boundaryBits != 0)
+            while (!reader.IsEndOfStream && reader.BaseStream.Position % boundaryBytes != 0)
             {
-                // Advance by a single byte so padding/alignment logic remains
-                // based on bytes rather than the reader's text encoding.
                 _ = reader.ReadByte();
             }
         }

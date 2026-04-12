@@ -44,7 +44,7 @@ public class BinaryReaderExtensionsTests
         reader.ReadByte(); // advance to position 1
 
         // Act
-        reader.SkipPadding(boundaryBits: 32);
+        reader.SkipPadding(boundaryBytes: 4);
 
         // Assert
         stream.Position.Should().Be(4);
@@ -58,8 +58,8 @@ public class BinaryReaderExtensionsTests
         using var stream = new MemoryStream(data);
         using var reader = new BinaryReader(stream);
 
-        // Act (position 0 is already aligned to 32 bits)
-        reader.SkipPadding(boundaryBits: 32);
+        // Act (position 0 is already aligned to 4 bytes)
+        reader.SkipPadding(boundaryBytes: 4);
 
         // Assert
         stream.Position.Should().Be(0);
