@@ -27,6 +27,7 @@ internal partial class TempFile
     {
         var filePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid() + ".tmp");
         File.Create(filePath).Dispose();
+
         return new TempFile(filePath);
     }
 }
