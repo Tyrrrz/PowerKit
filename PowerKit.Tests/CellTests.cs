@@ -36,13 +36,13 @@ public class CellTests
     }
 
     [Fact]
-    public void Store_Null_TryOpen_Test()
+    public void TryOpen_Null_Test()
     {
         // Arrange
         var cell = new Cell<int?>();
+        cell.Store(null);
 
         // Act
-        cell.Store(null);
         var result = cell.TryOpen(out var value);
 
         // Assert
