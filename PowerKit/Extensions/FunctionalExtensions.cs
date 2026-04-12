@@ -13,20 +13,20 @@ internal static class FunctionalExtensions
         public TOut Pipe<TOut>(Func<TIn, TOut> transform) => transform(input);
     }
 
-    extension<T>(T value)
-        where T : struct
-    {
-        /// <summary>
-        /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
-        /// </summary>
-        public T? NullIf(Func<T, bool> predicate) => !predicate(value) ? value : null;
+    // Cannot be placed in an extension block alongside the class-constrained NullIf overload
+    // in ObjectExtensions because C# (CS0111) does not allow two generic methods with identical
+    // parameter types that differ only by constraint (class vs struct).
+    /// <summary>
+    /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
+    /// </summary>
+    public static T? NullIf<T>(this T value, Func<T, bool> predicate)
+        where T : struct => !predicate(value) ? value : null;
 
-        /// <summary>
-        /// Returns <see langword="null" /> if the value equals the default value for its type; otherwise, returns the value.
-        /// </summary>
-        public T? NullIfDefault() =>
-            value.NullIf(v => EqualityComparer<T>.Default.Equals(v, default));
-    }
+    /// <summary>
+    /// Returns <see langword="null" /> if the value equals the default value for its type; otherwise, returns the value.
+    /// </summary>
+    public static T? NullIfDefault<T>(this T value)
+        where T : struct => value.NullIf(v => EqualityComparer<T>.Default.Equals(v, default));
 
     extension(string value)
     {

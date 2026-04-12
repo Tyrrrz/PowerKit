@@ -2,8 +2,8 @@ using System;
 
 namespace PowerKit.Extensions;
 
-// Kept in a separate class from FunctionalExtensions because C# (CS0111) does not allow
-// two generic methods with identical parameter types that differ only by constraint (class vs struct).
+// Kept separate from FunctionalExtensions because C# (CS0111) does not allow two generic
+// methods with identical parameter types that differ only by constraint (class vs struct).
 internal static class ObjectExtensions
 {
     /// <summary>
