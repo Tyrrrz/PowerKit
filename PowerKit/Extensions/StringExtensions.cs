@@ -17,11 +17,31 @@ internal static class StringExtensions
                 _ => str,
             };
 
+        public string SubstringUntilLast(
+            string sub,
+            StringComparison comparison = StringComparison.Ordinal
+        ) =>
+            str.LastIndexOf(sub, comparison) switch
+            {
+                >= 0 and var index => str[..index],
+                _ => str,
+            };
+
         public string SubstringAfter(
             string sub,
             StringComparison comparison = StringComparison.Ordinal
         ) =>
             str.IndexOf(sub, comparison) switch
+            {
+                >= 0 and var index => str[(index + sub.Length)..],
+                _ => "",
+            };
+
+        public string SubstringAfterLast(
+            string sub,
+            StringComparison comparison = StringComparison.Ordinal
+        ) =>
+            str.LastIndexOf(sub, comparison) switch
             {
                 >= 0 and var index => str[(index + sub.Length)..],
                 _ => "",

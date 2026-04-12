@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace PowerKit.Extensions;
 
 internal static class PathExtensions
 {
-    // This is a union of invalid characters from Windows (NTFS/FAT32), Linux (ext4/XFS), and macOS (HFS+/APFS).
-    // We use this instead of Path.GetInvalidFileNameChars() because that only returns OS-specific characters,
-    // not filesystem-specific characters. It's possible to use, for example, an NTFS drive on Linux,
-    // which would make some additional characters invalid that are otherwise valid on Linux.
-    private static readonly HashSet<char> InvalidFileNameChars =
+    // Characters that are invalid in file names across all major filesystems
+    // (Windows NTFS/FAT32, Linux ext4/XFS, macOS HFS+/APFS), beyond what
+    // the OS-specific Path.GetInvalidFileNameChars() returns.
+    // This is useful when working with files that may be accessed from
+    // different operating systems, such as NTFS drives on Linux.
+    private static readonly HashSet<char> CrossPlatformInvalidFileNameChars =
     [
         '\0', // Null character - invalid on all filesystems
         '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', // ASCII control characters -
@@ -28,15 +30,44 @@ internal static class PathExtensions
         '|', // Pipe on Windows
     ];
 
+    private static readonly HashSet<char> CrossPlatformInvalidPathChars =
+    [
+        '\0', // Null character - invalid on all filesystems
+        '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', // ASCII control characters -
+        '\x08', '\x09', '\x0A', '\x0B', '\x0C', '\x0D', '\x0E', '\x0F', // invalid on Windows
+        '\x10', '\x11', '\x12', '\x13', '\x14', '\x15', '\x16', '\x17', // (NTFS/FAT32)
+        '\x18', '\x19', '\x1A', '\x1B', '\x1C', '\x1D', '\x1E', '\x1F',
+        '*', // Wildcard on Windows
+        '?', // Wildcard on Windows
+        '"', // Reserved on Windows
+        '<', // Redirection on Windows
+        '>', // Redirection on Windows
+        '|', // Pipe on Windows
+    ];
+
     extension(Path)
     {
-        public static string EscapeFileName(string fileName)
+        public static char[] GetInvalidFileNameChars(bool crossPlatform) =>
+            crossPlatform
+                ? CrossPlatformInvalidFileNameChars.ToArray()
+                : Path.GetInvalidFileNameChars();
+
+        public static char[] GetInvalidPathChars(bool crossPlatform) =>
+            crossPlatform
+                ? CrossPlatformInvalidPathChars.ToArray()
+                : Path.GetInvalidPathChars();
+
+        public static string EscapeFileName(string fileName, bool crossPlatform = true)
         {
+            var invalidChars = crossPlatform
+                ? (IReadOnlyCollection<char>)CrossPlatformInvalidFileNameChars
+                : Path.GetInvalidFileNameChars();
+
             var buffer = new StringBuilder(fileName.Length);
 
             foreach (var ch in fileName)
             {
-                buffer.Append(!InvalidFileNameChars.Contains(ch) ? ch : '_');
+                buffer.Append(!invalidChars.Contains(ch) ? ch : '_');
             }
 
             // File names cannot end with a dot or whitespace (invalid on Windows, ambiguous on other filesystems)

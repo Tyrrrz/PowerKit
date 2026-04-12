@@ -46,7 +46,9 @@ internal static class AsyncEnumerableExtensions
             )
             {
                 foreach (var result in transform(item))
+                {
                     yield return result;
+                }
             }
         }
 

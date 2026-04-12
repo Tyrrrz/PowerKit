@@ -16,12 +16,30 @@ public class StringExtensionsTests
     }
 
     [Fact]
+    public void SubstringUntilLast_Test()
+    {
+        // Act & assert
+        "hello world foo".SubstringUntilLast(" ").Should().Be("hello world");
+        "hello".SubstringUntilLast("x").Should().Be("hello");
+        "a.b.c".SubstringUntilLast(".").Should().Be("a.b");
+    }
+
+    [Fact]
     public void SubstringAfter_Test()
     {
         // Act & assert
         "hello world".SubstringAfter(" ").Should().Be("world");
         "hello".SubstringAfter("x").Should().Be("");
         "hellox".SubstringAfter("x").Should().Be("");
+    }
+
+    [Fact]
+    public void SubstringAfterLast_Test()
+    {
+        // Act & assert
+        "hello world foo".SubstringAfterLast(" ").Should().Be("foo");
+        "hello".SubstringAfterLast("x").Should().Be("");
+        "a.b.c".SubstringAfterLast(".").Should().Be("c");
     }
 
     [Fact]
