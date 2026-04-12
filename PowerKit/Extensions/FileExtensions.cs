@@ -52,7 +52,7 @@ internal static class FileExtensions
         /// <summary>
         /// Reads the specified number of bytes from the file starting at the given offset.
         /// </summary>
-        public static byte[] ReadAllBytes(string path, long offset, long length)
+        public static byte[] ReadAllBytes(string path, long offset, int length)
         {
             using var stream = new FileStream(
                 path,
@@ -63,12 +63,12 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            if (length < 0 || length > int.MaxValue)
+            if (length < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            var buffer = new byte[(int)length];
+            var buffer = new byte[length];
             stream.ReadExactly(buffer);
 
             return buffer;
@@ -111,7 +111,7 @@ internal static class FileExtensions
         public static async Task<byte[]> ReadAllBytesAsync(
             string path,
             long offset,
-            long length,
+            int length,
             CancellationToken cancellationToken = default
         )
         {
@@ -126,12 +126,12 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            if (length < 0 || length > int.MaxValue)
+            if (length < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            var buffer = new byte[(int)length];
+            var buffer = new byte[length];
             await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
 
             return buffer;

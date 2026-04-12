@@ -105,7 +105,7 @@ public class FileExtensionsTests
             File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
 
             // Act
-            var bytes = File.ReadAllBytes(path, offset: 1L, length: 3L);
+            var bytes = File.ReadAllBytes(path, offset: 1L, length: 3);
 
             // Assert
             bytes.Should().Equal(2, 3, 4);
@@ -191,7 +191,7 @@ public class FileExtensionsTests
             File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
 
             // Act
-            var bytes = await File.ReadAllBytesAsync(path, offset: 1L, length: 3L);
+            var bytes = await File.ReadAllBytesAsync(path, offset: 1L, length: 3);
 
             // Assert
             bytes.Should().Equal(2, 3, 4);
