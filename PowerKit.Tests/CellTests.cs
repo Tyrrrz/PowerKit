@@ -82,7 +82,7 @@ public class CellTests
     }
 
     [Fact]
-    public void OpenOrDefault_Unset_Test()
+    public void OpenOrDefault_Null_Test()
     {
         // Arrange
         var cell = new Cell<int?>();
