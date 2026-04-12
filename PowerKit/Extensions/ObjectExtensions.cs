@@ -2,14 +2,13 @@ using System;
 
 namespace PowerKit.Extensions;
 
+// Kept in a separate class from FunctionalExtensions because C# (CS0111) does not allow
+// two generic methods with identical parameter types that differ only by constraint (class vs struct).
 internal static class ObjectExtensions
 {
-    extension<T>(T value)
-        where T : class
-    {
-        /// <summary>
-        /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
-        /// </summary>
-        public T? NullIf(Func<T, bool> predicate) => !predicate(value) ? value : null;
-    }
+    /// <summary>
+    /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
+    /// </summary>
+    public static T? NullIf<T>(this T value, Func<T, bool> predicate)
+        where T : class => !predicate(value) ? value : null;
 }
