@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -53,6 +54,48 @@ public class FileExtensionsTests
     }
 
     [Fact]
+    public void ReadAllBytes_WithOffset_AtEndOfFile_Test()
+    {
+        // Arrange
+        var path = Path.GetTempFileName();
+
+        try
+        {
+            File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
+
+            // Act
+            var bytes = File.ReadAllBytes(path, offset: 5L);
+
+            // Assert
+            bytes.Should().BeEmpty();
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void ReadAllBytes_WithOffset_PastEndOfFile_Test()
+    {
+        // Arrange
+        var path = Path.GetTempFileName();
+
+        try
+        {
+            File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
+
+            // Act & Assert
+            var act = () => File.ReadAllBytes(path, offset: 10L);
+            act.Should().Throw<ArgumentOutOfRangeException>();
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
     public void ReadAllBytes_WithOffsetAndLength_Test()
     {
         // Arrange
@@ -89,6 +132,48 @@ public class FileExtensionsTests
 
             // Assert
             bytes.Should().Equal(3, 4, 5);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public async Task ReadAllBytesAsync_WithOffset_AtEndOfFile_Test()
+    {
+        // Arrange
+        var path = Path.GetTempFileName();
+
+        try
+        {
+            File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
+
+            // Act
+            var bytes = await File.ReadAllBytesAsync(path, offset: 5L);
+
+            // Assert
+            bytes.Should().BeEmpty();
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public async Task ReadAllBytesAsync_WithOffset_PastEndOfFile_Test()
+    {
+        // Arrange
+        var path = Path.GetTempFileName();
+
+        try
+        {
+            File.WriteAllBytes(path, [1, 2, 3, 4, 5]);
+
+            // Act & Assert
+            var act = async () => await File.ReadAllBytesAsync(path, offset: 10L);
+            await act.Should().ThrowAsync<ArgumentOutOfRangeException>();
         }
         finally
         {

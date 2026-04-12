@@ -1,4 +1,4 @@
-using System.Buffers;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,13 +38,15 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var size = checked((int)(stream.Length - offset));
-            using var buffer = MemoryPool<byte>.Shared.Rent(size);
-            var slice = buffer.Memory.Span[..size];
+            if (offset > stream.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            }
 
-            stream.ReadExactly(slice);
+            var buffer = new byte[checked((int)(stream.Length - offset))];
+            stream.ReadExactly(buffer);
 
-            return slice.ToArray();
+            return buffer;
         }
 
         /// <summary>
@@ -61,13 +63,15 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var size = checked((int)length);
-            using var buffer = MemoryPool<byte>.Shared.Rent(size);
-            var slice = buffer.Memory.Span[..size];
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
 
-            stream.ReadExactly(slice);
+            var buffer = new byte[checked((int)length)];
+            stream.ReadExactly(buffer);
 
-            return slice.ToArray();
+            return buffer;
         }
 
         /// <summary>
@@ -90,13 +94,15 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var size = checked((int)(stream.Length - offset));
-            using var buffer = MemoryPool<byte>.Shared.Rent(size);
-            var slice = buffer.Memory[..size];
+            if (offset > stream.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            }
 
-            await stream.ReadExactlyAsync(slice, cancellationToken).ConfigureAwait(false);
+            var buffer = new byte[checked((int)(stream.Length - offset))];
+            await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
 
-            return slice.Span.ToArray();
+            return buffer;
         }
 
         /// <summary>
@@ -120,13 +126,15 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var size = checked((int)length);
-            using var buffer = MemoryPool<byte>.Shared.Rent(size);
-            var slice = buffer.Memory[..size];
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
 
-            await stream.ReadExactlyAsync(slice, cancellationToken).ConfigureAwait(false);
+            var buffer = new byte[checked((int)length)];
+            await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
 
-            return slice.Span.ToArray();
+            return buffer;
         }
     }
 }
