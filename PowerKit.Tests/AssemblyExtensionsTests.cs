@@ -14,7 +14,7 @@ public class AssemblyExtensionsTests
 
     // The embedded resource name follows the default MSBuild convention:
     // <RootNamespace>.<RelativePath> with path separators replaced by dots.
-    private const string ResourceName = "PowerKit.Tests.TestResource.txt";
+    private const string ResourceName = "PowerKit.Tests.TestData.TestResource.txt";
 
     [Fact]
     public void TryGetVersionString_Test()
