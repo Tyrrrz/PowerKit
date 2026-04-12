@@ -1,0 +1,27 @@
+using System;
+using System.Globalization;
+
+namespace PowerKit.Extensions;
+
+internal static class DateTimeOffsetParsingExtensions
+{
+    extension(DateTimeOffset)
+    {
+        /// <summary>
+        /// Parses the string as a <see cref="DateTimeOffset" /> using the specified format provider and styles,
+        /// returning <see langword="null" /> if parsing fails.
+        /// </summary>
+        public static DateTimeOffset? ParseOrNull(
+            string? str,
+            IFormatProvider? formatProvider,
+            DateTimeStyles styles
+        ) =>
+            DateTimeOffset.TryParse(str, formatProvider, styles, out var result) ? result : null;
+
+        /// <summary>
+        /// Parses the string as a <see cref="DateTimeOffset" />, returning <see langword="null" /> if parsing fails.
+        /// </summary>
+        public static DateTimeOffset? ParseOrNull(string? str) =>
+            DateTimeOffset.ParseOrNull(str, CultureInfo.InvariantCulture, DateTimeStyles.None);
+    }
+}
