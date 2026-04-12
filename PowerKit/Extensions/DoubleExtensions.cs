@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-internal static class DoubleParsingExtensions
+internal static class DoubleExtensions
 {
     extension(double)
     {

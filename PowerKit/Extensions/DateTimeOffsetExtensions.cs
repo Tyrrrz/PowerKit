@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-internal static class DateTimeOffsetParsingExtensions
+internal static class DateTimeOffsetExtensions
 {
     extension(DateTimeOffset)
     {

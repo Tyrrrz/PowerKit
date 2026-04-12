@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-internal static class DateTimeParsingExtensions
+internal static class DateTimeExtensions
 {
     extension(DateTime)
     {

@@ -1,6 +1,6 @@
 namespace PowerKit.Extensions;
 
-internal static class BoolParsingExtensions
+internal static class BoolExtensions
 {
     extension(bool)
     {

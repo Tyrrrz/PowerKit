@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-internal static class TimeSpanParsingExtensions
+internal static class TimeSpanExtensions
 {
     extension(TimeSpan)
     {

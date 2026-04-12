@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-internal static class IntParsingExtensions
+internal static class IntExtensions
 {
     extension(int)
     {

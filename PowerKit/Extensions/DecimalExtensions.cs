@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-internal static class DecimalParsingExtensions
+internal static class DecimalExtensions
 {
     extension(decimal)
     {

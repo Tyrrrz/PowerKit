@@ -2,7 +2,7 @@ using System;
 
 namespace PowerKit.Extensions;
 
-internal static class GuidParsingExtensions
+internal static class GuidExtensions
 {
     extension(Guid)
     {
