@@ -42,3 +42,18 @@ internal static class FunctionalExtensions
         public string? NullIfWhiteSpace() => !string.IsNullOrWhiteSpace(value) ? value : null;
     }
 }
+
+// Separate class because C# (CS0111) does not allow two generic methods with identical
+// parameter types that differ only by constraint (class vs struct) in the same class.
+internal static class ReferenceTypeFunctionalExtensions
+{
+    extension<T>(T value)
+        where T : class
+    {
+        /// <summary>
+        /// Returns <see langword="null" /> if the value is <see langword="null" /> or matches the specified predicate;
+        /// otherwise, returns the value.
+        /// </summary>
+        public T? NullIf(Func<T, bool> predicate) => value?.Pipe(v => !predicate(v) ? v : null);
+    }
+}
