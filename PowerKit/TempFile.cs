@@ -14,14 +14,7 @@ internal partial class TempFile(string path) : IDisposable
     public string Path { get; } = path;
 
     /// <inheritdoc />
-    public void Dispose()
-    {
-        try
-        {
-            File.Delete(Path);
-        }
-        catch (FileNotFoundException) { }
-    }
+    public void Dispose() => File.Delete(Path);
 }
 
 internal partial class TempFile
@@ -31,11 +24,19 @@ internal partial class TempFile
     /// </summary>
     public static TempFile Create()
     {
-        var filePath = System.IO.Path.Combine(
-            System.IO.Path.GetTempPath(),
-            Guid.NewGuid().ToString() + ".tmp"
-        );
+        while (true)
+        {
+            var filePath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                Guid.NewGuid().ToString() + ".tmp"
+            );
 
-        return new TempFile(filePath);
+            try
+            {
+                using (new FileStream(filePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None)) { }
+                return new TempFile(filePath);
+            }
+            catch (IOException) { }
+        }
     }
 }

@@ -23,7 +23,6 @@ public class TempFileTests
     {
         // Arrange
         var tempFile = TempFile.Create();
-        File.WriteAllText(tempFile.Path, "test");
 
         // Act
         tempFile.Dispose();
@@ -37,6 +36,7 @@ public class TempFileTests
     {
         // Arrange
         var tempFile = TempFile.Create();
+        File.Delete(tempFile.Path);
 
         // Act & assert
         var act = tempFile.Dispose;
