@@ -51,8 +51,9 @@ internal static class ReferenceTypeFunctionalExtensions
         where T : class
     {
         /// <summary>
-        /// Returns <see langword="null" /> if the value matches the specified predicate; otherwise, returns the value.
+        /// Returns <see langword="null" /> if the value is <see langword="null" /> or matches the specified predicate;
+        /// otherwise, returns the value.
         /// </summary>
-        public T? NullIf(Func<T, bool> predicate) => !predicate(value) ? value : null;
+        public T? NullIf(Func<T, bool> predicate) => value?.Pipe(v => !predicate(v) ? v : null);
     }
 }

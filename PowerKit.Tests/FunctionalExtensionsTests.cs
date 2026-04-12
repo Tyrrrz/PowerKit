@@ -21,6 +21,7 @@ public class FunctionalExtensionsTests
         // Act & assert
         "hello".NullIf(v => v == "hello").Should().BeNull();
         "world".NullIf(v => v == "hello").Should().Be("world");
+        ((string)null!).NullIf(_ => throw new InvalidOperationException()).Should().BeNull();
     }
 
     [Fact]
