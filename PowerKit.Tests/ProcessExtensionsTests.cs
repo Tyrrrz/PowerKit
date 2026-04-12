@@ -19,7 +19,7 @@ public class ProcessExtensionsTests
     public void IsRunning_ExitedProcess_Test()
     {
         // Arrange
-        using var process = Process.Start(new ProcessStartInfo("sleep", "0")
+        using var process = Process.Start(new ProcessStartInfo("dotnet", "--version")
         {
             RedirectStandardOutput = true
         })!;
