@@ -1,6 +1,7 @@
 using System.IO;
 using System.Reflection;
 using System.Resources;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,22 +22,56 @@ internal static class AssemblyExtensions
                 ?.InformationalVersion ?? assembly.GetName().Version?.ToString();
 
         /// <summary>
-        /// Extracts the specified manifest resource to a file at the given path.
+        /// Reads the specified manifest resource as a UTF-8 string.
         /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
         /// </summary>
-        public void ExtractManifestResource(string resourceName, string filePath)
+        public string GetManifestResourceString(string resourceName)
         {
-            var resourceStream =
+            using var stream =
                 assembly.GetManifestResourceStream(resourceName)
                 ?? throw new MissingManifestResourceException(
                     $"Failed to find resource '{resourceName}'."
                 );
 
-            using (resourceStream)
-            using (var fileStream = File.Create(filePath))
-            {
-                resourceStream.CopyTo(fileStream);
-            }
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+
+            return reader.ReadToEnd();
+        }
+
+        /// <summary>
+        /// Reads the specified manifest resource as a UTF-8 string asynchronously.
+        /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
+        /// </summary>
+        public async Task<string> GetManifestResourceStringAsync(
+            string resourceName,
+            CancellationToken cancellationToken = default
+        )
+        {
+            await using var stream =
+                assembly.GetManifestResourceStream(resourceName)
+                ?? throw new MissingManifestResourceException(
+                    $"Failed to find resource '{resourceName}'."
+                );
+
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+
+            return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Extracts the specified manifest resource to a file at the given path.
+        /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
+        /// </summary>
+        public void ExtractManifestResource(string resourceName, string filePath)
+        {
+            using var stream =
+                assembly.GetManifestResourceStream(resourceName)
+                ?? throw new MissingManifestResourceException(
+                    $"Failed to find resource '{resourceName}'."
+                );
+
+            using var fileStream = File.Create(filePath);
+            stream.CopyTo(fileStream);
         }
 
         /// <summary>
@@ -49,19 +84,14 @@ internal static class AssemblyExtensions
             CancellationToken cancellationToken = default
         )
         {
-            var resourceStream =
+            await using var stream =
                 assembly.GetManifestResourceStream(resourceName)
                 ?? throw new MissingManifestResourceException(
                     $"Failed to find resource '{resourceName}'."
                 );
 
-            await using (resourceStream)
-            await using (var fileStream = File.Create(filePath))
-            {
-                await resourceStream
-                    .CopyToAsync(fileStream, cancellationToken)
-                    .ConfigureAwait(false);
-            }
+            await using var fileStream = File.Create(filePath);
+            await stream.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
         }
     }
 }
