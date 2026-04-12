@@ -33,7 +33,7 @@ internal partial class TempFile
     {
         var filePath = System.IO.Path.Combine(
             System.IO.Path.GetTempPath(),
-            Guid.NewGuid() + ".tmp"
+            Guid.NewGuid().ToString() + ".tmp"
         );
 
         return new TempFile(filePath);
