@@ -97,5 +97,15 @@ internal static class StringExtensions
         /// Converts the PascalCase string to snake_case (e.g., "FooBar" → "foo_bar").
         /// </summary>
         public string ToSnakeCase() => str.SeparateWords('_').ToLowerInvariant();
+
+        /// <summary>
+        /// Returns the string with the characters in reverse order.
+        /// </summary>
+        public string Reverse()
+        {
+            var chars = str.ToCharArray();
+            Array.Reverse(chars);
+            return new string(chars);
+        }
     }
 }
