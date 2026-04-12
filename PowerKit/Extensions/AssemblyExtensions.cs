@@ -60,9 +60,8 @@ internal static class AssemblyExtensions
                     $"Failed to find resource '{resourceName}'."
                 );
 
-            cancellationToken.ThrowIfCancellationRequested();
             using var reader = new StreamReader(stream, encoding);
-            return await reader.ReadToEndAsync().ConfigureAwait(false);
+            return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
