@@ -54,9 +54,13 @@ internal static class FileExtensions
         {
             using var stream = new FileStream(
                 path,
-                FileMode.Open,
-                FileAccess.Read,
-                FileShare.ReadWrite
+                new FileStreamOptions
+                {
+                    Mode = FileMode.Open,
+                    Access = FileAccess.Read,
+                    Share = FileShare.ReadWrite,
+                    Options = FileOptions.Asynchronous,
+                }
             );
 
             stream.Seek(offset, SeekOrigin.Begin);
