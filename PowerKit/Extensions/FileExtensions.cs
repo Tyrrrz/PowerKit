@@ -63,12 +63,12 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            if (length < 0)
+            if (length < 0 || length > int.MaxValue)
             {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            var buffer = new byte[checked((int)length)];
+            var buffer = new byte[(int)length];
             stream.ReadExactly(buffer);
 
             return buffer;
@@ -126,12 +126,12 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            if (length < 0)
+            if (length < 0 || length > int.MaxValue)
             {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            var buffer = new byte[checked((int)length)];
+            var buffer = new byte[(int)length];
             await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
 
             return buffer;
