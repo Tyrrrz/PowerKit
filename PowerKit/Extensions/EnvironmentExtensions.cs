@@ -23,7 +23,7 @@ internal static class EnvironmentExtensions
                 var key = (string)environmentVariable.Key;
                 var value = (string?)environmentVariable.Value;
 
-                Environment.SetEnvironmentVariable(key, value);
+                Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Process);
             }
         }
     }
