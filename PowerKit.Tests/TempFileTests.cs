@@ -22,7 +22,7 @@ public class TempFileTests
     public void Dispose_Test()
     {
         // Arrange
-        var tempFile = TempFile.Create();
+        using var tempFile = TempFile.Create();
 
         // Act
         tempFile.Dispose();
@@ -35,7 +35,7 @@ public class TempFileTests
     public void Dispose_AlreadyDeleted_Test()
     {
         // Arrange
-        var tempFile = TempFile.Create();
+        using var tempFile = TempFile.Create();
         File.Delete(tempFile.Path);
 
         // Act & assert

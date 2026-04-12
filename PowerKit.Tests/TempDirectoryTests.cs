@@ -21,7 +21,7 @@ public class TempDirectoryTests
     public void Dispose_Test()
     {
         // Arrange
-        var tempDir = TempDirectory.Create();
+        using var tempDir = TempDirectory.Create();
         File.WriteAllText(Path.Combine(tempDir.Path, "test.txt"), "test");
 
         // Act
@@ -35,7 +35,7 @@ public class TempDirectoryTests
     public void Dispose_AlreadyDeleted_Test()
     {
         // Arrange
-        var tempDir = TempDirectory.Create();
+        using var tempDir = TempDirectory.Create();
         Directory.Delete(tempDir.Path);
 
         // Act & assert
