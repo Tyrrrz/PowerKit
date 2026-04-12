@@ -19,7 +19,7 @@ public class BinaryWriterExtensionsTests
         writer.WriteNullTerminatedString("hello");
 
         // Assert
-        stream.ToArray().Should().Equal((byte)'h', (byte)'e', (byte)'l', (byte)'l', (byte)'o', 0);
+        stream.ToArray().Should().Equal("hello\0"u8.ToArray());
     }
 
     [Fact]
