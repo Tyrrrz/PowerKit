@@ -17,8 +17,7 @@ internal static class FileExtensions
                 path,
                 FileMode.Create,
                 FileAccess.Write,
-                FileShare.None,
-                bufferSize: 1
+                FileShare.None
             );
 
             stream.SetLength(count);
