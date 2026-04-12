@@ -10,6 +10,30 @@ namespace PowerKit.Tests;
 public class FileExtensionsTests
 {
     [Fact]
+    public void TryDelete_ExistingFile_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+
+        // Act
+        var result = File.TryDelete(tempFile.Path);
+
+        // Assert
+        result.Should().BeTrue();
+        File.Exists(tempFile.Path).Should().BeFalse();
+    }
+
+    [Fact]
+    public void TryDelete_NonExistingFile_Test()
+    {
+        // Act
+        var result = File.TryDelete(Path.GetTempFileName() + ".nonexistent");
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
     public async Task WriteAllZeroes_Test()
     {
         // Arrange

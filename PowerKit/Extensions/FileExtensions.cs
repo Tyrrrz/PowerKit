@@ -10,6 +10,23 @@ internal static class FileExtensions
     extension(File)
     {
         /// <summary>
+        /// Attempts to delete the file at the specified path.
+        /// Returns <see langword="true" /> if the file was successfully deleted, or <see langword="false" /> if an error occurred.
+        /// </summary>
+        public static bool TryDelete(string path)
+        {
+            try
+            {
+                File.Delete(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Creates a file at the specified path and fills it with zeroes.
         /// </summary>
         public static void WriteAllZeroes(string path, long count)
