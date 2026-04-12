@@ -39,7 +39,7 @@ public class BinaryReaderExtensionsTests
         // Arrange - 1 byte of data, then 3 padding bytes, then 1 more byte
         var data = new byte[] { 0x01, 0x00, 0x00, 0x00, 0x02 };
         using var stream = new MemoryStream(data);
-        using var reader = new BinaryReader(stream, Encoding.Latin1);
+        using var reader = new BinaryReader(stream);
 
         reader.ReadByte(); // advance to position 1
 
@@ -56,7 +56,7 @@ public class BinaryReaderExtensionsTests
         // Arrange
         var data = new byte[] { 0x01, 0x02, 0x03, 0x04 };
         using var stream = new MemoryStream(data);
-        using var reader = new BinaryReader(stream, Encoding.Latin1);
+        using var reader = new BinaryReader(stream);
 
         // Act (position 0 is already aligned to 32 bits)
         reader.SkipPadding(boundaryBits: 32);
