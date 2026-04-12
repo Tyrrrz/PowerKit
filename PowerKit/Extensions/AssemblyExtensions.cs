@@ -46,14 +46,15 @@ internal static class AssemblyExtensions
             CancellationToken cancellationToken = default
         )
         {
-            await using var stream =
+            using var stream =
                 assembly.GetManifestResourceStream(resourceName)
                 ?? throw new MissingManifestResourceException(
                     $"Failed to find resource '{resourceName}'."
                 );
 
+            cancellationToken.ThrowIfCancellationRequested();
             using var reader = new StreamReader(stream, Encoding.UTF8);
-            return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
+            return await reader.ReadToEndAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -82,14 +83,21 @@ internal static class AssemblyExtensions
             CancellationToken cancellationToken = default
         )
         {
-            await using var stream =
+            using var stream =
                 assembly.GetManifestResourceStream(resourceName)
                 ?? throw new MissingManifestResourceException(
                     $"Failed to find resource '{resourceName}'."
                 );
 
-            await using var fileStream = File.Create(filePath);
-            await stream.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
+            using var fileStream = new FileStream(
+                filePath,
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.None,
+                81920,
+                FileOptions.Asynchronous
+            );
+            await stream.CopyToAsync(fileStream, 81920, cancellationToken).ConfigureAwait(false);
         }
     }
 }
