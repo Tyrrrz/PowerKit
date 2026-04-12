@@ -68,10 +68,13 @@ internal static class AssemblyExtensions
         /// Reads the specified manifest resource as a UTF-8 string asynchronously.
         /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
         /// </summary>
-        public Task<string> GetManifestResourceStringAsync(
+        public async Task<string> GetManifestResourceStringAsync(
             string resourceName,
             CancellationToken cancellationToken = default
-        ) => assembly.GetManifestResourceStringAsync(resourceName, Encoding.UTF8, cancellationToken);
+        ) =>
+            await assembly
+                .GetManifestResourceStringAsync(resourceName, Encoding.UTF8, cancellationToken)
+                .ConfigureAwait(false);
 
         /// <summary>
         /// Extracts the specified manifest resource to a file at the given path.
