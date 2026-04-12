@@ -17,7 +17,13 @@ internal static class DirectoryExtensions
             try
             {
                 using (File.Create(tempFilePath)) { }
-                File.Delete(tempFilePath);
+
+                try
+                {
+                    File.Delete(tempFilePath);
+                }
+                catch { }
+
                 return true;
             }
             catch (UnauthorizedAccessException)

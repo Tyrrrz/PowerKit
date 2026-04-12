@@ -22,7 +22,11 @@ internal static class FileExtensions
 
                 if (!existed)
                 {
-                    File.Delete(path);
+                    try
+                    {
+                        File.Delete(path);
+                    }
+                    catch { }
                 }
 
                 return true;
