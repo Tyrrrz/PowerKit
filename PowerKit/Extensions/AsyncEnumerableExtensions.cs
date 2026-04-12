@@ -20,16 +20,14 @@ internal static class AsyncEnumerableExtensions
 
             var currentCount = 0;
 
-            await foreach (
-                var item in source
-                    .WithCancellation(cancellationToken)
-                    .ConfigureAwait(false)
+            await using var enumerator = source.GetAsyncEnumerator(cancellationToken);
+
+            while (
+                currentCount < count
+                && await enumerator.MoveNextAsync().ConfigureAwait(false)
             )
             {
-                if (currentCount >= count)
-                    yield break;
-
-                yield return item;
+                yield return enumerator.Current;
                 currentCount++;
             }
         }
