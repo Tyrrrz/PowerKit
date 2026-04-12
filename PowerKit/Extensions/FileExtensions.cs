@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,10 +38,12 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var buffer = new byte[checked((int)(stream.Length - offset))];
-            stream.ReadExactly(buffer);
+            var size = checked((int)(stream.Length - offset));
+            using var buffer = MemoryPool<byte>.Shared.Rent(size);
 
-            return buffer;
+            stream.ReadExactly(buffer.Memory.Span[..size]);
+
+            return buffer.Memory.Span[..size].ToArray();
         }
 
         /// <summary>
@@ -57,10 +60,12 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var buffer = new byte[checked((int)length)];
-            stream.ReadExactly(buffer);
+            var size = checked((int)length);
+            using var buffer = MemoryPool<byte>.Shared.Rent(size);
 
-            return buffer;
+            stream.ReadExactly(buffer.Memory.Span[..size]);
+
+            return buffer.Memory.Span[..size].ToArray();
         }
 
         /// <summary>
@@ -83,10 +88,12 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var buffer = new byte[checked((int)(stream.Length - offset))];
-            await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
+            var size = checked((int)(stream.Length - offset));
+            using var buffer = MemoryPool<byte>.Shared.Rent(size);
 
-            return buffer;
+            await stream.ReadExactlyAsync(buffer.Memory[..size], cancellationToken).ConfigureAwait(false);
+
+            return buffer.Memory.Span[..size].ToArray();
         }
 
         /// <summary>
@@ -110,10 +117,12 @@ internal static class FileExtensions
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            var buffer = new byte[checked((int)length)];
-            await stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
+            var size = checked((int)length);
+            using var buffer = MemoryPool<byte>.Shared.Rent(size);
 
-            return buffer;
+            await stream.ReadExactlyAsync(buffer.Memory[..size], cancellationToken).ConfigureAwait(false);
+
+            return buffer.Memory.Span[..size].ToArray();
         }
     }
 }
