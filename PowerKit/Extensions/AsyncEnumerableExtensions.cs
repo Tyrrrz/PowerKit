@@ -1,3 +1,4 @@
+#if !NET35
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -84,3 +85,4 @@ internal static class AsyncEnumerableExtensions
         public ValueTaskAwaiter<List<T>> GetAwaiter() => source.ToListAsync().GetAwaiter();
     }
 }
+#endif

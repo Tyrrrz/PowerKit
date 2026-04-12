@@ -1,3 +1,4 @@
+#if !NET35
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -25,3 +26,4 @@ internal static class TextReaderExtensions
         }
     }
 }
+#endif

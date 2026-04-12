@@ -1,3 +1,4 @@
+#if !NET35
 using System.Reflection;
 
 namespace PowerKit.Extensions;
@@ -17,3 +18,4 @@ internal static class AssemblyExtensions
                 ?.InformationalVersion ?? assembly.GetName().Version?.ToString();
     }
 }
+#endif

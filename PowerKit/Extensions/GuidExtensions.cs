@@ -1,3 +1,4 @@
+#if !NET35
 using System;
 
 namespace PowerKit.Extensions;
@@ -13,3 +14,4 @@ internal static class GuidExtensions
             Guid.TryParse(str, out var result) ? result : null;
     }
 }
+#endif

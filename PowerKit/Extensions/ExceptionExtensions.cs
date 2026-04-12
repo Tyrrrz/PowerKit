@@ -1,3 +1,4 @@
+#if !NET35
 using System;
 using System.Collections.Generic;
 
@@ -36,3 +37,4 @@ internal static class ExceptionExtensions
         }
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if !NET35
 using System;
 using System.Buffers;
 using System.IO;
@@ -99,3 +100,4 @@ internal static class StreamExtensions
         }
     }
 }
+#endif

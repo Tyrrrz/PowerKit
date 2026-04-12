@@ -104,10 +104,12 @@ internal static class EnumerableExtensions
         /// </summary>
         public T? LastOrNull()
         {
+#if !NET35
             if (source is IReadOnlyList<T> list)
             {
                 return list.Count > 0 ? list[list.Count - 1] : null;
             }
+#endif
 
             var last = default(T?);
 
@@ -124,8 +126,13 @@ internal static class EnumerableExtensions
         /// </summary>
         public T? ElementAtOrNull(int index)
         {
+#if !NET35
             var list = source as IReadOnlyList<T> ?? source.ToArray();
             return index >= 0 && index < list.Count ? list[index] : null;
+#else
+            var arr = source.ToArray();
+            return index >= 0 && index < arr.Length ? arr[index] : null;
+#endif
         }
     }
 }

@@ -1,3 +1,4 @@
+#if !NET35
 using System;
 using System.Globalization;
 
@@ -21,3 +22,4 @@ internal static class TimeSpanExtensions
             TimeSpan.ParseOrNull(str, CultureInfo.CurrentCulture);
     }
 }
+#endif
