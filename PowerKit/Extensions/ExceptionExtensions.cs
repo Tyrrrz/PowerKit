@@ -1,4 +1,3 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +11,7 @@ internal static class ExceptionExtensions
         /// Returns a flat list containing the exception itself and all of its
         /// nested inner exceptions, recursively unwrapping <see cref="AggregateException" /> instances.
         /// </summary>
-        public IReadOnlyList<Exception> GetSelfAndDescendants()
+        public List<Exception> GetSelfAndDescendants()
         {
             static void PopulateDescendants(Exception ex, ICollection<Exception> result)
             {
@@ -37,4 +36,4 @@ internal static class ExceptionExtensions
         }
     }
 }
-#endif
+
