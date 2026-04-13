@@ -1,4 +1,4 @@
-#if !NET35
+#if NET40_OR_GREATER || NETSTANDARD || NET
 using System;
 using System.Buffers;
 using System.IO;

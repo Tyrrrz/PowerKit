@@ -104,7 +104,7 @@ internal static class EnumerableExtensions
         /// </summary>
         public T? LastOrNull()
         {
-#if !NET35
+#if NET40_OR_GREATER || NETSTANDARD || NET
             if (source is IReadOnlyList<T> list)
             {
                 return list.Count > 0 ? list[list.Count - 1] : null;
@@ -126,13 +126,12 @@ internal static class EnumerableExtensions
         /// </summary>
         public T? ElementAtOrNull(int index)
         {
-#if !NET35
-            var list = source as IReadOnlyList<T> ?? source.ToArray();
-            return index >= 0 && index < list.Count ? list[index] : null;
+#if NET40_OR_GREATER || NETSTANDARD || NET
+            IReadOnlyList<T> list = source as IReadOnlyList<T> ?? source.ToArray();
 #else
-            var arr = source.ToArray();
-            return index >= 0 && index < arr.Length ? arr[index] : null;
+            IList<T> list = source.ToArray();
 #endif
+            return index >= 0 && index < list.Count ? list[index] : null;
         }
     }
 }

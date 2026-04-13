@@ -74,7 +74,7 @@ internal static class FileExtensions
             return buffer;
         }
 
-#if !NET35
+#if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Reads all bytes from the specified file starting at the given offset asynchronously.
         /// </summary>
