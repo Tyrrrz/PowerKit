@@ -21,7 +21,7 @@ public class EncodingExtensionsTests
     }
 
     [Fact]
-    public void WithoutPreamble_EncodingWithPreamble_Test()
+    public void WithoutPreamble_Test()
     {
         // Arrange
         var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
@@ -36,7 +36,7 @@ public class EncodingExtensionsTests
     }
 
     [Fact]
-    public void WithoutPreamble_EncodingWithoutPreamble_ReturnsSameInstance_Test()
+    public void WithoutPreamble_WithoutPreamble_Test()
     {
         // Arrange
         var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
@@ -50,11 +50,11 @@ public class EncodingExtensionsTests
     }
 
     [Fact]
-    public void WithoutPreamble_PreservesRoundTrip_Test()
+    public void WithoutPreamble_RoundTrip_Test()
     {
         // Arrange
         var text = "hello, world! 🌍";
-        var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true).WithoutPreamble();
+        var encoding = new UTF8Encoding(true).WithoutPreamble();
 
         // Act
         var bytes = encoding.GetBytes(text);
