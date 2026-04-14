@@ -1,5 +1,7 @@
 #if NETFRAMEWORK || NET5_0_OR_GREATER
+#nullable enable
 using System.Diagnostics.CodeAnalysis;
+
 using System.Runtime.Versioning;
 using Microsoft.Win32;
 
