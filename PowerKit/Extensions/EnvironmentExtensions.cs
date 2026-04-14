@@ -19,7 +19,18 @@ internal static class EnvironmentExtensions
                 return;
             }
 
-            foreach (DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine))
+            var machineVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
+
+            foreach (DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Process))
+            {
+                var key = (string)environmentVariable.Key;
+                if (!machineVariables.Contains(key))
+                {
+                    Environment.SetEnvironmentVariable(key, null, EnvironmentVariableTarget.Process);
+                }
+            }
+
+            foreach (DictionaryEntry environmentVariable in machineVariables)
             {
                 var key = (string)environmentVariable.Key;
                 var value = (string?)environmentVariable.Value;
