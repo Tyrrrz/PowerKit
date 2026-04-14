@@ -8,42 +8,6 @@ internal static class DirectoryExtensions
     extension(Directory)
     {
         /// <summary>
-        /// Checks if it's possible to write to the specified directory.
-        /// </summary>
-        public static bool CheckWriteAccess(string path)
-        {
-            var tempFilePath = Path.Combine(path, Guid.NewGuid().ToString());
-
-            try
-            {
-                {
-                    using var tempFile = File.Create(tempFilePath);
-                }
-
-                try
-                {
-                    File.Delete(tempFilePath);
-                }
-                catch (IOException)
-                {
-                    // Best-effort cleanup: inability to delete the temporary file
-                    // does not affect the write-access check result.
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    // Best-effort cleanup: inability to delete the temporary file
-                    // does not affect the write-access check result.
-                }
-
-                return true;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Deletes the directory and all its contents, then recreates it as an empty directory.
         /// </summary>
         public static void Reset(string path)
@@ -71,6 +35,28 @@ internal static class DirectoryExtensions
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if it's possible to write to the specified directory.
+        /// </summary>
+        public static bool CheckWriteAccess(string path)
+        {
+            var tempFilePath = Path.Combine(path, Guid.NewGuid().ToString());
+
+            try
+            {
+                using var tempFile = File.Create(tempFilePath);
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            finally
+            {
+                File.TryDelete(tempFilePath);
             }
         }
     }
