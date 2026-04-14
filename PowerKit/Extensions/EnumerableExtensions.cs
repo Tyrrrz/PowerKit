@@ -129,7 +129,7 @@ internal static class EnumerableExtensions
 #if NET40_OR_GREATER || NETSTANDARD || NET
             var list = source as IReadOnlyList<T> ?? source.ToArray();
 #else
-            IList<T> list = source.ToArray();
+            var list = source as IList<T> ?? source.ToArray();
 #endif
             return index >= 0 && index < list.Count ? list[index] : null;
         }
