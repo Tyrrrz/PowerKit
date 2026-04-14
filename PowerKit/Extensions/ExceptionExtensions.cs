@@ -14,7 +14,7 @@ internal static class ExceptionExtensions
 #if NET40_OR_GREATER || NETSTANDARD || NET
         public IReadOnlyList<Exception> GetSelfAndDescendants()
 #else
-        public IEnumerable<Exception> GetSelfAndDescendants()
+        public IList<Exception> GetSelfAndDescendants()
 #endif
         {
             static void PopulateDescendants(Exception ex, ICollection<Exception> result)
