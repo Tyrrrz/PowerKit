@@ -18,10 +18,21 @@ internal static class ZipArchiveEntryExtensions
         public byte[] ReadAllBytes()
         {
             using var stream = entry.Open();
-            using var buffer = new MemoryStream();
-            stream.CopyTo(buffer);
+            var bytes = new byte[checked((int)entry.Length)];
+            var offset = 0;
 
-            return buffer.ToArray();
+            while (offset < bytes.Length)
+            {
+                var read = stream.Read(bytes, offset, bytes.Length - offset);
+                if (read == 0)
+                {
+                    throw new EndOfStreamException($"Expected to read {bytes.Length} bytes from zip archive entry '{entry.FullName}', but only read {offset}.");
+                }
+
+                offset += read;
+            }
+
+            return bytes;
         }
 
         /// <summary>
