@@ -53,8 +53,8 @@ internal static class EncodingExtensions
         /// Creates a derived encoding that produces an empty preamble, regardless of the original encoding's preamble.
         /// </summary>
         public Encoding WithoutPreamble() =>
-            encoding.GetPreamble().Length == 0
-                ? encoding
-                : new NoPreambleEncoding(encoding);
+            encoding.GetPreamble().Length > 0
+                ? new NoPreambleEncoding(encoding)
+                : encoding;
     }
 }
