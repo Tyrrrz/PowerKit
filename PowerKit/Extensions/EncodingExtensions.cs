@@ -16,7 +16,7 @@ file sealed class NoPreambleEncoding(Encoding inner) : Encoding
     public override bool IsMailNewsSave => inner.IsMailNewsSave;
     public override bool IsSingleByte => inner.IsSingleByte;
 
-    public override byte[] GetPreamble() => Array.Empty<byte>();
+    public override byte[] GetPreamble() => [];
 
     public override int GetByteCount(char[] chars, int index, int count) =>
         inner.GetByteCount(chars, index, count);
