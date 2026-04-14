@@ -21,6 +21,7 @@ internal static class ZipArchiveEntryExtensions
         {
             using var stream = entry.Open();
             using var buffer = new MemoryStream();
+
             stream.CopyTo(buffer);
 
             return buffer.ToArray();
@@ -53,6 +54,7 @@ internal static class ZipArchiveEntryExtensions
         {
             using var stream = entry.Open();
             using var writer = new StreamWriter(stream, encoding ?? Utf8NoBom);
+
             writer.Write(text);
         }
 
@@ -96,7 +98,8 @@ internal static class ZipArchiveEntryExtensions
         {
             using var stream = entry.Open();
             using var buffer = new MemoryStream();
-            await stream.CopyToAsync(buffer, 81920, cancellationToken).ConfigureAwait(false);
+
+            await stream.CopyToAsync(buffer, cancellationToken).ConfigureAwait(false);
 
             return buffer.ToArray();
         }
@@ -138,6 +141,7 @@ internal static class ZipArchiveEntryExtensions
         {
             using var stream = entry.Open();
             using var writer = new StreamWriter(stream, encoding ?? Utf8NoBom);
+
             await writer.WriteAsync(text.AsMemory(), cancellationToken).ConfigureAwait(false);
             await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
