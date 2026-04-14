@@ -14,7 +14,8 @@ internal static class EnvironmentExtensions
         /// are not present at the machine or user scope, then applies the machine-level
         /// and user-level values to the current process.
         /// This can remove variables inherited from the parent process or set by the
-        /// application itself. On other platforms, this method is a no-op.
+        /// application itself.
+        /// On other platforms, this method is a no-op.
         /// </summary>
         public static void RefreshEnvironmentVariables()
         {
