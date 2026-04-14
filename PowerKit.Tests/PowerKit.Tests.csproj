@@ -6,6 +6,11 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- Enable coverage collection for included PowerKit APIs -->
+    <DefineConstants>$(DefineConstants);POWERKIT_INCLUDE_COVERAGE</DefineConstants>
+  </PropertyGroup>
+
   <!-- Include PowerKit source files directly, simulating source-only package consumption -->
   <ItemGroup>
     <Compile Include="../PowerKit/**/*.cs" Exclude="../PowerKit/obj/**/*.cs" />

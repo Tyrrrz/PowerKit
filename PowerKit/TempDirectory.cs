@@ -7,7 +7,7 @@ namespace PowerKit;
 /// <summary>
 /// Represents a temporary directory that is automatically deleted when disposed.
 /// </summary>
-#if POWERKIT_EXCLUDE_COVERAGE
+#if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
 internal partial class TempDirectory(string path) : IDisposable

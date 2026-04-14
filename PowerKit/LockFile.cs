@@ -7,7 +7,7 @@ namespace PowerKit;
 /// <summary>
 /// Represents a file-based lock that prevents concurrent access to a shared resource.
 /// </summary>
-#if POWERKIT_EXCLUDE_COVERAGE
+#if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
 internal partial class LockFile(FileStream fileStream) : IDisposable

@@ -5,7 +5,7 @@ namespace PowerKit;
 /// Container for a value that may or may not be set.
 /// Essentially <see cref="System.Nullable{T}" />, but for cases where null is also a valid value.
 /// </summary>
-#if POWERKIT_EXCLUDE_COVERAGE
+#if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
 internal class Cell<T>
