@@ -16,10 +16,20 @@ public class RegistryExtensionsTests
         Skip.IfNot(OperatingSystem.IsWindows());
 
         // Arrange
-        using var key = Registry.CurrentUser.OpenSubKey("Software", false)!;
+        using var key = Registry.CurrentUser.OpenSubKey("Software", true)!;
+        var subKeyName = $"PowerKit.Tests.{Guid.NewGuid():N}";
 
-        // Act & assert
-        key.ContainsSubKey("Microsoft").Should().BeTrue();
+        try
+        {
+            using var subKey = key.CreateSubKey(subKeyName);
+
+            // Act & assert
+            key.ContainsSubKey(subKeyName).Should().BeTrue();
+        }
+        finally
+        {
+            key.DeleteSubKeyTree(subKeyName, false);
+        }
     }
 
     [SkippableFact]
