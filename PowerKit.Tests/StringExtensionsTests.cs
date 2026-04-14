@@ -84,4 +84,14 @@ public class StringExtensionsTests
         "hello".ToSnakeCase().Should().Be("hello");
         "".ToSnakeCase().Should().Be("");
     }
+
+    [Fact]
+    public void Reverse_Test()
+    {
+        // Act & assert
+        "hello".Reverse().Should().Be("olleh");
+        "abcde".Reverse().Should().Be("edcba");
+        "a".Reverse().Should().Be("a");
+        "".Reverse().Should().Be("");
+    }
 }
