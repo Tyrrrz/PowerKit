@@ -100,6 +100,7 @@ internal static class ZipArchiveEntryExtensions
         {
             using var stream = entry.Open();
             await stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+            await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
