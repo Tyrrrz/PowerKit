@@ -59,6 +59,30 @@ public class FileExtensionsTests
     }
 
     [Fact]
+    public void TryDelete_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+
+        // Act
+        var result = File.TryDelete(tempFile.Path);
+
+        // Assert
+        result.Should().BeTrue();
+        File.Exists(tempFile.Path).Should().BeFalse();
+    }
+
+    [Fact]
+    public void TryDelete_NonExisting_Test()
+    {
+        // Act
+        var result = File.TryDelete(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
     public async Task WriteAllZeroes_Test()
     {
         // Arrange
