@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -25,6 +26,12 @@ public class FileExtensionsTests
     [Fact]
     public void CheckWriteAccess_ReadOnly_Test()
     {
+        // Privileged processes can write to read-only files on Unix
+        if (Environment.IsPrivilegedProcess)
+        {
+            return;
+        }
+
         // Arrange
         using var tempFile = TempFile.Create();
         File.SetAttributes(tempFile.Path, File.GetAttributes(tempFile.Path) | FileAttributes.ReadOnly);
