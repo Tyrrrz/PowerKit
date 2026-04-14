@@ -3,7 +3,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 #if !NET35
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -145,7 +144,7 @@ internal static class ZipArchiveEntryExtensions
             using var stream = entry.Open();
             using var writer = new StreamWriter(stream, encoding ?? Utf8NoBom);
 
-            await writer.WriteAsync(text.AsMemory(), cancellationToken).ConfigureAwait(false);
+            await writer.WriteAsync(text).ConfigureAwait(false);
             await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
 
@@ -183,7 +182,7 @@ internal static class ZipArchiveEntryExtensions
 
             foreach (var line in lines)
             {
-                await writer.WriteLineAsync(line.AsMemory(), cancellationToken).ConfigureAwait(false);
+                await writer.WriteLineAsync(line).ConfigureAwait(false);
             }
 
             await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
