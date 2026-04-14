@@ -10,7 +10,7 @@ namespace PowerKit.Tests;
 public class FileExtensionsTests
 {
     [Fact]
-    public void TryDelete_ExistingFile_Test()
+    public void TryDelete_Test()
     {
         // Arrange
         using var tempFile = TempFile.Create();
@@ -24,7 +24,7 @@ public class FileExtensionsTests
     }
 
     [Fact]
-    public void TryDelete_NonExistingFile_Test()
+    public void TryDelete_NonExisting_Test()
     {
         // Act
         var result = File.TryDelete(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
