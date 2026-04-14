@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace PowerKit.Extensions;
@@ -34,6 +35,28 @@ internal static class DirectoryExtensions
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if it's possible to write to the specified directory.
+        /// </summary>
+        public static bool CheckWriteAccess(string path)
+        {
+            var tempFilePath = Path.Combine(path, Guid.NewGuid().ToString());
+
+            try
+            {
+                using var tempFile = File.Create(tempFilePath);
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            finally
+            {
+                File.TryDelete(tempFilePath);
             }
         }
     }
