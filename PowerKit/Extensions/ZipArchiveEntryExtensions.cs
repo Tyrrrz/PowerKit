@@ -1,10 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+#if !NET35
 using System.Threading;
 using System.Threading.Tasks;
+#endif
 
 namespace PowerKit.Extensions;
 
@@ -89,6 +90,7 @@ internal static class ZipArchiveEntryExtensions
             }
         }
 
+#if !NET35
         /// <summary>
         /// Reads all bytes from the zip archive entry asynchronously.
         /// </summary>
@@ -142,13 +144,8 @@ internal static class ZipArchiveEntryExtensions
             using var stream = entry.Open();
             using var writer = new StreamWriter(stream, encoding ?? Utf8NoBom);
 
-            await writer.WriteAsync(text.AsMemory(), cancellationToken).ConfigureAwait(false);
-
-#if NET8_0_OR_GREATER
-            await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
-#else
+            await writer.WriteAsync(text).ConfigureAwait(false);
             await writer.FlushAsync().ConfigureAwait(false);
-#endif
         }
 
         /// <summary>
@@ -185,18 +182,11 @@ internal static class ZipArchiveEntryExtensions
 
             foreach (var line in lines)
             {
-#if NET5_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER
-                await writer.WriteLineAsync(line.AsMemory(), cancellationToken).ConfigureAwait(false);
-#else
                 await writer.WriteLineAsync(line).ConfigureAwait(false);
-#endif
             }
 
-#if NET8_0_OR_GREATER
-            await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
-#else
             await writer.FlushAsync().ConfigureAwait(false);
-#endif
         }
+#endif
     }
 }
