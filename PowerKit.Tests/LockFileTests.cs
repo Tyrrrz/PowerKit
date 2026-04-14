@@ -41,10 +41,9 @@ public class LockFileTests
         // Arrange
         using var tempFile = TempFile.Create();
         var lockFile = LockFile.TryAcquire(tempFile.Path);
-        lockFile.Should().NotBeNull();
 
         // Act
-        lockFile.Dispose();
+        lockFile!.Dispose();
 
         // Assert: lock can be reacquired after disposal
         using var lockFile2 = LockFile.TryAcquire(tempFile.Path);
