@@ -21,15 +21,18 @@ internal static class EnvironmentExtensions
 
             var machineVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
 
+            // Handle removed variables
             foreach (DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Process))
             {
                 var key = (string)environmentVariable.Key;
+
                 if (!machineVariables.Contains(key))
                 {
                     Environment.SetEnvironmentVariable(key, null, EnvironmentVariableTarget.Process);
                 }
             }
 
+            // Handle added and overwritten variables
             foreach (DictionaryEntry environmentVariable in machineVariables)
             {
                 var key = (string)environmentVariable.Key;
