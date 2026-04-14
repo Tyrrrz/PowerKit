@@ -1,4 +1,3 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
 using System;
 
 namespace PowerKit.Extensions;
@@ -14,4 +13,3 @@ internal static class GuidExtensions
             Guid.TryParse(str, out var result) ? result : null;
     }
 }
-#endif

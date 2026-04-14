@@ -1,10 +1,11 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
 using System.IO;
 using System.Reflection;
 using System.Resources;
 using System.Text;
+#if NET40_OR_GREATER || NETSTANDARD || NET
 using System.Threading;
 using System.Threading.Tasks;
+#endif
 
 namespace PowerKit.Extensions;
 
@@ -45,6 +46,7 @@ internal static class AssemblyExtensions
         public string GetManifestResourceString(string resourceName) =>
             assembly.GetManifestResourceString(resourceName, Encoding.UTF8);
 
+#if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Reads the specified manifest resource as a string using the specified encoding asynchronously.
         /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
@@ -76,6 +78,7 @@ internal static class AssemblyExtensions
             await assembly
                 .GetManifestResourceStringAsync(resourceName, Encoding.UTF8, cancellationToken)
                 .ConfigureAwait(false);
+#endif
 
         /// <summary>
         /// Extracts the specified manifest resource to a file at the given path.
@@ -94,6 +97,7 @@ internal static class AssemblyExtensions
             destination.Flush();
         }
 
+#if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Extracts the specified manifest resource to a file at the given path asynchronously.
         /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
@@ -122,6 +126,6 @@ internal static class AssemblyExtensions
             await source.CopyToAsync(destination, 81920, cancellationToken).ConfigureAwait(false);
             await destination.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
+#endif
     }
 }
-#endif
