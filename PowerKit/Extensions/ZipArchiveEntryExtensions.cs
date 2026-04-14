@@ -43,8 +43,12 @@ internal static class ZipArchiveEntryExtensions
         /// </summary>
         public string ReadAllText(Encoding? encoding = null)
         {
-            var bytes = entry.ReadAllBytes();
-            return (encoding ?? new UTF8Encoding(false)).GetString(bytes);
+            using var stream = entry.Open();
+            using var reader = new StreamReader(
+                stream,
+                encoding ?? new UTF8Encoding(false),
+                detectEncodingFromByteOrderMarks: true);
+            return reader.ReadToEnd();
         }
 
         /// <summary>
