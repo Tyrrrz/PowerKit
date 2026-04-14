@@ -4,7 +4,7 @@ namespace PowerKit.Extensions;
 
 file static class EncodingEx
 {
-    public static Encoding Utf8WithoutBom { get; } = new UTF8Encoding(false);
+    public static Encoding Utf8WithoutBom { get; } = Encoding.ReadOnly(new UTF8Encoding(false));
 }
 
 internal static class EncodingExtensions
