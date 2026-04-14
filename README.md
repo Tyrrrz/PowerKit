@@ -38,4 +38,4 @@ To learn more about the war and how you can help, [click here](https://tyrrrz.me
 > You can ensure this by using the latest .NET SDK and setting `<LangVersion>latest</LangVersion>` in the project file.
 
 > [!IMPORTANT]
-> The library is statically tested for compatibility with .NET Standard 1.0+ and .NET Framework 3.5+, however some of the older targets may require additionally installing [**PolyShim**](https://github.com/Tyrrrz/PolyShim).
+> The library is statically tested for compatibility with .NET Standard 2.0+ and .NET Framework 3.5+, however some of the older targets may require additionally installing [**PolyShim**](https://github.com/Tyrrrz/PolyShim).
