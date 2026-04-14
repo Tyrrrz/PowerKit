@@ -20,6 +20,7 @@ internal static class ZipArchiveEntryExtensions
             using var stream = entry.Open();
             using var buffer = new MemoryStream();
             stream.CopyTo(buffer);
+
             return buffer.ToArray();
         }
 
@@ -39,6 +40,7 @@ internal static class ZipArchiveEntryExtensions
         {
             using var stream = entry.Open();
             using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
+
             return reader.ReadToEnd();
         }
 
@@ -93,6 +95,7 @@ internal static class ZipArchiveEntryExtensions
             using var stream = entry.Open();
             using var buffer = new MemoryStream();
             await stream.CopyToAsync(buffer, 81920, cancellationToken).ConfigureAwait(false);
+
             return buffer.ToArray();
         }
 
@@ -118,6 +121,7 @@ internal static class ZipArchiveEntryExtensions
         {
             using var stream = entry.Open();
             using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
+
             return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
         }
 
