@@ -10,7 +10,7 @@ namespace PowerKit.Extensions;
 
 internal static class ZipArchiveEntryExtensions
 {
-    private static readonly Encoding Utf8NoBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+    private static readonly Encoding Utf8NoBom = new UTF8Encoding(false);
 
     extension(ZipArchiveEntry entry)
     {
