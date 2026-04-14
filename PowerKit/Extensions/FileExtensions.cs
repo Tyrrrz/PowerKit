@@ -26,7 +26,14 @@ internal static class FileExtensions
                     {
                         File.Delete(path);
                     }
-                    catch { }
+                    catch (IOException)
+                    {
+                        // Best-effort cleanup: failure to delete the probe file does not affect write access.
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        // Best-effort cleanup: failure to delete the probe file does not affect write access.
+                    }
                 }
 
                 return true;
