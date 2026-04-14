@@ -16,7 +16,9 @@ internal static class DirectoryExtensions
 
             try
             {
-                using (File.Create(tempFilePath)) { }
+                {
+                    using var tempFile = File.Create(tempFilePath);
+                }
 
                 try
                 {
