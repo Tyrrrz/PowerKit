@@ -65,8 +65,18 @@ internal static class ZipArchiveEntryExtensions
         /// </summary>
         public string[] ReadAllLines(Encoding? encoding = null)
         {
-            var text = entry.ReadAllText(encoding);
-            return text.Split(["\r\n", "\n", "\r"]);
+            using var stream = entry.Open();
+            using var reader = new StreamReader(
+                stream,
+                encoding ?? new UTF8Encoding(false),
+                detectEncodingFromByteOrderMarks: true);
+
+            var lines = new List<string>();
+            string? line;
+            while ((line = reader.ReadLine()) is not null)
+                lines.Add(line);
+
+            return lines.ToArray();
         }
 
         /// <summary>
