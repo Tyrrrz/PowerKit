@@ -10,7 +10,7 @@ namespace PowerKit.Tests;
 public class DirectoryExtensionsTests
 {
     [Fact]
-    public void CheckWriteAccess_WritableDirectory_Test()
+    public void CheckWriteAccess_Test()
     {
         // Arrange
         using var tempDir = TempDirectory.Create();
@@ -23,7 +23,7 @@ public class DirectoryExtensionsTests
     }
 
     [Fact]
-    public void CheckWriteAccess_ReadOnlyDirectory_Test()
+    public void CheckWriteAccess_ReadOnly_Test()
     {
         // FileAttributes.ReadOnly removes write bits on Unix but has no effect on directories on Windows
         if (OperatingSystem.IsWindows() || Environment.IsPrivilegedProcess)
