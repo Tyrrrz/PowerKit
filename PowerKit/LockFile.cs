@@ -24,7 +24,7 @@ internal partial class LockFile
         {
             var fileStream = File.Open(
                 filePath,
-                FileMode.Create,
+                FileMode.OpenOrCreate,
                 FileAccess.ReadWrite,
                 FileShare.None
             );
