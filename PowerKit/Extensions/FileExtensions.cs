@@ -10,6 +10,53 @@ internal static class FileExtensions
     extension(File)
     {
         /// <summary>
+        /// Attempts to delete the file at the specified path.
+        /// Returns <see langword="true" /> if the delete operation completed without throwing an exception,
+        /// or <see langword="false" /> if an error occurred.
+        /// </summary>
+        /// <remarks>
+        /// This method can return <see langword="true" /> even if no file existed at <paramref name="path" />,
+        /// because <see cref="File.Delete(string)" /> does not throw when the target file does not exist.
+        /// </remarks>
+        public static bool TryDelete(string path)
+        {
+            try
+            {
+                File.Delete(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if it's possible to write to the specified file.
+        /// </summary>
+        public static bool CheckWriteAccess(string path)
+        {
+            var wasExisting = File.Exists(path);
+
+            try
+            {
+                using var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            finally
+            {
+                if (!wasExisting)
+                {
+                    File.TryDelete(path);
+                }
+            }
+        }
+
+        /// <summary>
         /// Creates a file at the specified path and fills it with zeroes.
         /// </summary>
         public static void WriteAllZeroes(string path, long count)
