@@ -48,7 +48,7 @@ public class DirectoryExtensionsTests
     }
 
     [Fact]
-    public void TryDelete_NonEmpt_Recursive_Test()
+    public void TryDelete_NonEmpty_Recursive_Test()
     {
         // Arrange
         using var tempDir = TempDirectory.Create();
