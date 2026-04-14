@@ -54,7 +54,8 @@ public class ArrayPoolExtensionsTests
         owner.Dispose();
 
         // Assert
-        Assert.Throws<ObjectDisposedException>(() => owner.Memory);
+        var act = () => owner.Memory;
+        act.Should().Throw<ObjectDisposedException>();
     }
 
     private sealed class TrackingArrayPool : ArrayPool<byte>
