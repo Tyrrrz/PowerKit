@@ -11,10 +11,11 @@ internal static class DirectoryExtensions
         /// </summary>
         public static void Reset(string path)
         {
-            if (Directory.Exists(path))
+            try
             {
                 Directory.Delete(path, true);
             }
+            catch (DirectoryNotFoundException) { }
 
             Directory.CreateDirectory(path);
         }
