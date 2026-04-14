@@ -30,6 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolyShim" />
+    <PackageReference Include="PolyShim" PrivateAssets="all" />
   </ItemGroup>
 </Project>
