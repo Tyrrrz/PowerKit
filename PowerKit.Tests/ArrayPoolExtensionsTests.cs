@@ -21,7 +21,7 @@ public class ArrayPoolExtensionsTests
     }
 
     [Fact]
-    public void RentOwner_ReturnsBufferOnDispose_Test()
+    public void RentOwner_Dispose_Test()
     {
         // Arrange
         var pool = ArrayPool<byte>.Create(16, 1);
