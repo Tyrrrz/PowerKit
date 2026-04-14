@@ -10,6 +10,8 @@ namespace PowerKit.Extensions;
 
 internal static class ZipArchiveEntryExtensions
 {
+    private static readonly Encoding Utf8NoBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+
     extension(ZipArchiveEntry entry)
     {
         /// <summary>
@@ -17,17 +19,11 @@ internal static class ZipArchiveEntryExtensions
         /// </summary>
         public byte[] ReadAllBytes()
         {
-            var length = checked((int)entry.Length);
-            if (length <= 0)
-            {
-                return [];
-            }
-
             using var stream = entry.Open();
-            var bytes = new byte[length];
-            stream.ReadExactly(bytes);
+            using var buffer = new MemoryStream();
+            stream.CopyTo(buffer);
 
-            return bytes;
+            return buffer.ToArray();
         }
 
         /// <summary>
@@ -45,10 +41,7 @@ internal static class ZipArchiveEntryExtensions
         public string ReadAllText(Encoding? encoding = null)
         {
             using var stream = entry.Open();
-            using var reader = new StreamReader(
-                stream,
-                encoding ?? new UTF8Encoding(false)
-            );
+            using var reader = new StreamReader(stream, encoding ?? Utf8NoBom);
 
             return reader.ReadToEnd();
         }
@@ -58,8 +51,9 @@ internal static class ZipArchiveEntryExtensions
         /// </summary>
         public void WriteAllText(string text, Encoding? encoding = null)
         {
-            var bytes = (encoding ?? new UTF8Encoding(false)).GetBytes(text);
-            entry.WriteAllBytes(bytes);
+            using var stream = entry.Open();
+            using var writer = new StreamWriter(stream, encoding ?? Utf8NoBom);
+            writer.Write(text);
         }
 
         /// <summary>
@@ -68,14 +62,13 @@ internal static class ZipArchiveEntryExtensions
         public string[] ReadAllLines(Encoding? encoding = null)
         {
             using var stream = entry.Open();
-            using var reader = new StreamReader(
-                stream,
-                encoding ?? new UTF8Encoding(false)
-            );
+            using var reader = new StreamReader(stream, encoding ?? Utf8NoBom);
 
             var lines = new List<string>();
             while (reader.ReadLine() is { } line)
+            {
                 lines.Add(line);
+            }
 
             return lines.ToArray();
         }
@@ -85,8 +78,13 @@ internal static class ZipArchiveEntryExtensions
         /// </summary>
         public void WriteAllLines(IEnumerable<string> lines, Encoding? encoding = null)
         {
-            var text = string.Join(Environment.NewLine, lines);
-            entry.WriteAllText(text, encoding);
+            using var stream = entry.Open();
+            using var writer = new StreamWriter(stream, encoding ?? Utf8NoBom);
+
+            foreach (var line in lines)
+            {
+                writer.WriteLine(line);
+            }
         }
 
         /// <summary>
@@ -96,17 +94,11 @@ internal static class ZipArchiveEntryExtensions
             CancellationToken cancellationToken = default
         )
         {
-            var length = checked((int)entry.Length);
-            if (length == 0)
-            {
-                return [];
-            }
-
             using var stream = entry.Open();
-            var bytes = new byte[length];
-            await stream.ReadExactlyAsync(bytes, cancellationToken).ConfigureAwait(false);
+            using var buffer = new MemoryStream();
+            await stream.CopyToAsync(buffer, 81920, cancellationToken).ConfigureAwait(false);
 
-            return bytes;
+            return buffer.ToArray();
         }
 
         /// <summary>
@@ -119,7 +111,6 @@ internal static class ZipArchiveEntryExtensions
         {
             using var stream = entry.Open();
             await stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
-            await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -130,13 +121,8 @@ internal static class ZipArchiveEntryExtensions
             CancellationToken cancellationToken = default
         )
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             using var stream = entry.Open();
-            using var reader = new StreamReader(
-                stream,
-                encoding ?? new UTF8Encoding(false)
-            );
+            using var reader = new StreamReader(stream, encoding ?? Utf8NoBom);
 
             return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -150,8 +136,10 @@ internal static class ZipArchiveEntryExtensions
             CancellationToken cancellationToken = default
         )
         {
-            var bytes = (encoding ?? new UTF8Encoding(false)).GetBytes(text);
-            await entry.WriteAllBytesAsync(bytes, cancellationToken).ConfigureAwait(false);
+            using var stream = entry.Open();
+            using var writer = new StreamWriter(stream, encoding ?? Utf8NoBom);
+            await writer.WriteAsync(text.AsMemory(), cancellationToken).ConfigureAwait(false);
+            await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -163,15 +151,13 @@ internal static class ZipArchiveEntryExtensions
         )
         {
             using var stream = entry.Open();
-            using var reader = new StreamReader(
-                stream,
-                encoding ?? new UTF8Encoding(false)
-            );
+            using var reader = new StreamReader(stream, encoding ?? Utf8NoBom);
 
             var lines = new List<string>();
-
             while (await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false) is { } line)
+            {
                 lines.Add(line);
+            }
 
             return lines.ToArray();
         }
@@ -185,8 +171,15 @@ internal static class ZipArchiveEntryExtensions
             CancellationToken cancellationToken = default
         )
         {
-            var text = string.Join(Environment.NewLine, lines);
-            await entry.WriteAllTextAsync(text, encoding, cancellationToken).ConfigureAwait(false);
+            using var stream = entry.Open();
+            using var writer = new StreamWriter(stream, encoding ?? Utf8NoBom);
+
+            foreach (var line in lines)
+            {
+                await writer.WriteLineAsync(line.AsMemory(), cancellationToken).ConfigureAwait(false);
+            }
+
+            await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 }
