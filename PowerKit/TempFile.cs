@@ -22,9 +22,6 @@ internal partial class TempFile(string path) : IDisposable
     public void Dispose() => File.Delete(Path);
 }
 
-#if POWERKIT_EXCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 internal partial class TempFile
 {
     /// <summary>

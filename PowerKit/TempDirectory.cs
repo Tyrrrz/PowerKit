@@ -28,9 +28,6 @@ internal partial class TempDirectory(string path) : IDisposable
     }
 }
 
-#if POWERKIT_EXCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 internal partial class TempDirectory
 {
     /// <summary>

@@ -16,9 +16,6 @@ internal partial class LockFile(FileStream fileStream) : IDisposable
     public void Dispose() => fileStream.Dispose();
 }
 
-#if POWERKIT_EXCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 internal partial class LockFile
 {
     /// <summary>
