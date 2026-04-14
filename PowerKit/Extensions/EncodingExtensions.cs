@@ -7,12 +7,10 @@ file sealed class NoPreambleEncoding : Encoding
     // Cloned for isolation — prevents mutations to shared singletons like Encoding.UTF8.
     private readonly Encoding _inner;
 
-    public NoPreambleEncoding(Encoding inner)
-    {
+    public NoPreambleEncoding(Encoding inner) =>
         // Clone for isolation — prevents mutations to shared singletons like Encoding.UTF8,
         // and ensures the clone carries the source's fallbacks into all encode/decode operations.
         _inner = (Encoding)inner.Clone();
-    }
 
     public override string BodyName => _inner.BodyName;
     public override string EncodingName => _inner.EncodingName;
@@ -25,7 +23,7 @@ file sealed class NoPreambleEncoding : Encoding
     public override bool IsMailNewsSave => _inner.IsMailNewsSave;
     public override bool IsSingleByte => _inner.IsSingleByte;
 
-    public override byte[] GetPreamble() => new byte[0];
+    public override byte[] GetPreamble() => [];
 
     public override int GetByteCount(char[] chars, int index, int count) =>
         _inner.GetByteCount(chars, index, count);
