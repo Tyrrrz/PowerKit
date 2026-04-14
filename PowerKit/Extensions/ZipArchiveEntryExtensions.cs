@@ -18,7 +18,9 @@ internal static class ZipArchiveEntryExtensions
         {
             var length = checked((int)entry.Length);
             if (length <= 0)
+            {
                 return [];
+            }
 
             using var stream = entry.Open();
             var bytes = new byte[length];
