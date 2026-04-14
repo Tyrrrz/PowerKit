@@ -33,45 +33,9 @@ To learn more about the war and how you can help, [click here](https://tyrrrz.me
 
 - 📦 [NuGet](https://nuget.org/packages/PowerKit): `dotnet add package PowerKit`
 
+> [!WARNING]
+> To use this package, your project needs to target C# 14 or later.
+> You can ensure this by using the latest .NET SDK and setting `<LangVersion>latest</LangVersion>` in the project file.
+
 > [!IMPORTANT]
-> To reference this package, you must have the latest major version of the .NET SDK installed.
-> This is only required for the build process, and does not affect which version of the runtime you can target.
-
-## Features
-
-- Provides utility types:
-  - `Cell<T>` — a container for a value that may or may not be set (nullable-agnostic alternative to `Nullable<T>`)
-  - `Disposable` — helpers for creating and composing `IDisposable` instances
-  - `LockFile` — a file-based lock that prevents concurrent access to a shared resource
-  - `TempFile` — a temporary file that is automatically deleted when disposed
-  - `TempDirectory` — a temporary directory that is automatically deleted when disposed
-- Provides extension methods for:
-  - `AggregateException`, `Exception`
-  - `ArrayPool<T>`
-  - `Assembly`
-  - `IAsyncEnumerable<T>`
-  - `BinaryReader`, `BinaryWriter`
-  - `bool`
-  - `ICollection<T>`
-  - `IComparable<T>`
-  - `Console`
-  - `CultureInfo`
-  - `DateTime`, `DateTimeOffset`
-  - `decimal`, `double`, `int`, `long`
-  - `DirectoryInfo`
-  - `Encoding`
-  - `IEnumerable<T>`
-  - `Environment`
-  - `FileInfo`
-  - `Guid`
-  - `Path`
-  - `Process`
-  - `RegistryKey`
-  - `Stream`
-  - `StringBuilder`
-  - `string`
-  - `TextReader`
-  - `TimeSpan`
-  - `ZipArchiveEntry`
-- Targets .NET Standard 2.0+, .NET Framework 3.5+, .NET 10+
-- Imposes no run-time dependencies
+> The library is statically tested for compatibility with .NET Standard 1.0+ and .NET Framework 3.5+, however some of the older targets may require additionally installing [**PolyShim**](https://github.com/Tyrrrz/PolyShim).
