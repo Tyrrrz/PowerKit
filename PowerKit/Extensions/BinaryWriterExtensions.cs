@@ -1,7 +1,11 @@
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class BinaryWriterExtensions
 {
     extension(BinaryWriter writer)

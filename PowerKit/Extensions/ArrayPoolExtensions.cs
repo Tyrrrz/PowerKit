@@ -1,9 +1,13 @@
 using System;
 using System.Buffers;
 using System.Threading;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class ArrayPoolExtensions
 {
     extension<T>(ArrayPool<T> pool)
@@ -18,6 +22,9 @@ internal static class ArrayPoolExtensions
     }
 }
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 file sealed class ArrayPoolMemoryOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength)
     : IMemoryOwner<T>
 {

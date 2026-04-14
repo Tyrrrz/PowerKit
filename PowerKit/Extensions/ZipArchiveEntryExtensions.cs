@@ -1,4 +1,5 @@
 #if NET40_OR_GREATER || NETSTANDARD || NET
+using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class ZipArchiveEntryExtensions
 {
     extension(ZipArchiveEntry entry)

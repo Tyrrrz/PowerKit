@@ -2,9 +2,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class TextReaderExtensions
 {
     extension(TextReader reader)

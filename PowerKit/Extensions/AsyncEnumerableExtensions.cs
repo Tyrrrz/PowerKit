@@ -1,4 +1,5 @@
 #if NET40_OR_GREATER || NETSTANDARD || NET
+using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -7,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class AsyncEnumerableExtensions
 {
     extension<T>(IAsyncEnumerable<T> source)

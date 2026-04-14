@@ -1,7 +1,11 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class ProcessExtensions
 {
     extension(Process)

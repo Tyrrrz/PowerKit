@@ -1,7 +1,11 @@
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 file sealed class NoPreambleEncoding : Encoding
 {
     // Cloned for isolation — prevents mutations to shared singletons like Encoding.UTF8.
@@ -46,11 +50,17 @@ file sealed class NoPreambleEncoding : Encoding
     public override Decoder GetDecoder() => _inner.GetDecoder();
 }
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 file static class EncodingEx
 {
     public static Encoding Utf8WithoutBom { get; } = Encoding.UTF8.WithoutPreamble();
 }
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class EncodingExtensions
 {
     extension(Encoding encoding)

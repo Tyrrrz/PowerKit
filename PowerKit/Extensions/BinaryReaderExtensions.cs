@@ -1,8 +1,12 @@
 using System.IO;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class BinaryReaderExtensions
 {
     extension(BinaryReader reader)

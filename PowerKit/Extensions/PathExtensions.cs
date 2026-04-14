@@ -2,9 +2,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 file static class PathEx
 {
     // Characters that are invalid in file names across all major filesystems
@@ -38,6 +42,9 @@ file static class PathEx
             .ToArray();
 }
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class PathExtensions
 {
     extension(Path)

@@ -1,11 +1,15 @@
 using System;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit;
 
 /// <summary>
 /// Represents a temporary file that is automatically deleted when disposed.
 /// </summary>
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal partial class TempFile(string path) : IDisposable
 {
     /// <summary>
@@ -18,6 +22,9 @@ internal partial class TempFile(string path) : IDisposable
     public void Dispose() => File.Delete(Path);
 }
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal partial class TempFile
 {
     /// <summary>

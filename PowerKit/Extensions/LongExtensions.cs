@@ -1,8 +1,12 @@
 using System;
 using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class LongExtensions
 {
     extension(long)

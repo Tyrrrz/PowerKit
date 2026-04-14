@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class CultureInfoExtensions
 {
     extension(CultureInfo culture)

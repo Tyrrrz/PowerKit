@@ -1,11 +1,15 @@
 using System;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit;
 
 /// <summary>
 /// Represents a temporary directory that is automatically deleted when disposed.
 /// </summary>
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal partial class TempDirectory(string path) : IDisposable
 {
     /// <summary>
@@ -24,6 +28,9 @@ internal partial class TempDirectory(string path) : IDisposable
     }
 }
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal partial class TempDirectory
 {
     /// <summary>

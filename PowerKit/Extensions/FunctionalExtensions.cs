@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class FunctionalExtensions
 {
     extension<TIn>(TIn input)
@@ -45,6 +49,9 @@ internal static class FunctionalExtensions
 
 // Separate class because C# (CS0111) does not allow two generic methods with identical
 // parameter types that differ only by constraint (class vs struct) in the same class.
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class ReferenceTypeFunctionalExtensions
 {
     extension<T>(T value)

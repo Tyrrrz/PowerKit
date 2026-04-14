@@ -1,9 +1,13 @@
 #if NETFRAMEWORK || NET5_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Versioning;
 using Microsoft.Win32;
 
 namespace PowerKit.Extensions;
 
+#if POWERKIT_EXCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class RegistryExtensions
 {
     extension(RegistryKey key)
