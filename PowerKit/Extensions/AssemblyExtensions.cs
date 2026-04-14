@@ -5,9 +5,13 @@ using System.Resources;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class AssemblyExtensions
 {
     extension(Assembly assembly)

@@ -1,9 +1,13 @@
 #nullable enable
 using System;
 using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class DateTimeOffsetExtensions
 {
     extension(DateTimeOffset)

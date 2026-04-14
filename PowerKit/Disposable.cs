@@ -1,12 +1,16 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit;
 
 /// <summary>
 /// Provides utility methods for creating and composing <see cref="IDisposable" /> instances.
 /// </summary>
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal partial class Disposable(Action dispose) : IDisposable
 {
     /// <inheritdoc />

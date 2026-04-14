@@ -2,6 +2,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -10,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class ZipArchiveEntryExtensions
 {
     extension(ZipArchiveEntry entry)

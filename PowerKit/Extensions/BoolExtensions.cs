@@ -1,6 +1,11 @@
 #nullable enable
+using System.Diagnostics.CodeAnalysis;
+
 namespace PowerKit.Extensions;
 
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class BoolExtensions
 {
     extension(bool)
