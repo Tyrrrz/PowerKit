@@ -11,8 +11,13 @@ internal static class FileExtensions
     {
         /// <summary>
         /// Attempts to delete the file at the specified path.
-        /// Returns <see langword="true" /> if the file was successfully deleted, or <see langword="false" /> if an error occurred.
+        /// Returns <see langword="true" /> if the delete operation completed without throwing an exception,
+        /// or <see langword="false" /> if an error occurred.
         /// </summary>
+        /// <remarks>
+        /// This method can return <see langword="true" /> even if no file existed at <paramref name="path" />,
+        /// because <see cref="File.Delete(string)" /> does not throw when the target file does not exist.
+        /// </remarks>
         public static bool TryDelete(string path)
         {
             try
