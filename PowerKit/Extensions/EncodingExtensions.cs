@@ -42,16 +42,13 @@ file static class EncodingEx
 
 internal static class EncodingExtensions
 {
-    extension(Encoding)
+    extension(Encoding encoding)
     {
         /// <summary>
         /// Gets an instance of the UTF-8 encoding that does not emit a byte order mark (BOM).
         /// </summary>
         public static Encoding Utf8WithoutBom => EncodingEx.Utf8WithoutBom;
-    }
 
-    extension(Encoding encoding)
-    {
         /// <summary>
         /// Creates a derived encoding that produces an empty preamble, regardless of the original encoding's preamble.
         /// </summary>
