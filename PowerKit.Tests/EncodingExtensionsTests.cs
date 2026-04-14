@@ -20,7 +20,7 @@ public class EncodingExtensionsTests
     }
 
     [Fact]
-    public void Utf8WithoutBom_IsDifferentFromEncodingUtf8()
+    public void Utf8WithoutBom_IsDifferentFromUtf8()
     {
         Encoding.Utf8WithoutBom.Should().NotBeSameAs(Encoding.UTF8);
     }
