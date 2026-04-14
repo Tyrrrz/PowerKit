@@ -30,10 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Extensions/RegistryExtensions.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="PolyShim" />
   </ItemGroup>
 </Project>
