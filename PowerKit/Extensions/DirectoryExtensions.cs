@@ -22,7 +22,16 @@ internal static class DirectoryExtensions
                 {
                     File.Delete(tempFilePath);
                 }
-                catch { }
+                catch (IOException)
+                {
+                    // Best-effort cleanup: inability to delete the temporary file
+                    // does not affect the write-access check result.
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // Best-effort cleanup: inability to delete the temporary file
+                    // does not affect the write-access check result.
+                }
 
                 return true;
             }
