@@ -8,6 +8,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.3" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="Gress" Version="2.1.1" />
+    <PackageVersion Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="PolyShim" Version="2.8.2" />
     <PackageVersion Include="xunit" Version="2.9.2" />
