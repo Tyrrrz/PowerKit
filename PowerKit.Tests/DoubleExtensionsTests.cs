@@ -1,3 +1,4 @@
+#nullable enable
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
