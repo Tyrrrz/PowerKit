@@ -1,3 +1,4 @@
+#if NET40_OR_GREATER || NETSTANDARD || NET
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
-#if NET40_OR_GREATER || NETSTANDARD || NET
 internal static class ZipArchiveEntryExtensions
 {
     extension(ZipArchiveEntry entry)
