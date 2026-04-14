@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -46,8 +47,9 @@ internal static class ZipArchiveEntryExtensions
             using var stream = entry.Open();
             using var reader = new StreamReader(
                 stream,
-                encoding ?? new UTF8Encoding(false),
-                detectEncodingFromByteOrderMarks: true);
+                encoding ?? new UTF8Encoding(false)
+            );
+
             return reader.ReadToEnd();
         }
 
@@ -68,12 +70,11 @@ internal static class ZipArchiveEntryExtensions
             using var stream = entry.Open();
             using var reader = new StreamReader(
                 stream,
-                encoding ?? new UTF8Encoding(false),
-                detectEncodingFromByteOrderMarks: true);
+                encoding ?? new UTF8Encoding(false)
+            );
 
             var lines = new List<string>();
-            string? line;
-            while ((line = reader.ReadLine()) is not null)
+            while (reader.ReadLine() is { } line)
                 lines.Add(line);
 
             return lines.ToArray();
@@ -134,13 +135,10 @@ internal static class ZipArchiveEntryExtensions
             using var stream = entry.Open();
             using var reader = new StreamReader(
                 stream,
-                encoding ?? new UTF8Encoding(false),
-                detectEncodingFromByteOrderMarks: true
+                encoding ?? new UTF8Encoding(false)
             );
 
-            var text = await reader.ReadToEndAsync().ConfigureAwait(false);
-            cancellationToken.ThrowIfCancellationRequested();
-            return text;
+            return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -167,22 +165,13 @@ internal static class ZipArchiveEntryExtensions
             using var stream = entry.Open();
             using var reader = new StreamReader(
                 stream,
-                encoding ?? new UTF8Encoding(false),
-                detectEncodingFromByteOrderMarks: true
+                encoding ?? new UTF8Encoding(false)
             );
-            var lines = new System.Collections.Generic.List<string>();
 
-            while (true)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                var line = await reader.ReadLineAsync().ConfigureAwait(false);
-                if (line is null)
-                {
-                    break;
-                }
+            var lines = new List<string>();
 
+            while (await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false) is { } line)
                 lines.Add(line);
-            }
 
             return lines.ToArray();
         }
