@@ -10,7 +10,11 @@ internal static class EnvironmentExtensions
         /// <summary>
         /// Refreshes the environment variables of the current process by re-applying
         /// the machine-level and user-level environment variables.
-        /// Only has an effect on Windows; on other platforms, this method is a no-op.
+        /// On Windows, this first removes any process-level environment variables that
+        /// are not present at the machine or user scope, then applies the machine-level
+        /// and user-level values to the current process.
+        /// This can remove variables inherited from the parent process or set by the
+        /// application itself. On other platforms, this method is a no-op.
         /// </summary>
         public static void RefreshEnvironmentVariables()
         {
