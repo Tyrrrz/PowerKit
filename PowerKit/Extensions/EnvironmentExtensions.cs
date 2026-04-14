@@ -22,6 +22,7 @@ internal static class EnvironmentExtensions
             var machineVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
             var userVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.User);
 
+            // Remove missing
             foreach (DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Process))
             {
                 var key = (string)environmentVariable.Key;
@@ -32,6 +33,7 @@ internal static class EnvironmentExtensions
                 }
             }
 
+            // Add/set machine variables
             foreach (DictionaryEntry environmentVariable in machineVariables)
             {
                 var key = (string)environmentVariable.Key;
@@ -40,6 +42,7 @@ internal static class EnvironmentExtensions
                 Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Process);
             }
 
+            // Add/set user variables
             foreach (DictionaryEntry environmentVariable in userVariables)
             {
                 var key = (string)environmentVariable.Key;
