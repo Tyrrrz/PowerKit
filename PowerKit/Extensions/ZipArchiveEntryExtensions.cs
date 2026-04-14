@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
+#if NET40_OR_GREATER || NETSTANDARD || NET
 internal static class ZipArchiveEntryExtensions
 {
     extension(ZipArchiveEntry entry)
@@ -40,7 +41,7 @@ internal static class ZipArchiveEntryExtensions
         public string ReadAllText(Encoding? encoding = null)
         {
             using var stream = entry.Open();
-            using var reader = new StreamReader(stream, encoding ?? Encoding.Utf8WithoutBom);
+            using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
 
             return reader.ReadToEnd();
         }
@@ -62,7 +63,7 @@ internal static class ZipArchiveEntryExtensions
         public string[] ReadAllLines(Encoding? encoding = null)
         {
             using var stream = entry.Open();
-            using var reader = new StreamReader(stream, encoding ?? Encoding.Utf8WithoutBom);
+            using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
 
             var lines = new List<string>();
             while (reader.ReadLine() is { } line)
@@ -87,7 +88,6 @@ internal static class ZipArchiveEntryExtensions
             }
         }
 
-#if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Reads all bytes from the zip archive entry asynchronously.
         /// </summary>
@@ -124,7 +124,7 @@ internal static class ZipArchiveEntryExtensions
         )
         {
             using var stream = entry.Open();
-            using var reader = new StreamReader(stream, encoding ?? Encoding.Utf8WithoutBom);
+            using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
 
             return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -154,7 +154,7 @@ internal static class ZipArchiveEntryExtensions
         )
         {
             using var stream = entry.Open();
-            using var reader = new StreamReader(stream, encoding ?? Encoding.Utf8WithoutBom);
+            using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
 
             var lines = new List<string>();
             while (await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false) is { } line)
@@ -186,6 +186,6 @@ internal static class ZipArchiveEntryExtensions
 
             await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
-#endif
     }
 }
+#endif
