@@ -102,11 +102,17 @@ internal static class ZipArchiveEntryExtensions
             CancellationToken cancellationToken = default
         )
         {
-            using var stream = entry.Open();
-            using var buffer = new MemoryStream();
-            await stream.CopyToAsync(buffer, 81920, cancellationToken).ConfigureAwait(false);
+            var length = checked((int)entry.Length);
+            if (length == 0)
+            {
+                return Array.Empty<byte>();
+            }
 
-            return buffer.ToArray();
+            using var stream = entry.Open();
+            var bytes = new byte[length];
+            await stream.ReadExactlyAsync(bytes, cancellationToken).ConfigureAwait(false);
+
+            return bytes;
         }
 
         /// <summary>
