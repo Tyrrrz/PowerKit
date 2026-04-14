@@ -89,13 +89,11 @@ internal static class ZipArchiveEntryExtensions
             }
         }
 
-#if !NET35
+#if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Reads all bytes from the zip archive entry asynchronously.
         /// </summary>
-        public async Task<byte[]> ReadAllBytesAsync(
-            CancellationToken cancellationToken = default
-        )
+        public async Task<byte[]> ReadAllBytesAsync(CancellationToken cancellationToken = default)
         {
             using var stream = entry.Open();
             using var buffer = new MemoryStream();
@@ -114,7 +112,9 @@ internal static class ZipArchiveEntryExtensions
         )
         {
             using var stream = entry.Open();
-            await stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+            await stream
+                .WriteAsync(bytes, 0, bytes.Length, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -181,7 +181,9 @@ internal static class ZipArchiveEntryExtensions
 
             foreach (var line in lines)
             {
-                await writer.WriteLineAsync(line.AsMemory(), cancellationToken).ConfigureAwait(false);
+                await writer
+                    .WriteLineAsync(line.AsMemory(), cancellationToken)
+                    .ConfigureAwait(false);
             }
 
             await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
