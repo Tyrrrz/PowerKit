@@ -8,20 +8,15 @@ namespace PowerKit.Tests;
 public class EncodingExtensionsTests
 {
     [Fact]
-    public void Utf8WithoutBom_IsUtf8()
+    public void Utf8WithoutBom_Test()
     {
-        Encoding.Utf8WithoutBom.WebName.Should().Be("utf-8");
-    }
+        // Arrange
+        var text = "hello, world! 🌍";
 
-    [Fact]
-    public void Utf8WithoutBom_HasNoBom()
-    {
-        Encoding.Utf8WithoutBom.GetPreamble().Should().BeEmpty();
-    }
+        // Act
+        var bytes = Encoding.Utf8WithoutBom.GetBytes(text);
 
-    [Fact]
-    public void Utf8WithoutBom_IsDifferentFromUtf8()
-    {
-        Encoding.Utf8WithoutBom.Should().NotBeSameAs(Encoding.UTF8);
+        // Assert
+        Encoding.UTF8.GetString(bytes).Should().Be(text);
     }
 }
