@@ -1,3 +1,4 @@
+using System;
 using System.Buffers;
 using FluentAssertions;
 using PowerKit.Extensions;
@@ -40,6 +41,20 @@ public class ArrayPoolExtensionsTests
         using var owner2 = pool.RentOwner(16);
         owner2.Memory.Length.Should().Be(16);
         pool.LastRentedArray.Should().BeSameAs(pool.LastReturnedArray);
+    }
+
+    [Fact]
+    public void RentOwner_MemoryAfterDispose_Test()
+    {
+        // Arrange
+        var pool = ArrayPool<byte>.Shared;
+        var owner = pool.RentOwner(16);
+
+        // Act
+        owner.Dispose();
+
+        // Assert
+        Assert.Throws<ObjectDisposedException>(() => owner.Memory);
     }
 
     private sealed class TrackingArrayPool : ArrayPool<byte>

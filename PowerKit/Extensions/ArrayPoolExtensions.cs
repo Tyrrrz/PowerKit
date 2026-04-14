@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Threading;
 
 namespace PowerKit.Extensions;
 
@@ -20,18 +21,24 @@ internal static class ArrayPoolExtensions
 file sealed class ArrayPoolMemoryOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength)
     : IMemoryOwner<T>
 {
-    private bool _disposed;
+    private int _disposed;
 
-    public Memory<T> Memory { get; } = buffer.AsMemory(0, minimumLength);
+    public Memory<T> Memory
+    {
+        get
+        {
+            ObjectDisposedException.ThrowIf(_disposed != 0, this);
+            return buffer.AsMemory(0, minimumLength);
+        }
+    }
 
     public void Dispose()
     {
-        if (_disposed)
+        if (Interlocked.Exchange(ref _disposed, 1) != 0)
         {
             return;
         }
 
-        _disposed = true;
         pool.Return(buffer);
     }
 }
