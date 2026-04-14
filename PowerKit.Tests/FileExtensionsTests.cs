@@ -23,14 +23,11 @@ public class FileExtensionsTests
         result.Should().BeTrue();
     }
 
-    [Fact]
+    [SkippableFact]
     public void CheckWriteAccess_ReadOnly_Test()
     {
         // Privileged processes can write to read-only files on Unix
-        if (Environment.IsPrivilegedProcess)
-        {
-            return;
-        }
+        Skip.If(Environment.IsPrivilegedProcess);
 
         // Arrange
         using var tempFile = TempFile.Create();

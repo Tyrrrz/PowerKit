@@ -12,5 +12,6 @@
     <PackageVersion Include="PolyShim" Version="2.8.2" />
     <PackageVersion Include="xunit" Version="2.9.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageVersion Include="Xunit.SkippableFact" Version="1.5.61" />
   </ItemGroup>
 </Project>

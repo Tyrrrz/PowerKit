@@ -22,14 +22,11 @@ public class DirectoryExtensionsTests
         result.Should().BeTrue();
     }
 
-    [Fact]
+    [SkippableFact]
     public void CheckWriteAccess_ReadOnly_Test()
     {
         // FileAttributes.ReadOnly removes write bits on Unix but has no effect on directories on Windows
-        if (OperatingSystem.IsWindows() || Environment.IsPrivilegedProcess)
-        {
-            return;
-        }
+        Skip.If(OperatingSystem.IsWindows() || Environment.IsPrivilegedProcess);
 
         // Arrange
         using var tempDir = TempDirectory.Create();
