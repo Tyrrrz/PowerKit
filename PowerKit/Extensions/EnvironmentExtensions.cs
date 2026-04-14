@@ -8,10 +8,8 @@ internal static class EnvironmentExtensions
     extension(Environment)
     {
         /// <summary>
-        /// Refreshes the environment variables of the current process to match the
-        /// machine-level environment variables by removing process variables that are
-        /// not defined at machine scope and re-applying machine-level values.
-        /// This may remove process- or user-only variables from the current process.
+        /// Refreshes the environment variables of the current process by re-applying
+        /// the machine-level and user-level environment variables.
         /// Only has an effect on Windows; on other platforms, this method is a no-op.
         /// </summary>
         public static void RefreshEnvironmentVariables()
@@ -22,20 +20,27 @@ internal static class EnvironmentExtensions
             }
 
             var machineVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
+            var userVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.User);
 
-            // Handle removed variables
             foreach (DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Process))
             {
                 var key = (string)environmentVariable.Key;
 
-                if (!machineVariables.Contains(key))
+                if (!machineVariables.Contains(key) && !userVariables.Contains(key))
                 {
                     Environment.SetEnvironmentVariable(key, null, EnvironmentVariableTarget.Process);
                 }
             }
 
-            // Handle added and overwritten variables
             foreach (DictionaryEntry environmentVariable in machineVariables)
+            {
+                var key = (string)environmentVariable.Key;
+                var value = (string?)environmentVariable.Value;
+
+                Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Process);
+            }
+
+            foreach (DictionaryEntry environmentVariable in userVariables)
             {
                 var key = (string)environmentVariable.Key;
                 var value = (string?)environmentVariable.Value;
