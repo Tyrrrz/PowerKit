@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Linq;
 
 namespace PowerKit.Extensions;
 
@@ -14,11 +13,7 @@ internal static class EnvironmentExtensions
         /// </summary>
         public static void RefreshEnvironmentVariables()
         {
-            var machineEnvironmentVariables = Environment
-                .GetEnvironmentVariables(EnvironmentVariableTarget.Machine)
-                .Cast<DictionaryEntry>();
-
-            foreach (var environmentVariable in machineEnvironmentVariables)
+            foreach (DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine))
             {
                 var key = (string)environmentVariable.Key;
                 var value = (string?)environmentVariable.Value;
