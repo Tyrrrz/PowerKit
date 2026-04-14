@@ -10,41 +10,6 @@ internal static class FileExtensions
     extension(File)
     {
         /// <summary>
-        /// Checks if it's possible to write to the specified file.
-        /// </summary>
-        public static bool CheckWriteAccess(string path)
-        {
-            var existed = File.Exists(path);
-
-            try
-            {
-                using var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-
-                if (!existed)
-                {
-                    try
-                    {
-                        File.Delete(path);
-                    }
-                    catch (IOException)
-                    {
-                        // Best-effort cleanup: failure to delete the probe file does not affect write access.
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        // Best-effort cleanup: failure to delete the probe file does not affect write access.
-                    }
-                }
-
-                return true;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Attempts to delete the file at the specified path.
         /// Returns <see langword="true" /> if the delete operation completed without throwing an exception,
         /// or <see langword="false" /> if an error occurred.
@@ -63,6 +28,29 @@ internal static class FileExtensions
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if it's possible to write to the specified file.
+        /// </summary>
+        public static bool CheckWriteAccess(string path)
+        {
+            var wasExisting = File.Exists(path);
+
+            try
+            {
+                using var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            finally
+            {
+                if (!wasExisting)
+                    File.TryDelete(path);
             }
         }
 
