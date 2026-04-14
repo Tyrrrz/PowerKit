@@ -8,10 +8,9 @@ file sealed class NoPreambleEncoding : Encoding
     private readonly Encoding _inner;
 
     public NoPreambleEncoding(Encoding inner)
-        // Initialize the wrapper's own fallback fields via the base constructor,
-        // which sets the backing fields directly and bypasses the read-only check.
-        : base(0, inner.EncoderFallback, inner.DecoderFallback)
     {
+        // Clone for isolation — prevents mutations to shared singletons like Encoding.UTF8,
+        // and ensures the clone carries the source's fallbacks into all encode/decode operations.
         _inner = (Encoding)inner.Clone();
     }
 
@@ -26,7 +25,7 @@ file sealed class NoPreambleEncoding : Encoding
     public override bool IsMailNewsSave => _inner.IsMailNewsSave;
     public override bool IsSingleByte => _inner.IsSingleByte;
 
-    public override byte[] GetPreamble() => [];
+    public override byte[] GetPreamble() => new byte[0];
 
     public override int GetByteCount(char[] chars, int index, int count) =>
         _inner.GetByteCount(chars, index, count);
