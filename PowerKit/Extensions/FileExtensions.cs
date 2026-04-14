@@ -50,7 +50,9 @@ internal static class FileExtensions
             finally
             {
                 if (!wasExisting)
+                {
                     File.TryDelete(path);
+                }
             }
         }
 
