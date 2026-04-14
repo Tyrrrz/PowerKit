@@ -1,3 +1,4 @@
+#nullable enable
 namespace PowerKit.Extensions;
 
 internal static class BoolExtensions
