@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Runtime.InteropServices;
 
 namespace PowerKit.Extensions;
 
@@ -15,7 +14,7 @@ internal static class EnvironmentExtensions
         /// </summary>
         public static void RefreshEnvironmentVariables()
         {
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (!OperatingSystem.IsWindows())
             {
                 return;
             }
