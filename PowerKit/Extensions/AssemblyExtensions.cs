@@ -2,10 +2,8 @@ using System.IO;
 using System.Reflection;
 using System.Resources;
 using System.Text;
-#if NET40_OR_GREATER || NETSTANDARD || NET
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace PowerKit.Extensions;
 
