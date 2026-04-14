@@ -129,8 +129,18 @@ internal static class ZipArchiveEntryExtensions
             CancellationToken cancellationToken = default
         )
         {
-            var bytes = await entry.ReadAllBytesAsync(cancellationToken).ConfigureAwait(false);
-            return (encoding ?? new UTF8Encoding(false)).GetString(bytes);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            using var stream = entry.Open();
+            using var reader = new StreamReader(
+                stream,
+                encoding ?? new UTF8Encoding(false),
+                detectEncodingFromByteOrderMarks: true
+            );
+
+            var text = await reader.ReadToEndAsync().ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
+            return text;
         }
 
         /// <summary>
