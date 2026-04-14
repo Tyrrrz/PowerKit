@@ -9,12 +9,11 @@ namespace PowerKit.Tests;
 
 public class RegistryExtensionsTests
 {
-    [Fact]
+    [SkippableFact]
     [SupportedOSPlatform("windows")]
     public void ContainsSubKey_Exists_Test()
     {
-        if (!OperatingSystem.IsWindows())
-            return;
+        Skip.IfNot(OperatingSystem.IsWindows());
 
         // Arrange
         using var key = Registry.CurrentUser.OpenSubKey("Software", false)!;
@@ -23,12 +22,11 @@ public class RegistryExtensionsTests
         key.ContainsSubKey("Microsoft").Should().BeTrue();
     }
 
-    [Fact]
+    [SkippableFact]
     [SupportedOSPlatform("windows")]
     public void ContainsSubKey_NotExists_Test()
     {
-        if (!OperatingSystem.IsWindows())
-            return;
+        Skip.IfNot(OperatingSystem.IsWindows());
 
         // Arrange
         using var key = Registry.CurrentUser.OpenSubKey("Software", false)!;
