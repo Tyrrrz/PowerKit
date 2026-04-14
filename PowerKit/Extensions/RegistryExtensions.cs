@@ -1,5 +1,4 @@
-#if NET5_0_OR_GREATER || NETFRAMEWORK
-
+#if NETFRAMEWORK || NET5_0_OR_GREATER
 using System.Runtime.Versioning;
 using Microsoft.Win32;
 
@@ -20,5 +19,4 @@ internal static class RegistryExtensions
         }
     }
 }
-
 #endif
