@@ -24,7 +24,7 @@ public class DirectoryExtensionsTests
     }
 
     [Fact]
-    public void Reset_NonExistentDirectory_Test()
+    public void Reset_NonExistent_Test()
     {
         // Arrange
         using var tempDir = TempDirectory.Create();
