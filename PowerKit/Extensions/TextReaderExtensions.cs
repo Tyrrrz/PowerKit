@@ -9,6 +9,7 @@ internal static class TextReaderExtensions
 {
     extension(TextReader reader)
     {
+#if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Reads all lines from the text reader as an async sequence.
         /// </summary>
@@ -23,5 +24,6 @@ internal static class TextReaderExtensions
                 yield return line;
             }
         }
+#endif
     }
 }
