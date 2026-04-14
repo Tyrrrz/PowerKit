@@ -9,7 +9,7 @@ namespace PowerKit.Tests;
 public class DirectoryExtensionsTests
 {
     [Fact]
-    public void TryDelete_ExistingDirectory_Test()
+    public void TryDelete_Test()
     {
         // Arrange
         using var tempDir = TempDirectory.Create();
@@ -23,7 +23,7 @@ public class DirectoryExtensionsTests
     }
 
     [Fact]
-    public void TryDelete_NonExistingDirectory_Test()
+    public void TryDelete_NonExisting_Test()
     {
         // Act
         var result = Directory.TryDelete(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
@@ -33,7 +33,7 @@ public class DirectoryExtensionsTests
     }
 
     [Fact]
-    public void TryDelete_NonEmptyDirectory_WithoutRecursive_Test()
+    public void TryDelete_NonEmpty_Test()
     {
         // Arrange
         using var tempDir = TempDirectory.Create();
@@ -48,7 +48,7 @@ public class DirectoryExtensionsTests
     }
 
     [Fact]
-    public void TryDelete_NonEmptyDirectory_WithRecursive_Test()
+    public void TryDelete_NonEmpt_Recursive_Test()
     {
         // Arrange
         using var tempDir = TempDirectory.Create();
