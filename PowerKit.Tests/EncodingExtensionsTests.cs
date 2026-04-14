@@ -50,17 +50,19 @@ public class EncodingExtensionsTests
     }
 
     [Fact]
-    public void WithoutPreamble_RoundTrip_Test()
+    public void WithoutPreamble_FallbackIsolation_Test()
     {
-        // Arrange
-        var text = "hello, world! 🌍";
-        var encoding = new UTF8Encoding(true).WithoutPreamble();
+        // Arrange — wrap the shared UTF8 singleton (read-only)
+        var originalFallback = Encoding.UTF8.EncoderFallback;
 
-        // Act
-        var bytes = encoding.GetBytes(text);
-        var decoded = encoding.GetString(bytes);
+        // Act — should not throw even though Encoding.UTF8 is a read-only singleton
+        var encoding = Encoding.UTF8.WithoutPreamble();
 
-        // Assert
-        decoded.Should().Be(text);
+        // Assert — the original singleton is not mutated,
+        // and the wrapper correctly inherits its fallback
+        Encoding.UTF8.EncoderFallback.Should().BeSameAs(originalFallback);
+        encoding.EncoderFallback.Should().BeSameAs(originalFallback);
+        encoding.GetPreamble().Should().BeEmpty();
+        encoding.GetString(encoding.GetBytes("hello")).Should().Be("hello");
     }
 }

@@ -1,38 +1,52 @@
-using System;
 using System.Text;
 
 namespace PowerKit.Extensions;
 
-file sealed class NoPreambleEncoding(Encoding inner) : Encoding
+file sealed class NoPreambleEncoding : Encoding
 {
-    public override string BodyName => inner.BodyName;
-    public override string EncodingName => inner.EncodingName;
-    public override string HeaderName => inner.HeaderName;
-    public override string WebName => inner.WebName;
-    public override int CodePage => inner.CodePage;
-    public override bool IsBrowserDisplay => inner.IsBrowserDisplay;
-    public override bool IsBrowserSave => inner.IsBrowserSave;
-    public override bool IsMailNewsDisplay => inner.IsMailNewsDisplay;
-    public override bool IsMailNewsSave => inner.IsMailNewsSave;
-    public override bool IsSingleByte => inner.IsSingleByte;
+    // Cloned for isolation — prevents mutations to shared singletons like Encoding.UTF8.
+    private readonly Encoding _inner;
 
-    public override byte[] GetPreamble() => [];
+    public NoPreambleEncoding(Encoding inner)
+        // Initialize the wrapper's own fallback fields via the base constructor,
+        // which sets the backing fields directly and bypasses the read-only check.
+        : base(0, inner.EncoderFallback, inner.DecoderFallback)
+    {
+        _inner = (Encoding)inner.Clone();
+    }
+
+    public override string BodyName => _inner.BodyName;
+    public override string EncodingName => _inner.EncodingName;
+    public override string HeaderName => _inner.HeaderName;
+    public override string WebName => _inner.WebName;
+    public override int CodePage => _inner.CodePage;
+    public override bool IsBrowserDisplay => _inner.IsBrowserDisplay;
+    public override bool IsBrowserSave => _inner.IsBrowserSave;
+    public override bool IsMailNewsDisplay => _inner.IsMailNewsDisplay;
+    public override bool IsMailNewsSave => _inner.IsMailNewsSave;
+    public override bool IsSingleByte => _inner.IsSingleByte;
+
+    public override byte[] GetPreamble() => new byte[0];
 
     public override int GetByteCount(char[] chars, int index, int count) =>
-        inner.GetByteCount(chars, index, count);
+        _inner.GetByteCount(chars, index, count);
 
     public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex) =>
-        inner.GetBytes(chars, charIndex, charCount, bytes, byteIndex);
+        _inner.GetBytes(chars, charIndex, charCount, bytes, byteIndex);
 
     public override int GetCharCount(byte[] bytes, int index, int count) =>
-        inner.GetCharCount(bytes, index, count);
+        _inner.GetCharCount(bytes, index, count);
 
     public override int GetChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex) =>
-        inner.GetChars(bytes, byteIndex, byteCount, chars, charIndex);
+        _inner.GetChars(bytes, byteIndex, byteCount, chars, charIndex);
 
-    public override int GetMaxByteCount(int charCount) => inner.GetMaxByteCount(charCount);
+    public override int GetMaxByteCount(int charCount) => _inner.GetMaxByteCount(charCount);
 
-    public override int GetMaxCharCount(int byteCount) => inner.GetMaxCharCount(byteCount);
+    public override int GetMaxCharCount(int byteCount) => _inner.GetMaxCharCount(byteCount);
+
+    public override Encoder GetEncoder() => _inner.GetEncoder();
+
+    public override Decoder GetDecoder() => _inner.GetDecoder();
 }
 
 file static class EncodingEx
