@@ -28,6 +28,7 @@ internal partial class LockFile
                 FileAccess.ReadWrite,
                 FileShare.None
             );
+
             return new LockFile(fileStream);
         }
         // This is the most specific exception for "access denied"
