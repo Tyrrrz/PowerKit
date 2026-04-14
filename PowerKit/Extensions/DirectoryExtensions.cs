@@ -7,6 +7,20 @@ internal static class DirectoryExtensions
     extension(Directory)
     {
         /// <summary>
+        /// Deletes the directory and all its contents, then recreates it as an empty directory.
+        /// </summary>
+        public static void Reset(string path)
+        {
+            try
+            {
+                Directory.Delete(path, true);
+            }
+            catch (DirectoryNotFoundException) { }
+
+            Directory.CreateDirectory(path);
+        }
+
+        /// <summary>
         /// Attempts to delete the directory at the specified path.
         /// Returns <see langword="true" /> if the directory was successfully deleted, or <see langword="false" /> if an error occurred.
         /// </summary>
