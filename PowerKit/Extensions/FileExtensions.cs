@@ -18,7 +18,7 @@ internal static class FileExtensions
 
             try
             {
-                using (new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite)) { }
+                using var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
 
                 if (!existed)
                 {
