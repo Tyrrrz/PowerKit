@@ -10,7 +10,7 @@ namespace PowerKit.Tests;
 public class FileExtensionsTests
 {
     [Fact]
-    public void CheckWriteAccess_WritableFile_Test()
+    public void CheckWriteAccess_Test()
     {
         // Arrange
         using var tempFile = TempFile.Create();
@@ -23,7 +23,7 @@ public class FileExtensionsTests
     }
 
     [Fact]
-    public void CheckWriteAccess_ReadOnlyFile_Test()
+    public void CheckWriteAccess_ReadOnly_Test()
     {
         // Arrange
         using var tempFile = TempFile.Create();
@@ -44,7 +44,7 @@ public class FileExtensionsTests
     }
 
     [Fact]
-    public void CheckWriteAccess_NonExistentFile_Test()
+    public void CheckWriteAccess_NonExistent_Test()
     {
         // Arrange
         using var tempDir = TempDirectory.Create();
