@@ -47,18 +47,11 @@ internal partial class TempDirectory
             if (!preCreate)
                 return new TempDirectory(dirPath);
 
-            try
-            {
-                if (Directory.Exists(dirPath))
-                    throw new IOException($"Directory '{dirPath}' already exists.");
+            if (Directory.Exists(dirPath))
+                continue;
 
-                Directory.CreateDirectory(dirPath);
-                return new TempDirectory(dirPath);
-            }
-            catch (IOException) when (Directory.Exists(dirPath))
-            {
-                // Path collision, retry with a new name
-            }
+            Directory.CreateDirectory(dirPath);
+            return new TempDirectory(dirPath);
         }
 
         throw new InvalidOperationException(
