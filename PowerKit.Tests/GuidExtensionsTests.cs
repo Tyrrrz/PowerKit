@@ -11,9 +11,9 @@ public class GuidExtensionsTests
     public void ParseOrNull_Test()
     {
         // Act & assert
-        Guid.ParseOrNull("12345678-1234-1234-1234-123456789abc").Should().Be(
-            new Guid("12345678-1234-1234-1234-123456789abc")
-        );
+        Guid.ParseOrNull("12345678-1234-1234-1234-123456789abc")
+            .Should()
+            .Be(new Guid("12345678-1234-1234-1234-123456789abc"));
         Guid.ParseOrNull("not-a-guid").Should().BeNull();
         Guid.ParseOrNull(null).Should().BeNull();
     }

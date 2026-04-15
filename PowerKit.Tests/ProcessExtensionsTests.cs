@@ -20,10 +20,9 @@ public class ProcessExtensionsTests
     public async Task IsRunning_NotRunning_Test()
     {
         // Arrange
-        using var process = Process.Start(new ProcessStartInfo("dotnet", "--version")
-        {
-            RedirectStandardOutput = true
-        })!;
+        using var process = Process.Start(
+            new ProcessStartInfo("dotnet", "--version") { RedirectStandardOutput = true }
+        )!;
 
         await process.WaitForExitAsync();
         var processId = process.Id;

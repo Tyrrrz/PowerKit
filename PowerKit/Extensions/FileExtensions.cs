@@ -1,9 +1,9 @@
 #nullable enable
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
@@ -45,7 +45,12 @@ internal static class FileExtensions
 
             try
             {
-                using var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                using var stream = new FileStream(
+                    path,
+                    FileMode.OpenOrCreate,
+                    FileAccess.Write,
+                    FileShare.ReadWrite
+                );
                 return true;
             }
             catch (UnauthorizedAccessException)

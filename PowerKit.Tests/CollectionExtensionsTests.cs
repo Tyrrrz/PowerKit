@@ -11,7 +11,7 @@ public class CollectionExtensionsTests
     public void RemoveAll_Test()
     {
         // Arrange
-        var collection = (ICollection<int>) new List<int> { 1, 2, 3, 4, 5 };
+        var collection = (ICollection<int>)new List<int> { 1, 2, 3, 4, 5 };
 
         // Act
         var removed = collection.RemoveAll(x => x % 2 == 0);

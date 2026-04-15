@@ -31,7 +31,10 @@ public class FileExtensionsTests
 
         // Arrange
         using var tempFile = TempFile.Create();
-        File.SetAttributes(tempFile.Path, File.GetAttributes(tempFile.Path) | FileAttributes.ReadOnly);
+        File.SetAttributes(
+            tempFile.Path,
+            File.GetAttributes(tempFile.Path) | FileAttributes.ReadOnly
+        );
 
         try
         {
@@ -43,7 +46,10 @@ public class FileExtensionsTests
         }
         finally
         {
-            File.SetAttributes(tempFile.Path, File.GetAttributes(tempFile.Path) & ~FileAttributes.ReadOnly);
+            File.SetAttributes(
+                tempFile.Path,
+                File.GetAttributes(tempFile.Path) & ~FileAttributes.ReadOnly
+            );
         }
     }
 

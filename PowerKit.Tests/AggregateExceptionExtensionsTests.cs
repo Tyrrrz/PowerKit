@@ -14,7 +14,10 @@ public class AggregateExceptionExtensionsTests
         var inner = new Exception("only");
 
         // Act & assert
-        new AggregateException(inner).TryGetSingle().Should().BeSameAs(inner);
+        new AggregateException(inner)
+            .TryGetSingle()
+            .Should()
+            .BeSameAs(inner);
     }
 
     [Fact]
@@ -44,9 +47,7 @@ public class AggregateExceptionExtensionsTests
     public void TryGetSingle_NestedMultiple_Test()
     {
         // Act & assert
-        new AggregateException(
-                new AggregateException(new Exception("a"), new Exception("b"))
-            )
+        new AggregateException(new AggregateException(new Exception("a"), new Exception("b")))
             .TryGetSingle()
             .Should()
             .BeNull();

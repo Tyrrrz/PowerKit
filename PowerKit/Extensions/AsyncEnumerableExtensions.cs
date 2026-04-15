@@ -31,10 +31,7 @@ internal static class AsyncEnumerableExtensions
 
             await using var enumerator = source.GetAsyncEnumerator(cancellationToken);
 
-            while (
-                currentCount < count
-                && await enumerator.MoveNextAsync().ConfigureAwait(false)
-            )
+            while (currentCount < count && await enumerator.MoveNextAsync().ConfigureAwait(false))
             {
                 yield return enumerator.Current;
                 currentCount++;
@@ -51,9 +48,7 @@ internal static class AsyncEnumerableExtensions
         )
         {
             await foreach (
-                var item in source
-                    .WithCancellation(cancellationToken)
-                    .ConfigureAwait(false)
+                var item in source.WithCancellation(cancellationToken).ConfigureAwait(false)
             )
             {
                 foreach (var result in transform(item))
@@ -66,16 +61,12 @@ internal static class AsyncEnumerableExtensions
         /// <summary>
         /// Materializes the async sequence into a <see cref="List{T}" />.
         /// </summary>
-        public async ValueTask<List<T>> ToListAsync(
-            CancellationToken cancellationToken = default
-        )
+        public async ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken = default)
         {
             var list = new List<T>();
 
             await foreach (
-                var item in source
-                    .WithCancellation(cancellationToken)
-                    .ConfigureAwait(false)
+                var item in source.WithCancellation(cancellationToken).ConfigureAwait(false)
             )
             {
                 list.Add(item);

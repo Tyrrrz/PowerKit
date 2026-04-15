@@ -1,7 +1,7 @@
 #nullable enable
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
@@ -15,9 +15,10 @@ internal static class BinaryReaderExtensions
         /// <summary>
         /// Gets a value indicating whether the reader has reached the end of the stream.
         /// </summary>
-        public bool IsEndOfStream => reader.BaseStream.CanSeek
-            ? reader.BaseStream.Position >= reader.BaseStream.Length
-            : reader.PeekChar() == -1;
+        public bool IsEndOfStream =>
+            reader.BaseStream.CanSeek
+                ? reader.BaseStream.Position >= reader.BaseStream.Length
+                : reader.PeekChar() == -1;
 
         /// <summary>
         /// Skips bytes until the current position is aligned to the specified byte boundary.
