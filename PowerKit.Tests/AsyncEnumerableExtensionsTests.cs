@@ -25,13 +25,9 @@ public class AsyncEnumerableExtensionsTests
             .Should()
             .Equal(1, 2, 3);
 
-        (await ToAsyncEnumerable([1, 2, 3]).TakeAsync(0).ToListAsync())
-            .Should()
-            .BeEmpty();
+        (await ToAsyncEnumerable([1, 2, 3]).TakeAsync(0).ToListAsync()).Should().BeEmpty();
 
-        (await ToAsyncEnumerable([1, 2, 3]).TakeAsync(10).ToListAsync())
-            .Should()
-            .Equal(1, 2, 3);
+        (await ToAsyncEnumerable([1, 2, 3]).TakeAsync(10).ToListAsync()).Should().Equal(1, 2, 3);
     }
 
     [Fact]

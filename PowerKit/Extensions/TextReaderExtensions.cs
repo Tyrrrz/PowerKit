@@ -1,9 +1,9 @@
 #nullable enable
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
@@ -22,9 +22,7 @@ internal static class TextReaderExtensions
             [EnumeratorCancellation] CancellationToken cancellationToken = default
         )
         {
-            while (
-                await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false) is { } line
-            )
+            while (await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false) is { } line)
             {
                 yield return line;
             }

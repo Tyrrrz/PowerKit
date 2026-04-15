@@ -16,10 +16,7 @@ public class CultureInfoExtensionsTests
             .Should()
             .Equal(new CultureInfo("en"), CultureInfo.InvariantCulture);
 
-        new CultureInfo("en")
-            .GetParents()
-            .Should()
-            .Equal(CultureInfo.InvariantCulture);
+        new CultureInfo("en").GetParents().Should().Equal(CultureInfo.InvariantCulture);
 
         CultureInfo.InvariantCulture.GetParents().Should().BeEmpty();
     }
@@ -38,8 +35,8 @@ public class CultureInfoExtensionsTests
             .Should()
             .Equal(new CultureInfo("en"), CultureInfo.InvariantCulture);
 
-        CultureInfo.InvariantCulture
-            .GetSelfAndParents()
+        CultureInfo
+            .InvariantCulture.GetSelfAndParents()
             .Should()
             .Equal(CultureInfo.InvariantCulture);
     }

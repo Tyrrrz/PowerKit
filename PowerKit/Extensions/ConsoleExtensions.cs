@@ -36,7 +36,10 @@ internal static class ConsoleExtensions
         /// <summary>
         /// Temporarily changes the console foreground and background colors and returns a handle that restores the original colors when disposed.
         /// </summary>
-        public static IDisposable WithColors(ConsoleColor foregroundColor, ConsoleColor backgroundColor) =>
+        public static IDisposable WithColors(
+            ConsoleColor foregroundColor,
+            ConsoleColor backgroundColor
+        ) =>
             Disposable.Merge(
                 Console.WithForegroundColor(foregroundColor),
                 Console.WithBackgroundColor(backgroundColor)

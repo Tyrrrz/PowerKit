@@ -1,7 +1,7 @@
 #nullable enable
 using System;
-using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace PowerKit.Extensions;
 
@@ -20,8 +20,7 @@ internal static class DateTimeOffsetExtensions
             string? str,
             IFormatProvider? formatProvider,
             DateTimeStyles styles
-        ) =>
-            DateTimeOffset.TryParse(str, formatProvider, styles, out var result) ? result : null;
+        ) => DateTimeOffset.TryParse(str, formatProvider, styles, out var result) ? result : null;
 
         /// <summary>
         /// Parses the string as a <see cref="DateTimeOffset" />, returning <see langword="null" /> if parsing fails.

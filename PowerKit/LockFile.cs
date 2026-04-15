@@ -1,7 +1,7 @@
 #nullable enable
 using System;
-using System.IO;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace PowerKit;
 

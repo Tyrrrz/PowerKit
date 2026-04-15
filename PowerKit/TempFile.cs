@@ -1,7 +1,7 @@
 #nullable enable
 using System;
-using System.IO;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace PowerKit;
 
@@ -30,7 +30,10 @@ internal partial class TempFile
     /// </summary>
     public static TempFile Create()
     {
-        var filePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid() + ".tmp");
+        var filePath = System.IO.Path.Combine(
+            System.IO.Path.GetTempPath(),
+            Guid.NewGuid() + ".tmp"
+        );
         File.Create(filePath).Dispose();
 
         return new TempFile(filePath);

@@ -1,8 +1,8 @@
 #nullable enable
 using System;
 using System.Buffers;
-using System.Threading;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 namespace PowerKit.Extensions;
 

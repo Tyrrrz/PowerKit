@@ -1,7 +1,7 @@
 #nullable enable
 using System;
-using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace PowerKit.Extensions;
 

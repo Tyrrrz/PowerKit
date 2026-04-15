@@ -142,4 +142,3 @@ public class BinaryReaderExtensionsTests
         result.Should().BeEmpty();
     }
 }
-

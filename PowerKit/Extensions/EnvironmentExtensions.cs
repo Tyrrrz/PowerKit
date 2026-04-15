@@ -31,17 +31,27 @@ internal static class EnvironmentExtensions
                 return;
             }
 
-            var machineVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
+            var machineVariables = Environment.GetEnvironmentVariables(
+                EnvironmentVariableTarget.Machine
+            );
             var userVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.User);
 
             // Remove missing
-            foreach (DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Process))
+            foreach (
+                DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(
+                    EnvironmentVariableTarget.Process
+                )
+            )
             {
                 var key = (string)environmentVariable.Key;
 
                 if (!machineVariables.Contains(key) && !userVariables.Contains(key))
                 {
-                    Environment.SetEnvironmentVariable(key, null, EnvironmentVariableTarget.Process);
+                    Environment.SetEnvironmentVariable(
+                        key,
+                        null,
+                        EnvironmentVariableTarget.Process
+                    );
                 }
             }
 

@@ -9,7 +9,8 @@ namespace PowerKit.Extensions;
 #endif
 internal static class ComparableExtensions
 {
-    extension<T>(T value) where T : IComparable<T>
+    extension<T>(T value)
+        where T : IComparable<T>
     {
         /// <summary>
         /// Clamps the value to the specified range.

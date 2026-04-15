@@ -1,6 +1,6 @@
 #nullable enable
-using System.Text;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace PowerKit.Extensions;
 
@@ -33,14 +33,24 @@ file sealed class NoPreambleEncoding : Encoding
     public override int GetByteCount(char[] chars, int index, int count) =>
         _inner.GetByteCount(chars, index, count);
 
-    public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex) =>
-        _inner.GetBytes(chars, charIndex, charCount, bytes, byteIndex);
+    public override int GetBytes(
+        char[] chars,
+        int charIndex,
+        int charCount,
+        byte[] bytes,
+        int byteIndex
+    ) => _inner.GetBytes(chars, charIndex, charCount, bytes, byteIndex);
 
     public override int GetCharCount(byte[] bytes, int index, int count) =>
         _inner.GetCharCount(bytes, index, count);
 
-    public override int GetChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex) =>
-        _inner.GetChars(bytes, byteIndex, byteCount, chars, charIndex);
+    public override int GetChars(
+        byte[] bytes,
+        int byteIndex,
+        int byteCount,
+        char[] chars,
+        int charIndex
+    ) => _inner.GetChars(bytes, byteIndex, byteCount, chars, charIndex);
 
     public override int GetMaxByteCount(int charCount) => _inner.GetMaxByteCount(charCount);
 
@@ -75,8 +85,6 @@ internal static class EncodingExtensions
         /// Creates a derived encoding that produces an empty preamble, regardless of the original encoding's preamble.
         /// </summary>
         public Encoding WithoutPreamble() =>
-            encoding.GetPreamble().Length > 0
-                ? new NoPreambleEncoding(encoding)
-                : encoding;
+            encoding.GetPreamble().Length > 0 ? new NoPreambleEncoding(encoding) : encoding;
     }
 }

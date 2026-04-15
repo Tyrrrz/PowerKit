@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CSharpier.MsBuild" PrivateAssets="all" />
     <PackageReference Include="PolyShim" PrivateAssets="all" />
   </ItemGroup>
 </Project>

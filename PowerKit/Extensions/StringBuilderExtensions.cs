@@ -1,6 +1,6 @@
 #nullable enable
-using System.Text;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace PowerKit.Extensions;
 

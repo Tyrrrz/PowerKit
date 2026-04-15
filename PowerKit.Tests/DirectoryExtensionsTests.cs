@@ -95,7 +95,9 @@ public class DirectoryExtensionsTests
     public void TryDelete_NonExisting_Test()
     {
         // Act
-        var result = Directory.TryDelete(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+        var result = Directory.TryDelete(
+            Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())
+        );
 
         // Assert
         result.Should().BeFalse();

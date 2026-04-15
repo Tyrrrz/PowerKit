@@ -11,7 +11,11 @@ public class StringBuilderExtensionsTests
     public void AppendIfNotEmpty_Test()
     {
         // Act & assert
-        new StringBuilder().AppendIfNotEmpty(',').ToString().Should().Be("");
+        new StringBuilder()
+            .AppendIfNotEmpty(',')
+            .ToString()
+            .Should()
+            .Be("");
         new StringBuilder("hello").AppendIfNotEmpty(',').ToString().Should().Be("hello,");
         new StringBuilder("a").AppendIfNotEmpty(',').Append("b").ToString().Should().Be("a,b");
     }
@@ -20,7 +24,11 @@ public class StringBuilderExtensionsTests
     public void Trim_Test()
     {
         // Act & assert
-        new StringBuilder("  hello  ").Trim().ToString().Should().Be("hello");
+        new StringBuilder("  hello  ")
+            .Trim()
+            .ToString()
+            .Should()
+            .Be("hello");
         new StringBuilder("  hello").Trim().ToString().Should().Be("hello");
         new StringBuilder("hello  ").Trim().ToString().Should().Be("hello");
         new StringBuilder("hello").Trim().ToString().Should().Be("hello");

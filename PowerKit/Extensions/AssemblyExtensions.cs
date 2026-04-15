@@ -1,11 +1,11 @@
 #nullable enable
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Resources;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
@@ -24,7 +24,8 @@ internal static class AssemblyExtensions
         public string? TryGetVersionString() =>
             assembly
                 .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                ?.InformationalVersion ?? assembly.GetName().Version?.ToString();
+                ?.InformationalVersion
+            ?? assembly.GetName().Version?.ToString();
 
         /// <summary>
         /// Reads the specified manifest resource as a string using the specified encoding.

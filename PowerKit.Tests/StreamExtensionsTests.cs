@@ -44,5 +44,4 @@ public class StreamExtensionsTests
         reports.Should().AllSatisfy(v => v.Should().BeInRange(0.0, 1.0));
         reports[^1].Should().BeApproximately(1.0, precision: 1e-5);
     }
-
 }
