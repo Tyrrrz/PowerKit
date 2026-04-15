@@ -27,6 +27,7 @@ internal partial class TempFile
 {
     /// <summary>
     /// Creates a new temporary file.
+    /// The file is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
     /// </summary>
     /// <param name="preCreate">
     /// Whether to pre-create the file at the target location.
@@ -34,14 +35,25 @@ internal partial class TempFile
     /// </param>
     public static TempFile Create(bool preCreate = true)
     {
-        var filePath = System.IO.Path.Combine(
-            System.IO.Path.GetTempPath(),
-            Guid.NewGuid() + ".tmp"
-        );
+        while (true)
+        {
+            var filePath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                Guid.NewGuid() + ".tmp"
+            );
 
-        if (preCreate)
-            File.Create(filePath).Dispose();
+            if (!preCreate)
+                return new TempFile(filePath);
 
-        return new TempFile(filePath);
+            try
+            {
+                using var stream = new FileStream(filePath, FileMode.CreateNew);
+                return new TempFile(filePath);
+            }
+            catch (IOException) when (File.Exists(filePath))
+            {
+                // Path collision — retry with a new name
+            }
+        }
     }
 }
