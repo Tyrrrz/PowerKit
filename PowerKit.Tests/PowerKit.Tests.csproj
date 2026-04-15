@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CSharpier.MsBuild" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="GitHubActionsTestLogger" />
     <PackageReference Include="FluentAssertions" />
