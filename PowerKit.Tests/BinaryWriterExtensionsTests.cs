@@ -9,6 +9,38 @@ namespace PowerKit.Tests;
 public class BinaryWriterExtensionsTests
 {
     [Fact]
+    public void SkipPadding_Test()
+    {
+        // Arrange
+        using var stream = new MemoryStream();
+        using var writer = new BinaryWriter(stream);
+
+        writer.Write((byte)0x01); // advance to position 1
+
+        // Act
+        writer.SkipPadding(boundaryBytes: 4);
+
+        // Assert
+        stream.Position.Should().Be(4);
+        stream.ToArray().Should().Equal(0x01, 0x00, 0x00, 0x00);
+    }
+
+    [Fact]
+    public void SkipPadding_AlreadyAligned_Test()
+    {
+        // Arrange
+        using var stream = new MemoryStream();
+        using var writer = new BinaryWriter(stream);
+
+        // Act (position 0 is already aligned to 4 bytes)
+        writer.SkipPadding(boundaryBytes: 4);
+
+        // Assert
+        stream.Position.Should().Be(0);
+        stream.ToArray().Should().BeEmpty();
+    }
+
+    [Fact]
     public void WriteNullTerminatedString_Test()
     {
         // Arrange

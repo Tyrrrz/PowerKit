@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -25,6 +26,9 @@ internal static class BinaryReaderExtensions
         /// </summary>
         public void SkipPadding(int boundaryBytes = 4)
         {
+            if (boundaryBytes <= 0)
+                throw new ArgumentOutOfRangeException(nameof(boundaryBytes));
+
             while (!reader.IsEndOfStream && reader.BaseStream.Position % boundaryBytes != 0)
             {
                 _ = reader.ReadByte();
