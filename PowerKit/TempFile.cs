@@ -35,7 +35,7 @@ internal partial class TempFile
     /// </param>
     public static TempFile Create(bool preCreate = true)
     {
-        while (true)
+        for (var attempt = 0; attempt < 20; attempt++)
         {
             var filePath = System.IO.Path.Combine(
                 System.IO.Path.GetTempPath(),
@@ -55,5 +55,9 @@ internal partial class TempFile
                 // Path collision — retry with a new name
             }
         }
+
+        throw new InvalidOperationException(
+            "Failed to create a unique temporary file after 20 attempts."
+        );
     }
 }
