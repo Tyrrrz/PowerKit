@@ -9,6 +9,7 @@
   <PropertyGroup>
     <!-- Enable coverage collection for included PowerKit APIs -->
     <DefineConstants>$(DefineConstants);POWERKIT_INCLUDE_COVERAGE</DefineConstants>
+    <RunSettingsFilePath>PowerKit.Tests.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <!-- Include PowerKit source files directly, simulating source-only package consumption -->
