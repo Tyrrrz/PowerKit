@@ -33,16 +33,30 @@ internal partial class TempDirectory
 {
     /// <summary>
     /// Creates a new temporary directory.
+    /// The directory is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
     /// </summary>
-    public static TempDirectory Create()
+    public static TempDirectory Create(bool preCreate = true)
     {
-        var dirPath = System.IO.Path.Combine(
-            System.IO.Path.GetTempPath(),
-            Guid.NewGuid().ToString()
+        for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
+        {
+            var dirPath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                Guid.NewGuid().ToString()
+            );
+
+            if (!preCreate)
+                return new TempDirectory(dirPath);
+
+            // Path collision, retry with a new name
+            if (Directory.Exists(dirPath))
+                continue;
+
+            Directory.CreateDirectory(dirPath);
+            return new TempDirectory(dirPath);
+        }
+
+        throw new InvalidOperationException(
+            "Failed to create a unique temporary directory after several attempts."
         );
-
-        Directory.CreateDirectory(dirPath);
-
-        return new TempDirectory(dirPath);
     }
 }

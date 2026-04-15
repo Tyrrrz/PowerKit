@@ -18,6 +18,16 @@ public class TempFileTests
     }
 
     [Fact]
+    public void Create_WithoutPreCreate_Test()
+    {
+        // Act
+        using var tempFile = TempFile.Create(preCreate: false);
+
+        // Assert
+        File.Exists(tempFile.Path).Should().BeFalse();
+    }
+
+    [Fact]
     public void Dispose_Test()
     {
         // Arrange

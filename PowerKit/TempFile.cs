@@ -27,15 +27,33 @@ internal partial class TempFile
 {
     /// <summary>
     /// Creates a new temporary file.
+    /// The file is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
     /// </summary>
-    public static TempFile Create()
+    public static TempFile Create(bool preCreate = true)
     {
-        var filePath = System.IO.Path.Combine(
-            System.IO.Path.GetTempPath(),
-            Guid.NewGuid() + ".tmp"
-        );
-        File.Create(filePath).Dispose();
+        for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
+        {
+            var filePath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                Guid.NewGuid() + ".tmp"
+            );
 
-        return new TempFile(filePath);
+            if (!preCreate)
+                return new TempFile(filePath);
+
+            try
+            {
+                using var stream = new FileStream(filePath, FileMode.CreateNew);
+                return new TempFile(filePath);
+            }
+            catch (IOException) when (File.Exists(filePath))
+            {
+                // Path collision, retry with a new name
+            }
+        }
+
+        throw new InvalidOperationException(
+            "Failed to create a unique temporary file after several attempts."
+        );
     }
 }

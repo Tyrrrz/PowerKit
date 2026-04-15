@@ -18,6 +18,16 @@ public class TempDirectoryTests
     }
 
     [Fact]
+    public void Create_WithoutPreCreate_Test()
+    {
+        // Act
+        using var tempDir = TempDirectory.Create(preCreate: false);
+
+        // Assert
+        Directory.Exists(tempDir.Path).Should().BeFalse();
+    }
+
+    [Fact]
     public void Dispose_Test()
     {
         // Arrange
