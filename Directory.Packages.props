@@ -4,6 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageVersion Include="CSharpier.MsBuild" Version="1.2.6" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.3" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />

@@ -20,6 +20,10 @@
     <EnableAotAnalyzer>false</EnableAotAnalyzer>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CSharpier.MsBuild" PrivateAssets="all" />
+  </ItemGroup>
+
   <PropertyGroup>
     <Authors>$(Company)</Authors>
     <Description>Collection of utilities and extensions for rapid .NET development</Description>
