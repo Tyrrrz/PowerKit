@@ -15,6 +15,10 @@
     </tr>
 </table>
 
+<p align="center">
+    <img src="favicon.png" alt="Icon" />
+</p>
+
 **PowerKit** is a collection of utilities and extensions for rapid .NET development.
 It's distributed as a source-only package that can be referenced without imposing any run-time dependencies.
 

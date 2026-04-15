@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <PackageIcon>favicon.png</PackageIcon>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <DevelopmentDependency>true</DevelopmentDependency>
@@ -27,6 +28,10 @@
       Visible="false"
       BuildAction="compile"
     />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../favicon.png" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
