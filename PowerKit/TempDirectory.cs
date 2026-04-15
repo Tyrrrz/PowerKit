@@ -37,7 +37,7 @@ internal partial class TempDirectory
     /// </summary>
     public static TempDirectory Create(bool preCreate = true)
     {
-        for (var attempt = 0; attempt < 20; attempt++)
+        for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
         {
             var dirPath = System.IO.Path.Combine(
                 System.IO.Path.GetTempPath(),
@@ -47,11 +47,18 @@ internal partial class TempDirectory
             if (!preCreate)
                 return new TempDirectory(dirPath);
 
-            if (Directory.Exists(dirPath))
-                continue;
+            try
+            {
+                if (Directory.Exists(dirPath))
+                    throw new IOException($"Directory '{dirPath}' already exists.");
 
-            Directory.CreateDirectory(dirPath);
-            return new TempDirectory(dirPath);
+                Directory.CreateDirectory(dirPath);
+                return new TempDirectory(dirPath);
+            }
+            catch (IOException) when (Directory.Exists(dirPath))
+            {
+                // Path collision, retry with a new name
+            }
         }
 
         throw new InvalidOperationException(
