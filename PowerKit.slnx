@@ -5,7 +5,7 @@
     <File Path="global.json" />
     <File Path="License.txt" />
     <File Path="NuGet.config" />
-    <File Path="README.md" />
+    <File Path="Readme.md" />
   </Folder>
 
   <Project Path="PowerKit/PowerKit.csproj" />
