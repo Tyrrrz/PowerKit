@@ -35,10 +35,6 @@ internal partial class TempDirectory
     /// Creates a new temporary directory.
     /// The directory is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
     /// </summary>
-    /// <param name="preCreate">
-    /// Whether to pre-create the directory at the target location.
-    /// If <see langword="false" />, only the directory path is generated without creating the directory.
-    /// </param>
     public static TempDirectory Create(bool preCreate = true)
     {
         var dirPath = System.IO.Path.Combine(
