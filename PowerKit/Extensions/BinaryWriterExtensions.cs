@@ -18,7 +18,10 @@ internal static class BinaryWriterExtensions
         public void SkipPadding(int boundaryBytes = 4)
         {
             if (boundaryBytes <= 0)
-                throw new ArgumentOutOfRangeException(nameof(boundaryBytes), "Boundary must be a positive integer.");
+                throw new ArgumentOutOfRangeException(
+                    nameof(boundaryBytes),
+                    "Boundary must be a positive integer."
+                );
 
             while (writer.BaseStream.Position % boundaryBytes != 0)
             {
