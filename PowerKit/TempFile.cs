@@ -28,13 +28,19 @@ internal partial class TempFile
     /// <summary>
     /// Creates a new temporary file.
     /// </summary>
-    public static TempFile Create()
+    /// <param name="preCreate">
+    /// Whether to pre-create the file at the target location.
+    /// If <see langword="false" />, only the file path is generated without creating the file.
+    /// </param>
+    public static TempFile Create(bool preCreate = true)
     {
         var filePath = System.IO.Path.Combine(
             System.IO.Path.GetTempPath(),
             Guid.NewGuid() + ".tmp"
         );
-        File.Create(filePath).Dispose();
+
+        if (preCreate)
+            File.Create(filePath).Dispose();
 
         return new TempFile(filePath);
     }
