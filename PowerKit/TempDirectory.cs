@@ -33,6 +33,7 @@ internal partial class TempDirectory
 {
     /// <summary>
     /// Creates a new temporary directory.
+    /// The directory is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
     /// </summary>
     /// <param name="preCreate">
     /// Whether to pre-create the directory at the target location.
