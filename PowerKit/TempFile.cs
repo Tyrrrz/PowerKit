@@ -53,7 +53,7 @@ internal partial class TempFile
         }
 
         throw new InvalidOperationException(
-            "Failed to create a unique temporary file after 20 attempts."
+            "Failed to create a unique temporary file after several attempts."
         );
     }
 }
