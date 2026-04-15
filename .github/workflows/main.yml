@@ -23,10 +23,10 @@ on:
 
 jobs:
   main:
+    uses: Tyrrrz/.github/.github/workflows/nuget.yml@prime
     permissions:
       actions: write
       contents: write
-    uses: Tyrrrz/.github/.github/workflows/nuget.yml@prime
     with:
       deploy: ${{ inputs.deploy || github.ref_type == 'tag' }}
       package-version: ${{ inputs.package-version || (github.ref_type == 'tag' && github.ref_name) || format('0.0.0-ci-{0}', github.sha) }}
