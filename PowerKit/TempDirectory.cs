@@ -47,6 +47,7 @@ internal partial class TempDirectory
             if (!preCreate)
                 return new TempDirectory(dirPath);
 
+            // Path collision, retry with a new name
             if (Directory.Exists(dirPath))
                 continue;
 
@@ -55,7 +56,7 @@ internal partial class TempDirectory
         }
 
         throw new InvalidOperationException(
-            "Failed to create a unique temporary directory after 20 attempts."
+            "Failed to create a unique temporary directory after several attempts."
         );
     }
 }
