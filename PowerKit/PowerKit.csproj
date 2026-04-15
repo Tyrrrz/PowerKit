@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <!-- Target frameworks here are only used to verify source compatibility with different API levels -->
     <TargetFrameworks>netstandard2.0;net35;net10.0</TargetFrameworks>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
