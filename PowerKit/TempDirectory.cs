@@ -37,14 +37,25 @@ internal partial class TempDirectory
     /// </summary>
     public static TempDirectory Create(bool preCreate = true)
     {
-        var dirPath = System.IO.Path.Combine(
-            System.IO.Path.GetTempPath(),
-            Guid.NewGuid().ToString()
-        );
+        for (var attempt = 0; attempt < 20; attempt++)
+        {
+            var dirPath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                Guid.NewGuid().ToString()
+            );
 
-        if (preCreate)
+            if (!preCreate)
+                return new TempDirectory(dirPath);
+
+            if (Directory.Exists(dirPath))
+                continue;
+
             Directory.CreateDirectory(dirPath);
+            return new TempDirectory(dirPath);
+        }
 
-        return new TempDirectory(dirPath);
+        throw new InvalidOperationException(
+            "Failed to create a unique temporary directory after 20 attempts."
+        );
     }
 }
