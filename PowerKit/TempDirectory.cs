@@ -34,14 +34,19 @@ internal partial class TempDirectory
     /// <summary>
     /// Creates a new temporary directory.
     /// </summary>
-    public static TempDirectory Create()
+    /// <param name="preCreate">
+    /// Whether to pre-create the directory at the target location.
+    /// If <see langword="false" />, only the directory path is generated without creating the directory.
+    /// </param>
+    public static TempDirectory Create(bool preCreate = true)
     {
         var dirPath = System.IO.Path.Combine(
             System.IO.Path.GetTempPath(),
             Guid.NewGuid().ToString()
         );
 
-        Directory.CreateDirectory(dirPath);
+        if (preCreate)
+            Directory.CreateDirectory(dirPath);
 
         return new TempDirectory(dirPath);
     }
