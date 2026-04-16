@@ -39,10 +39,7 @@ internal partial class TempFile
     {
         for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
         {
-            var filePath = System.IO.Path.Combine(
-                System.IO.Path.GetTempPath(),
-                Guid.NewGuid() + ".tmp"
-            );
+            var filePath = GeneratePath();
 
             if (!preCreate)
                 return new TempFile(filePath);

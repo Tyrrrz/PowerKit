@@ -45,10 +45,7 @@ internal partial class TempDirectory
     {
         for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
         {
-            var dirPath = System.IO.Path.Combine(
-                System.IO.Path.GetTempPath(),
-                Guid.NewGuid().ToString()
-            );
+            var dirPath = GeneratePath();
 
             if (!preCreate)
                 return new TempDirectory(dirPath);
