@@ -58,11 +58,6 @@ internal static class DirectoryExtensions
 
             try
             {
-                var normalizedSourcePath = sourcePath.TrimEnd(
-                    Path.DirectorySeparatorChar,
-                    Path.AltDirectorySeparatorChar
-                );
-
                 // Create all destination directories
                 Directory.CreateDirectory(destinationPath);
                 foreach (
@@ -73,7 +68,7 @@ internal static class DirectoryExtensions
                     )
                 )
                 {
-                    var relativePath = sourceDirectoryPath.Substring(normalizedSourcePath.Length + 1);
+                    var relativePath = sourceDirectoryPath.Substring(sourcePath.Length + 1);
                     Directory.CreateDirectory(Path.Combine(destinationPath, relativePath));
                 }
 
@@ -88,7 +83,7 @@ internal static class DirectoryExtensions
                 {
                     sourceStreams.Add(File.OpenRead(sourceFilePath));
 
-                    var relativePath = sourceFilePath.Substring(normalizedSourcePath.Length + 1);
+                    var relativePath = sourceFilePath.Substring(sourcePath.Length + 1);
                     var destinationFilePath = Path.Combine(destinationPath, relativePath);
 
                     destinationStreams.Add(
