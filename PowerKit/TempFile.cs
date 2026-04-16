@@ -28,8 +28,23 @@ internal partial class TempFile
     /// <summary>
     /// Generates a unique path for a temporary file without creating it.
     /// </summary>
-    public static string GeneratePath() =>
-        System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid() + ".tmp");
+    public static string GeneratePath()
+    {
+        for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
+        {
+            var filePath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                Guid.NewGuid() + ".tmp"
+            );
+
+            if (!File.Exists(filePath))
+                return filePath;
+        }
+
+        throw new InvalidOperationException(
+            "Failed to generate a unique temporary file path after several attempts."
+        );
+    }
 
     /// <summary>
     /// Creates a new temporary file.
@@ -37,26 +52,12 @@ internal partial class TempFile
     /// </summary>
     public static TempFile Create(bool preCreate = true)
     {
-        for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
-        {
-            var filePath = GeneratePath();
+        var filePath = GeneratePath();
 
-            if (!preCreate)
-                return new TempFile(filePath);
+        if (!preCreate)
+            return new TempFile(filePath);
 
-            try
-            {
-                using var stream = new FileStream(filePath, FileMode.CreateNew);
-                return new TempFile(filePath);
-            }
-            catch (IOException) when (File.Exists(filePath))
-            {
-                // Path collision, retry with a new name
-            }
-        }
-
-        throw new InvalidOperationException(
-            "Failed to create a unique temporary file after several attempts."
-        );
+        using var stream = new FileStream(filePath, FileMode.CreateNew);
+        return new TempFile(filePath);
     }
 }

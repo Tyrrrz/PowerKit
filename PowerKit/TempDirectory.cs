@@ -34,8 +34,23 @@ internal partial class TempDirectory
     /// <summary>
     /// Generates a unique path for a temporary directory without creating it.
     /// </summary>
-    public static string GeneratePath() =>
-        System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString());
+    public static string GeneratePath()
+    {
+        for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
+        {
+            var dirPath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                Guid.NewGuid().ToString()
+            );
+
+            if (!Directory.Exists(dirPath))
+                return dirPath;
+        }
+
+        throw new InvalidOperationException(
+            "Failed to generate a unique temporary directory path after several attempts."
+        );
+    }
 
     /// <summary>
     /// Creates a new temporary directory.
@@ -43,23 +58,12 @@ internal partial class TempDirectory
     /// </summary>
     public static TempDirectory Create(bool preCreate = true)
     {
-        for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
-        {
-            var dirPath = GeneratePath();
+        var dirPath = GeneratePath();
 
-            if (!preCreate)
-                return new TempDirectory(dirPath);
-
-            // Path collision, retry with a new name
-            if (Directory.Exists(dirPath))
-                continue;
-
-            Directory.CreateDirectory(dirPath);
+        if (!preCreate)
             return new TempDirectory(dirPath);
-        }
 
-        throw new InvalidOperationException(
-            "Failed to create a unique temporary directory after several attempts."
-        );
+        Directory.CreateDirectory(dirPath);
+        return new TempDirectory(dirPath);
     }
 }
