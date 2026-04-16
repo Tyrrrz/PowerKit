@@ -47,8 +47,9 @@ internal static class DirectoryExtensions
 
         /// <summary>
         /// Recursively copies all files from <paramref name="sourcePath" /> to <paramref name="destinationPath" />.
-        /// File locks are acquired on every destination file before any data is written,
-        /// so concurrent readers will observe either the old content or the fully updated content.
+        /// Destination files are opened with exclusive locks before any data is written.
+        /// Concurrent readers may be blocked or fail with a sharing violation while a file is being updated,
+        /// and this method does not guarantee atomic old-or-new visibility to readers.
         /// </summary>
         public static void Copy(string sourcePath, string destinationPath, bool overwrite = true)
         {
