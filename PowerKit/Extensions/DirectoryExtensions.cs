@@ -61,6 +61,20 @@ internal static class DirectoryExtensions
                 Path.AltDirectorySeparatorChar
             );
 
+            Directory.CreateDirectory(destinationPath);
+
+            foreach (
+                var sourceDirectoryPath in Directory.GetDirectories(
+                    sourcePath,
+                    "*",
+                    SearchOption.AllDirectories
+                )
+            )
+            {
+                var relativePath = sourceDirectoryPath.Substring(normalizedSourcePath.Length + 1);
+                Directory.CreateDirectory(Path.Combine(destinationPath, relativePath));
+            }
+
             foreach (
                 var sourceFilePath in Directory.GetFiles(
                     sourcePath,
