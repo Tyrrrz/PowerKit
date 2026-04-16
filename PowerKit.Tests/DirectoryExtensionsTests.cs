@@ -73,8 +73,7 @@ public class DirectoryExtensionsTests
         File.WriteAllText(Path.Combine(destinationDirectory.Path, "file.txt"), "existing");
 
         // Act
-        var act = () =>
-            Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, false);
+        var act = () => Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, false);
 
         // Assert
         act.Should().Throw<IOException>();
