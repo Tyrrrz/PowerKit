@@ -14,64 +14,64 @@ public class DirectoryExtensionsTests
     public void Copy_Test()
     {
         // Arrange
-        using var sourceDir = TempDirectory.Create();
-        using var destDir = TempDirectory.Create();
+        using var sourceDirectory = TempDirectory.Create();
+        using var destinationDirectory = TempDirectory.Create();
 
-        File.WriteAllText(Path.Combine(sourceDir.Path, "file.txt"), "hello");
+        File.WriteAllText(Path.Combine(sourceDirectory.Path, "file.txt"), "hello");
 
         // Act
-        Directory.Copy(sourceDir.Path, destDir.Path);
+        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path);
 
         // Assert
-        File.ReadAllText(Path.Combine(destDir.Path, "file.txt")).Should().Be("hello");
+        File.ReadAllText(Path.Combine(destinationDirectory.Path, "file.txt")).Should().Be("hello");
     }
 
     [Fact]
     public void Copy_Nested_Test()
     {
         // Arrange
-        using var sourceDir = TempDirectory.Create();
-        using var destDir = TempDirectory.Create();
+        using var sourceDirectory = TempDirectory.Create();
+        using var destinationDirectory = TempDirectory.Create();
 
-        Directory.CreateDirectory(Path.Combine(sourceDir.Path, "sub"));
-        File.WriteAllText(Path.Combine(sourceDir.Path, "sub", "file.txt"), "nested");
+        Directory.CreateDirectory(Path.Combine(sourceDirectory.Path, "sub"));
+        File.WriteAllText(Path.Combine(sourceDirectory.Path, "sub", "file.txt"), "nested");
 
         // Act
-        Directory.Copy(sourceDir.Path, destDir.Path);
+        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path);
 
         // Assert
-        File.ReadAllText(Path.Combine(destDir.Path, "sub", "file.txt")).Should().Be("nested");
+        File.ReadAllText(Path.Combine(destinationDirectory.Path, "sub", "file.txt")).Should().Be("nested");
     }
 
     [Fact]
     public void Copy_Overwrite_Test()
     {
         // Arrange
-        using var sourceDir = TempDirectory.Create();
-        using var destDir = TempDirectory.Create();
+        using var sourceDirectory = TempDirectory.Create();
+        using var destinationDirectory = TempDirectory.Create();
 
-        File.WriteAllText(Path.Combine(sourceDir.Path, "file.txt"), "new");
-        File.WriteAllText(Path.Combine(destDir.Path, "file.txt"), "old");
+        File.WriteAllText(Path.Combine(sourceDirectory.Path, "file.txt"), "new");
+        File.WriteAllText(Path.Combine(destinationDirectory.Path, "file.txt"), "old");
 
         // Act
-        Directory.Copy(sourceDir.Path, destDir.Path, overwrite: true);
+        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, overwrite: true);
 
         // Assert
-        File.ReadAllText(Path.Combine(destDir.Path, "file.txt")).Should().Be("new");
+        File.ReadAllText(Path.Combine(destinationDirectory.Path, "file.txt")).Should().Be("new");
     }
 
     [Fact]
     public void Copy_NoOverwrite_Test()
     {
         // Arrange
-        using var sourceDir = TempDirectory.Create();
-        using var destDir = TempDirectory.Create();
+        using var sourceDirectory = TempDirectory.Create();
+        using var destinationDirectory = TempDirectory.Create();
 
-        File.WriteAllText(Path.Combine(sourceDir.Path, "file.txt"), "source");
-        File.WriteAllText(Path.Combine(destDir.Path, "file.txt"), "existing");
+        File.WriteAllText(Path.Combine(sourceDirectory.Path, "file.txt"), "source");
+        File.WriteAllText(Path.Combine(destinationDirectory.Path, "file.txt"), "existing");
 
         // Act
-        var act = () => Directory.Copy(sourceDir.Path, destDir.Path, overwrite: false);
+        var act = () => Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, overwrite: false);
 
         // Assert
         act.Should().Throw<IOException>();
@@ -81,17 +81,17 @@ public class DirectoryExtensionsTests
     public void Copy_Truncates_Test()
     {
         // Arrange
-        using var sourceDir = TempDirectory.Create();
-        using var destDir = TempDirectory.Create();
+        using var sourceDirectory = TempDirectory.Create();
+        using var destinationDirectory = TempDirectory.Create();
 
-        File.WriteAllText(Path.Combine(sourceDir.Path, "file.txt"), "hi");
-        File.WriteAllText(Path.Combine(destDir.Path, "file.txt"), "longer content");
+        File.WriteAllText(Path.Combine(sourceDirectory.Path, "file.txt"), "hi");
+        File.WriteAllText(Path.Combine(destinationDirectory.Path, "file.txt"), "longer content");
 
         // Act
-        Directory.Copy(sourceDir.Path, destDir.Path, overwrite: true);
+        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, overwrite: true);
 
         // Assert
-        File.ReadAllText(Path.Combine(destDir.Path, "file.txt")).Should().Be("hi");
+        File.ReadAllText(Path.Combine(destinationDirectory.Path, "file.txt")).Should().Be("hi");
     }
 
     [SkippableFact]
@@ -101,10 +101,10 @@ public class DirectoryExtensionsTests
         Skip.If(OperatingSystem.IsWindows());
 
         // Arrange
-        using var sourceDir = TempDirectory.Create();
-        using var destDir = TempDirectory.Create();
+        using var sourceDirectory = TempDirectory.Create();
+        using var destinationDirectory = TempDirectory.Create();
 
-        var sourceFilePath = Path.Combine(sourceDir.Path, "file.sh");
+        var sourceFilePath = Path.Combine(sourceDirectory.Path, "file.sh");
         File.WriteAllText(sourceFilePath, "#!/bin/sh");
         File.SetUnixFileMode(
             sourceFilePath,
@@ -118,10 +118,10 @@ public class DirectoryExtensionsTests
         );
 
         // Act
-        Directory.Copy(sourceDir.Path, destDir.Path);
+        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path);
 
         // Assert
-        File.GetUnixFileMode(Path.Combine(destDir.Path, "file.sh"))
+        File.GetUnixFileMode(Path.Combine(destinationDirectory.Path, "file.sh"))
             .Should()
             .Be(File.GetUnixFileMode(sourceFilePath));
     }
