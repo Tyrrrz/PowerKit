@@ -60,10 +60,9 @@ internal partial class TempDirectory
     {
         var dirPath = GeneratePath();
 
-        if (!preCreate)
-            return new TempDirectory(dirPath);
+        if (preCreate)
+            Directory.CreateDirectory(dirPath);
 
-        Directory.CreateDirectory(dirPath);
         return new TempDirectory(dirPath);
     }
 }
