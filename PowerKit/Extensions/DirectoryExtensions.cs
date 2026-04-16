@@ -56,75 +56,80 @@ internal static class DirectoryExtensions
             var sourceStreams = new List<FileStream>();
             var destinationStreams = new List<FileStream>();
 
-            var normalizedSourcePath = sourcePath.TrimEnd(
-                Path.DirectorySeparatorChar,
-                Path.AltDirectorySeparatorChar
-            );
-
-            Directory.CreateDirectory(destinationPath);
-
-            foreach (
-                var sourceDirectoryPath in Directory.GetDirectories(
-                    sourcePath,
-                    "*",
-                    SearchOption.AllDirectories
-                )
-            )
+            try
             {
-                var relativePath = sourceDirectoryPath.Substring(normalizedSourcePath.Length + 1);
-                Directory.CreateDirectory(Path.Combine(destinationPath, relativePath));
-            }
-
-            foreach (
-                var sourceFilePath in Directory.GetFiles(
-                    sourcePath,
-                    "*",
-                    SearchOption.AllDirectories
-                )
-            )
-            {
-                sourceStreams.Add(File.OpenRead(sourceFilePath));
-
-                var relativePath = sourceFilePath.Substring(normalizedSourcePath.Length + 1);
-                var destinationFilePath = Path.Combine(destinationPath, relativePath);
-
-                // destinationFilePath is always a full path under destinationPath, so GetDirectoryName is never null
-                Directory.CreateDirectory(Path.GetDirectoryName(destinationFilePath)!);
-
-                destinationStreams.Add(
-                    overwrite
-                        ? File.OpenWrite(destinationFilePath)
-                        : File.Open(
-                            destinationFilePath,
-                            FileMode.CreateNew,
-                            FileAccess.Write,
-                            FileShare.None
-                        )
+                var normalizedSourcePath = sourcePath.TrimEnd(
+                    Path.DirectorySeparatorChar,
+                    Path.AltDirectorySeparatorChar
                 );
-            }
-
-            using var streams = Disposable.Merge([.. sourceStreams, .. destinationStreams]);
-
-            foreach (
-                var (sourceStream, destinationStream) in sourceStreams.Zip(
-                    destinationStreams,
-                    (s, d) => (s, d)
+    
+                Directory.CreateDirectory(destinationPath);
+    
+                foreach (
+                    var sourceDirectoryPath in Directory.GetDirectories(
+                        sourcePath,
+                        "*",
+                        SearchOption.AllDirectories
+                    )
                 )
-            )
-            {
-                sourceStream.CopyTo(destinationStream);
-
-                // Truncate the destination file if the source file is shorter
-                destinationStream.SetLength(sourceStream.Length);
-
-                // Preserve Unix file permissions on non-Windows platforms
-                if (!OperatingSystem.IsWindows())
                 {
-                    File.SetUnixFileMode(
-                        destinationStream.Name,
-                        File.GetUnixFileMode(sourceStream.Name)
+                    var relativePath = sourceDirectoryPath.Substring(normalizedSourcePath.Length + 1);
+                    Directory.CreateDirectory(Path.Combine(destinationPath, relativePath));
+                }
+    
+                foreach (
+                    var sourceFilePath in Directory.GetFiles(
+                        sourcePath,
+                        "*",
+                        SearchOption.AllDirectories
+                    )
+                )
+                {
+                    sourceStreams.Add(File.OpenRead(sourceFilePath));
+    
+                    var relativePath = sourceFilePath.Substring(normalizedSourcePath.Length + 1);
+                    var destinationFilePath = Path.Combine(destinationPath, relativePath);
+    
+                    // destinationFilePath is always a full path under destinationPath, so GetDirectoryName is never null
+                    Directory.CreateDirectory(Path.GetDirectoryName(destinationFilePath)!);
+    
+                    destinationStreams.Add(
+                        overwrite
+                            ? File.OpenWrite(destinationFilePath)
+                            : File.Open(
+                                destinationFilePath,
+                                FileMode.CreateNew,
+                                FileAccess.Write,
+                                FileShare.None
+                            )
                     );
                 }
+    
+                foreach (
+                    var (sourceStream, destinationStream) in sourceStreams.Zip(
+                        destinationStreams,
+                        (s, d) => (s, d)
+                    )
+                )
+                {
+                    sourceStream.CopyTo(destinationStream);
+    
+                    // Truncate the destination file if the source file is shorter
+                    destinationStream.SetLength(sourceStream.Length);
+    
+                    // Preserve Unix file permissions on non-Windows platforms
+                    if (!OperatingSystem.IsWindows())
+                    {
+                        File.SetUnixFileMode(
+                            destinationStream.Name,
+                            File.GetUnixFileMode(sourceStream.Name)
+                        );
+                    }
+                }
+            }
+            finally
+            {
+                Disposable.Merge([.. sourceStreams, .. destinationStreams]).Dispose();
             }
         }
 
