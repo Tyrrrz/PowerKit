@@ -1,7 +1,7 @@
 #nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
+using PowerKit.Extensions;
 
 namespace PowerKit;
 
@@ -54,10 +54,9 @@ internal partial class TempFile
     {
         var filePath = GeneratePath();
 
-        if (!preCreate)
-            return new TempFile(filePath);
+        if (preCreate)
+            File.WriteAllZeroes(filePath, 0);
 
-        using var stream = new FileStream(filePath, FileMode.CreateNew);
         return new TempFile(filePath);
     }
 }
