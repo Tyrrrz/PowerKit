@@ -46,58 +46,63 @@ internal static class DirectoryExtensions
         }
 
         /// <summary>
-        /// Recursively copies all files from <paramref name="sourceDirPath" /> to <paramref name="destDirPath" />.
+        /// Recursively copies all files from <paramref name="sourcePath" /> to <paramref name="destinationPath" />.
         /// File locks are acquired on every destination file before any data is written,
         /// so concurrent readers will observe either the old content or the fully updated content.
         /// </summary>
-        public static void Copy(string sourceDirPath, string destDirPath, bool overwrite = true)
+        public static void Copy(string sourcePath, string destinationPath, bool overwrite = true)
         {
             var sourceStreams = new List<FileStream>();
-            var destStreams = new List<FileStream>();
+            var destinationStreams = new List<FileStream>();
 
             using var streams = Disposable.Merge(
-                sourceStreams.Cast<IDisposable>().Concat(destStreams.Cast<IDisposable>())
+                sourceStreams.Cast<IDisposable>().Concat(destinationStreams.Cast<IDisposable>())
             );
 
-            var normalizedSourceDir = sourceDirPath.TrimEnd(
+            var normalizedSourcePath = sourcePath.TrimEnd(
                 Path.DirectorySeparatorChar,
                 Path.AltDirectorySeparatorChar
             );
 
             foreach (
                 var sourceFilePath in Directory.GetFiles(
-                    sourceDirPath,
+                    sourcePath,
                     "*",
                     SearchOption.AllDirectories
                 )
             )
             {
-                sourceStreams.Add(
-                    File.Open(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)
-                );
+                sourceStreams.Add(File.OpenRead(sourceFilePath));
 
-                var relativePath = sourceFilePath.Substring(normalizedSourceDir.Length + 1);
-                var destFilePath = Path.Combine(destDirPath, relativePath);
+                var relativePath = sourceFilePath.Substring(normalizedSourcePath.Length + 1);
+                var destinationFilePath = Path.Combine(destinationPath, relativePath);
 
-                // destFilePath is always a full path under destDirPath, so GetDirectoryName is never null
-                Directory.CreateDirectory(Path.GetDirectoryName(destFilePath)!);
+                // destinationFilePath is always a full path under destinationPath, so GetDirectoryName is never null
+                Directory.CreateDirectory(Path.GetDirectoryName(destinationFilePath)!);
 
-                destStreams.Add(
-                    File.Open(
-                        destFilePath,
-                        overwrite ? FileMode.OpenOrCreate : FileMode.CreateNew,
-                        FileAccess.ReadWrite,
-                        FileShare.None
-                    )
+                destinationStreams.Add(
+                    overwrite
+                        ? File.OpenWrite(destinationFilePath)
+                        : File.Open(
+                            destinationFilePath,
+                            FileMode.CreateNew,
+                            FileAccess.Write,
+                            FileShare.None
+                        )
                 );
             }
 
-            for (var i = 0; i < sourceStreams.Count; i++)
+            foreach (
+                var (sourceStream, destinationStream) in sourceStreams.Zip(
+                    destinationStreams,
+                    (s, d) => (s, d)
+                )
+            )
             {
-                sourceStreams[i].CopyTo(destStreams[i]);
+                sourceStream.CopyTo(destinationStream);
 
                 // Truncate the destination file if the source file is shorter
-                destStreams[i].SetLength(sourceStreams[i].Length);
+                destinationStream.SetLength(sourceStream.Length);
             }
         }
 
