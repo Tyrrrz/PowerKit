@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 
 namespace PowerKit.Extensions;
 
@@ -54,68 +55,49 @@ internal static class DirectoryExtensions
             var sourceStreams = new List<FileStream>();
             var destStreams = new List<FileStream>();
 
-            try
+            using var streams = Disposable.Merge(
+                sourceStreams.Cast<IDisposable>().Concat(destStreams.Cast<IDisposable>())
+            );
+
+            var normalizedSourceDir = sourceDirPath.TrimEnd(
+                Path.DirectorySeparatorChar,
+                Path.AltDirectorySeparatorChar
+            );
+
+            foreach (
+                var sourceFilePath in Directory.GetFiles(
+                    sourceDirPath,
+                    "*",
+                    SearchOption.AllDirectories
+                )
+            )
             {
-                var normalizedSourceDir = sourceDirPath.TrimEnd(
-                    Path.DirectorySeparatorChar,
-                    Path.AltDirectorySeparatorChar
+                sourceStreams.Add(
+                    File.Open(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)
                 );
 
-                foreach (
-                    var sourceFilePath in Directory.GetFiles(
-                        sourceDirPath,
-                        "*",
-                        SearchOption.AllDirectories
+                var relativePath = sourceFilePath.Substring(normalizedSourceDir.Length + 1);
+                var destFilePath = Path.Combine(destDirPath, relativePath);
+
+                // destFilePath is always a full path under destDirPath, so GetDirectoryName is never null
+                Directory.CreateDirectory(Path.GetDirectoryName(destFilePath)!);
+
+                destStreams.Add(
+                    File.Open(
+                        destFilePath,
+                        overwrite ? FileMode.OpenOrCreate : FileMode.CreateNew,
+                        FileAccess.ReadWrite,
+                        FileShare.None
                     )
-                )
-                {
-                    sourceStreams.Add(
-                        File.Open(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)
-                    );
-
-                    var relativePath = sourceFilePath.Substring(normalizedSourceDir.Length + 1);
-                    var destFilePath = Path.Combine(destDirPath, relativePath);
-
-                    // destFilePath is always a full path under destDirPath, so GetDirectoryName is never null
-                    Directory.CreateDirectory(Path.GetDirectoryName(destFilePath)!);
-
-                    destStreams.Add(
-                        File.Open(
-                            destFilePath,
-                            overwrite ? FileMode.OpenOrCreate : FileMode.CreateNew,
-                            FileAccess.ReadWrite,
-                            FileShare.None
-                        )
-                    );
-                }
-
-                for (var i = 0; i < sourceStreams.Count; i++)
-                {
-                    sourceStreams[i].CopyTo(destStreams[i]);
-
-                    // Truncate the destination file if the source file is shorter
-                    destStreams[i].SetLength(sourceStreams[i].Length);
-                }
+                );
             }
-            finally
-            {
-                foreach (var stream in sourceStreams)
-                {
-                    try
-                    {
-                        stream.Dispose();
-                    }
-                    catch { }
-                }
 
-                foreach (var stream in destStreams)
-                {
-                    try
-                    {
-                        stream.Dispose();
-                    }
-                    catch { }
-                }
+            for (var i = 0; i < sourceStreams.Count; i++)
+            {
+                sourceStreams[i].CopyTo(destStreams[i]);
+
+                // Truncate the destination file if the source file is shorter
+                destStreams[i].SetLength(sourceStreams[i].Length);
             }
         }
 
