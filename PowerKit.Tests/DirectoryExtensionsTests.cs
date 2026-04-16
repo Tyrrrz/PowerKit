@@ -56,7 +56,7 @@ public class DirectoryExtensionsTests
         File.WriteAllText(Path.Combine(destinationDirectory.Path, "file.txt"), "old");
 
         // Act
-        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, overwrite: true);
+        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, true);
 
         // Assert
         File.ReadAllText(Path.Combine(destinationDirectory.Path, "file.txt")).Should().Be("new");
@@ -74,7 +74,7 @@ public class DirectoryExtensionsTests
 
         // Act
         var act = () =>
-            Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, overwrite: false);
+            Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, false);
 
         // Assert
         act.Should().Throw<IOException>();
@@ -91,7 +91,7 @@ public class DirectoryExtensionsTests
         File.WriteAllText(Path.Combine(destinationDirectory.Path, "file.txt"), "longer content");
 
         // Act
-        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, overwrite: true);
+        Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, true);
 
         // Assert
         File.ReadAllText(Path.Combine(destinationDirectory.Path, "file.txt")).Should().Be("hi");
