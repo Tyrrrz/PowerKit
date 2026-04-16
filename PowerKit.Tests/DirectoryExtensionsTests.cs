@@ -40,7 +40,9 @@ public class DirectoryExtensionsTests
         Directory.Copy(sourceDirectory.Path, destinationDirectory.Path);
 
         // Assert
-        File.ReadAllText(Path.Combine(destinationDirectory.Path, "sub", "file.txt")).Should().Be("nested");
+        File.ReadAllText(Path.Combine(destinationDirectory.Path, "sub", "file.txt"))
+            .Should()
+            .Be("nested");
     }
 
     [Fact]
@@ -71,7 +73,8 @@ public class DirectoryExtensionsTests
         File.WriteAllText(Path.Combine(destinationDirectory.Path, "file.txt"), "existing");
 
         // Act
-        var act = () => Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, overwrite: false);
+        var act = () =>
+            Directory.Copy(sourceDirectory.Path, destinationDirectory.Path, overwrite: false);
 
         // Assert
         act.Should().Throw<IOException>();
