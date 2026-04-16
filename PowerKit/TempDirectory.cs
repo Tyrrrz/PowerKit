@@ -32,6 +32,12 @@ internal partial class TempDirectory(string path) : IDisposable
 internal partial class TempDirectory
 {
     /// <summary>
+    /// Generates a unique path for a temporary directory without creating it.
+    /// </summary>
+    public static string GeneratePath() =>
+        System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString());
+
+    /// <summary>
     /// Creates a new temporary directory.
     /// The directory is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
     /// </summary>

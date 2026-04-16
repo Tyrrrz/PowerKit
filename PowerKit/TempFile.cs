@@ -26,6 +26,12 @@ internal partial class TempFile(string path) : IDisposable
 internal partial class TempFile
 {
     /// <summary>
+    /// Generates a unique path for a temporary file without creating it.
+    /// </summary>
+    public static string GeneratePath() =>
+        System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid() + ".tmp");
+
+    /// <summary>
     /// Creates a new temporary file.
     /// The file is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
     /// </summary>
