@@ -55,10 +55,6 @@ internal static class DirectoryExtensions
             var sourceStreams = new List<FileStream>();
             var destinationStreams = new List<FileStream>();
 
-            using var streams = Disposable.Merge(
-                sourceStreams.Cast<IDisposable>().Concat(destinationStreams.Cast<IDisposable>())
-            );
-
             var normalizedSourcePath = sourcePath.TrimEnd(
                 Path.DirectorySeparatorChar,
                 Path.AltDirectorySeparatorChar
@@ -91,6 +87,8 @@ internal static class DirectoryExtensions
                         )
                 );
             }
+
+            using var streams = Disposable.Merge([.. sourceStreams, .. destinationStreams]);
 
             foreach (
                 var (sourceStream, destinationStream) in sourceStreams.Zip(
