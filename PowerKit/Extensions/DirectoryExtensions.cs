@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
@@ -40,6 +41,68 @@ internal static class DirectoryExtensions
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Recursively copies all files from <paramref name="sourceDirPath" /> to <paramref name="destDirPath" />.
+        /// File locks are acquired on every destination file before any data is written,
+        /// so concurrent readers will observe either the old content or the fully updated content.
+        /// </summary>
+        public static void Copy(string sourceDirPath, string destDirPath, bool overwrite = true)
+        {
+            var sourceStreams = new List<FileStream>();
+            var destStreams = new List<FileStream>();
+
+            try
+            {
+                var normalizedSourceDir = sourceDirPath.TrimEnd(
+                    Path.DirectorySeparatorChar,
+                    Path.AltDirectorySeparatorChar
+                );
+
+                foreach (
+                    var sourceFilePath in Directory.GetFiles(
+                        sourceDirPath,
+                        "*",
+                        SearchOption.AllDirectories
+                    )
+                )
+                {
+                    sourceStreams.Add(
+                        File.Open(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)
+                    );
+
+                    var relativePath = sourceFilePath.Substring(normalizedSourceDir.Length + 1);
+                    var destFilePath = Path.Combine(destDirPath, relativePath);
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(destFilePath) ?? destDirPath);
+
+                    destStreams.Add(
+                        File.Open(
+                            destFilePath,
+                            overwrite ? FileMode.OpenOrCreate : FileMode.CreateNew,
+                            FileAccess.ReadWrite,
+                            FileShare.None
+                        )
+                    );
+                }
+
+                for (var i = 0; i < sourceStreams.Count; i++)
+                {
+                    sourceStreams[i].CopyTo(destStreams[i]);
+
+                    // Truncate the destination file if the source file is shorter
+                    destStreams[i].SetLength(sourceStreams[i].Length);
+                }
+            }
+            finally
+            {
+                foreach (var stream in sourceStreams)
+                    stream.Dispose();
+
+                foreach (var stream in destStreams)
+                    stream.Dispose();
             }
         }
 

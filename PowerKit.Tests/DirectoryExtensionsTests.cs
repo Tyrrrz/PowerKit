@@ -10,6 +10,90 @@ namespace PowerKit.Tests;
 public class DirectoryExtensionsTests
 {
     [Fact]
+    public void Copy_Test()
+    {
+        // Arrange
+        using var sourceDir = TempDirectory.Create();
+        using var destDir = TempDirectory.Create();
+
+        File.WriteAllText(Path.Combine(sourceDir.Path, "file.txt"), "hello");
+
+        // Act
+        Directory.Copy(sourceDir.Path, destDir.Path);
+
+        // Assert
+        File.ReadAllText(Path.Combine(destDir.Path, "file.txt")).Should().Be("hello");
+    }
+
+    [Fact]
+    public void Copy_Nested_Test()
+    {
+        // Arrange
+        using var sourceDir = TempDirectory.Create();
+        using var destDir = TempDirectory.Create();
+
+        Directory.CreateDirectory(Path.Combine(sourceDir.Path, "sub"));
+        File.WriteAllText(Path.Combine(sourceDir.Path, "sub", "file.txt"), "nested");
+
+        // Act
+        Directory.Copy(sourceDir.Path, destDir.Path);
+
+        // Assert
+        File.ReadAllText(Path.Combine(destDir.Path, "sub", "file.txt")).Should().Be("nested");
+    }
+
+    [Fact]
+    public void Copy_Overwrite_Test()
+    {
+        // Arrange
+        using var sourceDir = TempDirectory.Create();
+        using var destDir = TempDirectory.Create();
+
+        File.WriteAllText(Path.Combine(sourceDir.Path, "file.txt"), "new");
+        File.WriteAllText(Path.Combine(destDir.Path, "file.txt"), "old");
+
+        // Act
+        Directory.Copy(sourceDir.Path, destDir.Path, overwrite: true);
+
+        // Assert
+        File.ReadAllText(Path.Combine(destDir.Path, "file.txt")).Should().Be("new");
+    }
+
+    [Fact]
+    public void Copy_NoOverwrite_Test()
+    {
+        // Arrange
+        using var sourceDir = TempDirectory.Create();
+        using var destDir = TempDirectory.Create();
+
+        File.WriteAllText(Path.Combine(sourceDir.Path, "file.txt"), "source");
+        File.WriteAllText(Path.Combine(destDir.Path, "file.txt"), "existing");
+
+        // Act
+        var act = () => Directory.Copy(sourceDir.Path, destDir.Path, overwrite: false);
+
+        // Assert
+        act.Should().Throw<IOException>();
+    }
+
+    [Fact]
+    public void Copy_Truncates_Test()
+    {
+        // Arrange
+        using var sourceDir = TempDirectory.Create();
+        using var destDir = TempDirectory.Create();
+
+        File.WriteAllText(Path.Combine(sourceDir.Path, "file.txt"), "hi");
+        File.WriteAllText(Path.Combine(destDir.Path, "file.txt"), "longer content");
+
+        // Act
+        Directory.Copy(sourceDir.Path, destDir.Path, overwrite: true);
+
+        // Assert
+        File.ReadAllText(Path.Combine(destDir.Path, "file.txt")).Should().Be("hi");
+    }
+
+    [Fact]
     public void CheckWriteAccess_Test()
     {
         // Arrange
