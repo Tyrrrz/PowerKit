@@ -8,6 +8,17 @@ namespace PowerKit.Tests;
 public class TempDirectoryTests
 {
     [Fact]
+    public void GeneratePath_Test()
+    {
+        // Act
+        var path = TempDirectory.GeneratePath();
+
+        // Assert
+        path.Should().NotBeNullOrEmpty();
+        Directory.Exists(path).Should().BeFalse();
+    }
+
+    [Fact]
     public void Create_Test()
     {
         // Act

@@ -32,10 +32,9 @@ internal partial class TempDirectory(string path) : IDisposable
 internal partial class TempDirectory
 {
     /// <summary>
-    /// Creates a new temporary directory.
-    /// The directory is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
+    /// Generates a unique path for a temporary directory without creating it.
     /// </summary>
-    public static TempDirectory Create(bool preCreate = true)
+    public static string GeneratePath()
     {
         for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
         {
@@ -44,19 +43,26 @@ internal partial class TempDirectory
                 Guid.NewGuid().ToString()
             );
 
-            if (!preCreate)
-                return new TempDirectory(dirPath);
-
-            // Path collision, retry with a new name
-            if (Directory.Exists(dirPath))
-                continue;
-
-            Directory.CreateDirectory(dirPath);
-            return new TempDirectory(dirPath);
+            if (!Directory.Exists(dirPath))
+                return dirPath;
         }
 
         throw new InvalidOperationException(
-            "Failed to create a unique temporary directory after several attempts."
+            "Failed to generate a unique temporary directory path after several attempts."
         );
+    }
+
+    /// <summary>
+    /// Creates a new temporary directory.
+    /// The directory is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
+    /// </summary>
+    public static TempDirectory Create(bool preCreate = true)
+    {
+        var dirPath = GeneratePath();
+
+        if (preCreate)
+            Directory.CreateDirectory(dirPath);
+
+        return new TempDirectory(dirPath);
     }
 }

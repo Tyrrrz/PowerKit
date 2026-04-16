@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using PowerKit.Extensions;
 
 namespace PowerKit;
 
@@ -26,10 +27,9 @@ internal partial class TempFile(string path) : IDisposable
 internal partial class TempFile
 {
     /// <summary>
-    /// Creates a new temporary file.
-    /// The file is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
+    /// Generates a unique path for a temporary file without creating it.
     /// </summary>
-    public static TempFile Create(bool preCreate = true)
+    public static string GeneratePath()
     {
         for (var retriesRemaining = 20; retriesRemaining > 0; retriesRemaining--)
         {
@@ -38,22 +38,26 @@ internal partial class TempFile
                 Guid.NewGuid() + ".tmp"
             );
 
-            if (!preCreate)
-                return new TempFile(filePath);
-
-            try
-            {
-                using var stream = new FileStream(filePath, FileMode.CreateNew);
-                return new TempFile(filePath);
-            }
-            catch (IOException) when (File.Exists(filePath))
-            {
-                // Path collision, retry with a new name
-            }
+            if (!File.Exists(filePath))
+                return filePath;
         }
 
         throw new InvalidOperationException(
-            "Failed to create a unique temporary file after several attempts."
+            "Failed to generate a unique temporary file path after several attempts."
         );
+    }
+
+    /// <summary>
+    /// Creates a new temporary file.
+    /// The file is only created on disk when <paramref name="preCreate" /> is <see langword="true" />.
+    /// </summary>
+    public static TempFile Create(bool preCreate = true)
+    {
+        var filePath = GeneratePath();
+
+        if (preCreate)
+            File.WriteAllZeroes(filePath, 0);
+
+        return new TempFile(filePath);
     }
 }
