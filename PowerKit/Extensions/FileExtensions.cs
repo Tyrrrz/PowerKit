@@ -45,12 +45,7 @@ internal static class FileExtensions
 
             try
             {
-                using var stream = new FileStream(
-                    path,
-                    FileMode.OpenOrCreate,
-                    FileAccess.Write,
-                    FileShare.ReadWrite
-                );
+                File.OpenWrite(path).Dispose();
                 return true;
             }
             catch (UnauthorizedAccessException)
@@ -71,13 +66,7 @@ internal static class FileExtensions
         /// </summary>
         public static void WriteAllZeroes(string path, long count)
         {
-            using var stream = new FileStream(
-                path,
-                FileMode.Create,
-                FileAccess.Write,
-                FileShare.None
-            );
-
+            using var stream = File.Create(path);
             stream.SetLength(count);
         }
 
@@ -86,13 +75,7 @@ internal static class FileExtensions
         /// </summary>
         public static byte[] ReadAllBytes(string path, long offset)
         {
-            using var stream = new FileStream(
-                path,
-                FileMode.Open,
-                FileAccess.Read,
-                FileShare.ReadWrite
-            );
-
+            using var stream = File.OpenRead(path);
             stream.Seek(offset, SeekOrigin.Begin);
 
             if (offset >= stream.Length)
@@ -111,13 +94,7 @@ internal static class FileExtensions
         /// </summary>
         public static byte[] ReadAllBytes(string path, long offset, int length)
         {
-            using var stream = new FileStream(
-                path,
-                FileMode.Open,
-                FileAccess.Read,
-                FileShare.ReadWrite
-            );
-
+            using var stream = File.OpenRead(path);
             stream.Seek(offset, SeekOrigin.Begin);
 
             if (length < 0)
@@ -146,7 +123,7 @@ internal static class FileExtensions
                 FileMode.Open,
                 FileAccess.Read,
                 FileShare.ReadWrite,
-                bufferSize: 4096,
+                4096,
                 FileOptions.Asynchronous
             );
 
@@ -178,7 +155,7 @@ internal static class FileExtensions
                 FileMode.Open,
                 FileAccess.Read,
                 FileShare.ReadWrite,
-                bufferSize: 4096,
+                4096,
                 FileOptions.Asynchronous
             );
 
