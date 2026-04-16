@@ -103,6 +103,15 @@ internal static class DirectoryExtensions
 
                 // Truncate the destination file if the source file is shorter
                 destinationStream.SetLength(sourceStream.Length);
+
+                // Preserve Unix file permissions on non-Windows platforms
+                if (!OperatingSystem.IsWindows())
+                {
+                    File.SetUnixFileMode(
+                        destinationStream.Name,
+                        File.GetUnixFileMode(sourceStream.Name)
+                    );
+                }
             }
         }
 

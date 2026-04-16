@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.Versioning;
 using FluentAssertions;
 using PowerKit;
 using PowerKit.Extensions;
@@ -91,6 +92,38 @@ public class DirectoryExtensionsTests
 
         // Assert
         File.ReadAllText(Path.Combine(destDir.Path, "file.txt")).Should().Be("hi");
+    }
+
+    [SkippableFact]
+    [UnsupportedOSPlatform("windows")]
+    public void Copy_UnixFileMode_Test()
+    {
+        Skip.If(OperatingSystem.IsWindows());
+
+        // Arrange
+        using var sourceDir = TempDirectory.Create();
+        using var destDir = TempDirectory.Create();
+
+        var sourceFilePath = Path.Combine(sourceDir.Path, "file.sh");
+        File.WriteAllText(sourceFilePath, "#!/bin/sh");
+        File.SetUnixFileMode(
+            sourceFilePath,
+            UnixFileMode.UserRead
+                | UnixFileMode.UserWrite
+                | UnixFileMode.UserExecute
+                | UnixFileMode.GroupRead
+                | UnixFileMode.GroupExecute
+                | UnixFileMode.OtherRead
+                | UnixFileMode.OtherExecute
+        );
+
+        // Act
+        Directory.Copy(sourceDir.Path, destDir.Path);
+
+        // Assert
+        File.GetUnixFileMode(Path.Combine(destDir.Path, "file.sh"))
+            .Should()
+            .Be(File.GetUnixFileMode(sourceFilePath));
     }
 
     [Fact]
