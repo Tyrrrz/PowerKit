@@ -76,7 +76,8 @@ internal static class DirectoryExtensions
                     var relativePath = sourceFilePath.Substring(normalizedSourceDir.Length + 1);
                     var destFilePath = Path.Combine(destDirPath, relativePath);
 
-                    Directory.CreateDirectory(Path.GetDirectoryName(destFilePath) ?? destDirPath);
+                    // destFilePath is always a full path under destDirPath, so GetDirectoryName is never null
+                    Directory.CreateDirectory(Path.GetDirectoryName(destFilePath)!);
 
                     destStreams.Add(
                         File.Open(
@@ -99,10 +100,22 @@ internal static class DirectoryExtensions
             finally
             {
                 foreach (var stream in sourceStreams)
-                    stream.Dispose();
+                {
+                    try
+                    {
+                        stream.Dispose();
+                    }
+                    catch { }
+                }
 
                 foreach (var stream in destStreams)
-                    stream.Dispose();
+                {
+                    try
+                    {
+                        stream.Dispose();
+                    }
+                    catch { }
+                }
             }
         }
 
