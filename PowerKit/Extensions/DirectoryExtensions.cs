@@ -62,9 +62,10 @@ internal static class DirectoryExtensions
                     Path.DirectorySeparatorChar,
                     Path.AltDirectorySeparatorChar
                 );
-    
+
+
+                // Create all destination directories
                 Directory.CreateDirectory(destinationPath);
-    
                 foreach (
                     var sourceDirectoryPath in Directory.GetDirectories(
                         sourcePath,
@@ -76,7 +77,8 @@ internal static class DirectoryExtensions
                     var relativePath = sourceDirectoryPath.Substring(normalizedSourcePath.Length + 1);
                     Directory.CreateDirectory(Path.Combine(destinationPath, relativePath));
                 }
-    
+
+                // Create file stream pairs
                 foreach (
                     var sourceFilePath in Directory.GetFiles(
                         sourcePath,
@@ -104,7 +106,8 @@ internal static class DirectoryExtensions
                             )
                     );
                 }
-    
+
+                // Copy the file contents
                 foreach (
                     var (sourceStream, destinationStream) in sourceStreams.Zip(
                         destinationStreams,
