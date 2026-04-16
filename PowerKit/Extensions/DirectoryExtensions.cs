@@ -68,8 +68,12 @@ internal static class DirectoryExtensions
                     )
                 )
                 {
-                    var relativePath = sourceDirectoryPath.Substring(sourcePath.Length + 1);
-                    Directory.CreateDirectory(Path.Combine(destinationPath, relativePath));
+                    Directory.CreateDirectory(
+                        Path.Combine(
+                            destinationPath,
+                            Path.GetRelativePath(sourcePath, sourceDirectoryPath)
+                        )
+                    );
                 }
 
                 // Create file stream pairs
@@ -83,8 +87,10 @@ internal static class DirectoryExtensions
                 {
                     sourceStreams.Add(File.OpenRead(sourceFilePath));
 
-                    var relativePath = sourceFilePath.Substring(sourcePath.Length + 1);
-                    var destinationFilePath = Path.Combine(destinationPath, relativePath);
+                    var destinationFilePath = Path.Combine(
+                        destinationPath,
+                        Path.GetRelativePath(sourcePath, sourceFilePath)
+                    );
 
                     destinationStreams.Add(
                         overwrite
