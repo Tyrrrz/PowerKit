@@ -1,7 +1,9 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 
 namespace PowerKit.Extensions;
 
@@ -40,6 +42,94 @@ internal static class DirectoryExtensions
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Recursively copies all files from <paramref name="sourcePath" /> to <paramref name="destinationPath" />.
+        /// Destination files are opened with exclusive locks before any data is written.
+        /// Concurrent readers may be blocked or fail with a sharing violation while a file is being updated,
+        /// and this method does not guarantee atomic old-or-new visibility to readers.
+        /// </summary>
+        public static void Copy(string sourcePath, string destinationPath, bool overwrite = true)
+        {
+            var sourceStreams = new List<FileStream>();
+            var destinationStreams = new List<FileStream>();
+
+            try
+            {
+                // Create all destination directories
+                Directory.CreateDirectory(destinationPath);
+                foreach (
+                    var sourceDirectoryPath in Directory.GetDirectories(
+                        sourcePath,
+                        "*",
+                        SearchOption.AllDirectories
+                    )
+                )
+                {
+                    Directory.CreateDirectory(
+                        Path.Combine(
+                            destinationPath,
+                            Path.GetRelativePath(sourcePath, sourceDirectoryPath)
+                        )
+                    );
+                }
+
+                // Create file stream pairs
+                foreach (
+                    var sourceFilePath in Directory.GetFiles(
+                        sourcePath,
+                        "*",
+                        SearchOption.AllDirectories
+                    )
+                )
+                {
+                    sourceStreams.Add(File.OpenRead(sourceFilePath));
+
+                    var destinationFilePath = Path.Combine(
+                        destinationPath,
+                        Path.GetRelativePath(sourcePath, sourceFilePath)
+                    );
+
+                    destinationStreams.Add(
+                        overwrite
+                            ? File.OpenWrite(destinationFilePath)
+                            : File.Open(
+                                destinationFilePath,
+                                FileMode.CreateNew,
+                                FileAccess.Write,
+                                FileShare.None
+                            )
+                    );
+                }
+
+                // Copy the file contents
+                foreach (
+                    var (sourceStream, destinationStream) in sourceStreams.Zip(
+                        destinationStreams,
+                        (s, d) => (s, d)
+                    )
+                )
+                {
+                    sourceStream.CopyTo(destinationStream);
+
+                    // Truncate the destination file if the source file is shorter
+                    destinationStream.SetLength(sourceStream.Length);
+
+                    // Preserve Unix file permissions on non-Windows platforms
+                    if (!OperatingSystem.IsWindows())
+                    {
+                        File.SetUnixFileMode(
+                            destinationStream.Name,
+                            File.GetUnixFileMode(sourceStream.Name)
+                        );
+                    }
+                }
+            }
+            finally
+            {
+                Disposable.Merge([.. sourceStreams, .. destinationStreams]).Dispose();
             }
         }
 
