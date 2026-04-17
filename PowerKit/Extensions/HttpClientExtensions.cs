@@ -36,6 +36,7 @@ internal static class HttpClientExtensions
             using var source = await response
                 .Content.ReadAsStreamAsync(cancellationToken)
                 .ConfigureAwait(false);
+
             using var destination = File.Create(filePath, 81920, FileOptions.Asynchronous);
 
             await source.CopyToAsync(destination, cancellationToken).ConfigureAwait(false);
@@ -50,7 +51,6 @@ internal static class HttpClientExtensions
         )
         {
             using var request = new HttpRequestMessage(HttpMethod.Head, requestUri);
-
             return await http.SendAsync(
                     request,
                     HttpCompletionOption.ResponseHeadersRead,
