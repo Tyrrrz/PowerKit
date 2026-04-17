@@ -8,7 +8,8 @@ namespace PowerKit.Tests;
 
 file class AsyncDisposableStub(Action onDispose) : IDisposable, IAsyncDisposable
 {
-    public void Dispose() => onDispose();
+    public void Dispose() =>
+        throw new Exception("DisposeAsync() should've been called instead");
 
     public ValueTask DisposeAsync()
     {
