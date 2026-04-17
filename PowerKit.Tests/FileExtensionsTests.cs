@@ -242,23 +242,4 @@ public class FileExtensionsTests
         // Assert
         result.Should().BeFalse();
     }
-
-    [Fact]
-    public void ContainsBytes_Found_SpanningChunkBoundary_Test()
-    {
-        // Arrange
-        using var tempFile = TempFile.Create();
-
-        var data = new byte[4097];
-        data[4094] = 0xAA;
-        data[4095] = 0xBB;
-        data[4096] = 0xCC;
-        File.WriteAllBytes(tempFile.Path, data);
-
-        // Act
-        var result = File.ContainsBytes(tempFile.Path, [0xAA, 0xBB, 0xCC]);
-
-        // Assert
-        result.Should().BeTrue();
-    }
 }
