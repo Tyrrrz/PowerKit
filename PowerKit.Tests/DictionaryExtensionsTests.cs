@@ -13,7 +13,7 @@ public class DictionaryExtensionsTests
     public void ToDictionary_Test()
     {
         // Arrange
-        IDictionary source = new System.Collections.Hashtable { ["one"] = 1, ["two"] = 2 };
+        IDictionary source = new Hashtable { ["one"] = 1, ["two"] = 2 };
 
         // Act
         var result = source.ToDictionary<string, int>();
@@ -27,7 +27,7 @@ public class DictionaryExtensionsTests
     public void ToDictionary_CustomComparer_Test()
     {
         // Arrange
-        IDictionary source = new System.Collections.Hashtable { ["one"] = 1, ["two"] = 2 };
+        IDictionary source = new Hashtable { ["one"] = 1, ["two"] = 2 };
 
         // Act
         var result = source.ToDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
