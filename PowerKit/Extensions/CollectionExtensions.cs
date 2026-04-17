@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -30,5 +31,17 @@ internal static class CollectionExtensions
 
             return removedCount;
         }
+    }
+
+    extension(IDictionary dictionary)
+    {
+        /// <summary>
+        /// Converts a non-generic dictionary to a typed <see cref="Dictionary{TKey, TValue}"/> using the specified comparer.
+        /// </summary>
+        public Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEqualityComparer<TKey> comparer)
+            where TKey : notnull =>
+            dictionary
+                .Cast<DictionaryEntry>()
+                .ToDictionary(entry => (TKey)entry.Key, entry => (TValue)entry.Value!, comparer);
     }
 }
