@@ -6,6 +6,22 @@ using Xunit;
 
 namespace PowerKit.Tests;
 
+file class AsyncDisposableStub(Action onDispose) : IDisposable, IAsyncDisposable
+{
+    public void Dispose() => onDispose();
+
+    public ValueTask DisposeAsync()
+    {
+        onDispose();
+        return default;
+    }
+}
+
+file class DisposableStub(Action onDispose) : IDisposable
+{
+    public void Dispose() => onDispose();
+}
+
 public class AsyncDisposableExtensionsTests
 {
     [Fact]
@@ -36,21 +52,5 @@ public class AsyncDisposableExtensionsTests
 
         // Assert
         disposeCalled.Should().BeTrue();
-    }
-
-    private sealed class AsyncDisposableStub(Action onDispose) : IDisposable, IAsyncDisposable
-    {
-        public void Dispose() => onDispose();
-
-        public ValueTask DisposeAsync()
-        {
-            onDispose();
-            return default;
-        }
-    }
-
-    private sealed class DisposableStub(Action onDispose) : IDisposable
-    {
-        public void Dispose() => onDispose();
     }
 }
