@@ -38,7 +38,10 @@ internal static class AsyncDisposableExtensions
         /// <see cref="IAsyncDisposable.DisposeAsync" /> if supported, or falls back to
         /// <see cref="IDisposable.Dispose" />.
         /// </summary>
-        public IAsyncDisposable ToAsyncDisposable() => new AsyncDisposableAdapter(disposable);
+        public IAsyncDisposable ToAsyncDisposable() =>
+            disposable is IAsyncDisposable asyncDisposable
+                ? asyncDisposable
+                : new AsyncDisposableAdapter(disposable);
     }
 }
 #endif
