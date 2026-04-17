@@ -1,4 +1,3 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
 #nullable enable
 using System;
 using System.Buffers;
@@ -16,6 +15,7 @@ internal static class StreamExtensions
 {
     extension(Stream source)
     {
+#if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Copies the contents of the stream to the destination stream, optionally flushing after each write.
         /// </summary>
@@ -103,6 +103,6 @@ internal static class StreamExtensions
                 .CopyToAsync(destination, contentLength, progress, cancellationToken)
                 .ConfigureAwait(false);
         }
+#endif
     }
 }
-#endif
