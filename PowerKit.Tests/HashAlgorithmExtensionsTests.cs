@@ -25,4 +25,19 @@ public class HashAlgorithmExtensionsTests
                 )
             );
     }
+
+    [Fact]
+    public void ComputeHash_DisposesAlgorithm_Test()
+    {
+        // Arrange
+        var algorithm = SHA256.Create();
+        var data = "hello"u8.ToArray();
+
+        // Act
+        HashAlgorithm.ComputeHash(algorithm, data);
+
+        // Assert — disposed algorithm throws ObjectDisposedException
+        var act = () => algorithm.ComputeHash(data);
+        act.Should().Throw<ObjectDisposedException>();
+    }
 }
