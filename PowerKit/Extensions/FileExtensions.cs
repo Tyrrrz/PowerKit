@@ -62,53 +62,6 @@ internal static class FileExtensions
         }
 
         /// <summary>
-        /// Creates a file at the specified path and fills it with zeroes.
-        /// </summary>
-        public static void WriteAllZeroes(string path, long count)
-        {
-            using var stream = File.Create(path);
-            stream.SetLength(count);
-        }
-
-        /// <summary>
-        /// Reads all bytes from the specified file starting at the given offset.
-        /// </summary>
-        public static byte[] ReadAllBytes(string path, long offset)
-        {
-            using var stream = File.OpenRead(path);
-            stream.Seek(offset, SeekOrigin.Begin);
-
-            if (offset >= stream.Length)
-            {
-                return [];
-            }
-
-            var buffer = new byte[checked((int)(stream.Length - offset))];
-            stream.ReadExactly(buffer);
-
-            return buffer;
-        }
-
-        /// <summary>
-        /// Reads the specified number of bytes from the file starting at the given offset.
-        /// </summary>
-        public static byte[] ReadAllBytes(string path, long offset, int length)
-        {
-            using var stream = File.OpenRead(path);
-            stream.Seek(offset, SeekOrigin.Begin);
-
-            if (length < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(length));
-            }
-
-            var buffer = new byte[length];
-            stream.ReadExactly(buffer);
-
-            return buffer;
-        }
-
-        /// <summary>
         /// Checks whether the file at the specified path contains the given byte sequence.
         /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
         /// </summary>
@@ -154,6 +107,53 @@ internal static class FileExtensions
         /// </summary>
         public static bool ContainsBytes(string path, byte[] bytes) =>
             File.ContainsBytes(path, new ReadOnlySpan<byte>(bytes));
+
+        /// <summary>
+        /// Creates a file at the specified path and fills it with zeroes.
+        /// </summary>
+        public static void WriteAllZeroes(string path, long count)
+        {
+            using var stream = File.Create(path);
+            stream.SetLength(count);
+        }
+
+        /// <summary>
+        /// Reads all bytes from the specified file starting at the given offset.
+        /// </summary>
+        public static byte[] ReadAllBytes(string path, long offset)
+        {
+            using var stream = File.OpenRead(path);
+            stream.Seek(offset, SeekOrigin.Begin);
+
+            if (offset >= stream.Length)
+            {
+                return [];
+            }
+
+            var buffer = new byte[checked((int)(stream.Length - offset))];
+            stream.ReadExactly(buffer);
+
+            return buffer;
+        }
+
+        /// <summary>
+        /// Reads the specified number of bytes from the file starting at the given offset.
+        /// </summary>
+        public static byte[] ReadAllBytes(string path, long offset, int length)
+        {
+            using var stream = File.OpenRead(path);
+            stream.Seek(offset, SeekOrigin.Begin);
+
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
+
+            var buffer = new byte[length];
+            stream.ReadExactly(buffer);
+
+            return buffer;
+        }
 
 #if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>

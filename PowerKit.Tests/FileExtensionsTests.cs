@@ -69,6 +69,34 @@ public class FileExtensionsTests
     }
 
     [Fact]
+    public void ContainsBytes_Found_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [2, 3, 4]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_NotFound_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [9, 8, 7]);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
     public void TryDelete_Test()
     {
         // Arrange
@@ -213,33 +241,5 @@ public class FileExtensionsTests
 
         // Assert
         bytes.Should().Equal(2, 3, 4);
-    }
-
-    [Fact]
-    public void ContainsBytes_Found_Test()
-    {
-        // Arrange
-        using var tempFile = TempFile.Create();
-        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
-
-        // Act
-        var result = File.ContainsBytes(tempFile.Path, [2, 3, 4]);
-
-        // Assert
-        result.Should().BeTrue();
-    }
-
-    [Fact]
-    public void ContainsBytes_NotFound_Test()
-    {
-        // Arrange
-        using var tempFile = TempFile.Create();
-        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
-
-        // Act
-        var result = File.ContainsBytes(tempFile.Path, [9, 8, 7]);
-
-        // Assert
-        result.Should().BeFalse();
     }
 }
