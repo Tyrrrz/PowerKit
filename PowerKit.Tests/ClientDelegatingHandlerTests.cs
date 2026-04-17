@@ -9,7 +9,7 @@ using Xunit;
 
 namespace PowerKit.Tests;
 
-file class FakeClientDelegatingHandler(HttpStatusCode statusCode = HttpStatusCode.OK)
+file class FakeHttpMessageHandler(HttpStatusCode statusCode = HttpStatusCode.OK)
     : HttpMessageHandler
 {
     public HttpRequestMessage? LastRequest { get; private set; }
@@ -33,7 +33,7 @@ public class ClientDelegatingHandlerTests
     public async Task SendAsync_Test()
     {
         // Arrange
-        var inner = new FakeClientDelegatingHandler();
+        var inner = new FakeHttpMessageHandler();
         using var innerClient = new HttpClient(inner);
         using var handler = new PassthroughClientDelegatingHandler(innerClient);
         using var http = new HttpClient(handler);
