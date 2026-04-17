@@ -7,7 +7,7 @@ using Xunit;
 
 namespace PowerKit.Tests;
 
-file class DelegateObserver<T>(
+file class FakeObserver<T>(
     Action<T>? onNext = null,
     Action<Exception>? onError = null,
     Action? onCompleted = null
@@ -35,7 +35,7 @@ public class ObservableTests
 
         // Act
         subscribed.Should().BeFalse();
-        observable.Subscribe(new DelegateObserver<int>());
+        observable.Subscribe(new FakeObserver<int>());
 
         // Assert
         subscribed.Should().BeTrue();
@@ -56,7 +56,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new DelegateObserver<int>(onNext: received.Add));
+        observable.Subscribe(new FakeObserver<int>(onNext: received.Add));
 
         // Assert
         received.Should().Equal(1, 2, 3);
@@ -74,7 +74,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new DelegateObserver<int>(onError: ex => receivedError = ex));
+        observable.Subscribe(new FakeObserver<int>(onError: ex => receivedError = ex));
 
         // Assert
         receivedError.Should().BeOfType<InvalidOperationException>();
@@ -93,7 +93,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new DelegateObserver<int>(onCompleted: () => completed = true));
+        observable.Subscribe(new FakeObserver<int>(onCompleted: () => completed = true));
 
         // Assert
         completed.Should().BeTrue();
@@ -108,7 +108,7 @@ public class ObservableTests
 
         // Act
         disposed.Should().BeFalse();
-        var subscription = observable.Subscribe(new DelegateObserver<int>());
+        var subscription = observable.Subscribe(new FakeObserver<int>());
         subscription.Dispose();
 
         // Assert
@@ -130,7 +130,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new DelegateObserver<int>(onNext: received.Add));
+        observable.Subscribe(new FakeObserver<int>(onNext: received.Add));
 
         // Assert
         received.Should().Equal(1, 2, 3);
@@ -169,7 +169,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new DelegateObserver<int>(onNext: v => received.Add(v)));
+        observable.Subscribe(new FakeObserver<int>(onNext: v => received.Add(v)));
 
         // Assert
         received.Should().HaveCount(threadCount * valuesPerThread);
