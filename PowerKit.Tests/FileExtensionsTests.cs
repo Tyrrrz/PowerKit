@@ -115,7 +115,7 @@ public class FileExtensionsTests
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
         // Act
-        var bytes = File.ReadAllBytes(tempFile.Path, offset: 2L);
+        var bytes = File.ReadAllBytes(tempFile.Path, 2L);
 
         // Assert
         bytes.Should().Equal(3, 4, 5);
@@ -129,7 +129,7 @@ public class FileExtensionsTests
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
         // Act
-        var bytes = File.ReadAllBytes(tempFile.Path, offset: 5L);
+        var bytes = File.ReadAllBytes(tempFile.Path, 5L);
 
         // Assert
         bytes.Should().BeEmpty();
@@ -143,7 +143,7 @@ public class FileExtensionsTests
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
         // Act & Assert
-        var bytes = File.ReadAllBytes(tempFile.Path, offset: 10L);
+        var bytes = File.ReadAllBytes(tempFile.Path, 10L);
         bytes.Should().BeEmpty();
     }
 
@@ -155,7 +155,7 @@ public class FileExtensionsTests
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
         // Act
-        var bytes = File.ReadAllBytes(tempFile.Path, offset: 1L, length: 3);
+        var bytes = File.ReadAllBytes(tempFile.Path, 1L, 3);
 
         // Assert
         bytes.Should().Equal(2, 3, 4);
@@ -169,7 +169,7 @@ public class FileExtensionsTests
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
         // Act
-        var bytes = await File.ReadAllBytesAsync(tempFile.Path, offset: 2L);
+        var bytes = await File.ReadAllBytesAsync(tempFile.Path, 2L);
 
         // Assert
         bytes.Should().Equal(3, 4, 5);
@@ -183,7 +183,7 @@ public class FileExtensionsTests
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
         // Act
-        var bytes = await File.ReadAllBytesAsync(tempFile.Path, offset: 5L);
+        var bytes = await File.ReadAllBytesAsync(tempFile.Path, 5L);
 
         // Assert
         bytes.Should().BeEmpty();
@@ -197,7 +197,7 @@ public class FileExtensionsTests
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
         // Act & Assert
-        var bytes = await File.ReadAllBytesAsync(tempFile.Path, offset: 10L);
+        var bytes = await File.ReadAllBytesAsync(tempFile.Path, 10L);
         bytes.Should().BeEmpty();
     }
 
@@ -209,7 +209,7 @@ public class FileExtensionsTests
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
         // Act
-        var bytes = await File.ReadAllBytesAsync(tempFile.Path, offset: 1L, length: 3);
+        var bytes = await File.ReadAllBytesAsync(tempFile.Path, 1L, 3);
 
         // Assert
         bytes.Should().Equal(2, 3, 4);

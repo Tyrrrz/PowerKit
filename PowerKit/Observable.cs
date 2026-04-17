@@ -1,10 +1,10 @@
+#if NET40_OR_GREATER || NETSTANDARD || NET
 #nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit;
 
-#if NET40_OR_GREATER || NETSTANDARD || NET
 /// <summary>
 /// Represents an observable sequence of values.
 /// </summary>
