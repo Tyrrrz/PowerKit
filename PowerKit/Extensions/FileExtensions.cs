@@ -66,7 +66,7 @@ internal static class FileExtensions
         /// Checks whether the file at the specified path contains the given byte sequence.
         /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
         /// </summary>
-        public static bool ContainsBytes(string path, ReadOnlySpan<byte> bytes)
+        public static bool Contains(string path, ReadOnlySpan<byte> bytes)
         {
             if (bytes.IsEmpty)
                 return true;
@@ -103,8 +103,8 @@ internal static class FileExtensions
         /// Checks whether the file at the specified path contains the given byte sequence.
         /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
         /// </summary>
-        public static bool ContainsBytes(string path, byte[] bytes) =>
-            File.ContainsBytes(path, new ReadOnlySpan<byte>(bytes));
+        public static bool Contains(string path, byte[] bytes) =>
+            File.Contains(path, new ReadOnlySpan<byte>(bytes));
 
         /// <summary>
         /// Creates a file at the specified path and fills it with zeroes.
