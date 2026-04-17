@@ -15,23 +15,12 @@ namespace PowerKit;
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-internal class ProgressMuxer
+internal class ProgressMuxer(IProgress<double> output)
 {
     private readonly Lock _lock = new();
-    private readonly IProgress<double> _output;
-    private readonly Dictionary<int, double> _splitTotals;
+    private readonly Dictionary<int, double> _splitTotals = new();
 
     private int _splitCount;
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="ProgressMuxer" /> that forwards combined
-    /// progress to the specified output reporter.
-    /// </summary>
-    public ProgressMuxer(IProgress<double> output)
-    {
-        _output = output;
-        _splitTotals = new Dictionary<int, double>();
-    }
 
     /// <summary>
     /// Creates a new progress input with the specified weight.
@@ -41,12 +30,12 @@ internal class ProgressMuxer
     public IProgress<double> CreateInput(double weight = 1)
     {
         var index = _splitCount++;
-        return new DelegateProgress(p =>
+        return new DelegateProgress<double>(p =>
         {
             using (_lock.EnterScope())
             {
                 _splitTotals[index] = weight * p;
-                _output.Report(_splitTotals.Values.Sum());
+                output.Report(_splitTotals.Values.Sum());
             }
         });
     }
@@ -55,8 +44,8 @@ internal class ProgressMuxer
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-file sealed class DelegateProgress(Action<double> report) : IProgress<double>
+file sealed class DelegateProgress<T>(Action<T> report) : IProgress<T>
 {
-    public void Report(double value) => report(value);
+    public void Report(T value) => report(value);
 }
 #endif
