@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
@@ -60,6 +61,50 @@ internal static class FileExtensions
                 }
             }
         }
+
+        /// <summary>
+        /// Checks whether the file at the specified path contains the given byte sequence.
+        /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
+        /// </summary>
+        public static bool ContainsBytes(string path, ReadOnlySpan<byte> bytes)
+        {
+            if (bytes.IsEmpty)
+                return true;
+
+            using var stream = File.OpenRead(path);
+            using var buffer = ArrayPool<byte>.Shared.RentOwner(bytes.Length * 2);
+
+            var bytesInBuffer = 0;
+            while (true)
+            {
+                var bytesRead = stream.Read(buffer.Span.Slice(bytesInBuffer));
+                bytesInBuffer += bytesRead;
+
+                for (var i = 0; i <= bytesInBuffer - bytes.Length; i++)
+                {
+                    if (buffer.Span.Slice(i, bytes.Length).SequenceEqual(bytes))
+                        return true;
+                }
+
+                if (bytesRead == 0)
+                    break;
+
+                var overlap = Math.Min(bytes.Length - 1, bytesInBuffer);
+                if (overlap > 0)
+                    buffer.Span.Slice(bytesInBuffer - overlap, overlap).CopyTo(buffer.Span);
+
+                bytesInBuffer = overlap;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks whether the file at the specified path contains the given byte sequence.
+        /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
+        /// </summary>
+        public static bool ContainsBytes(string path, byte[] bytes) =>
+            File.ContainsBytes(path, new ReadOnlySpan<byte>(bytes));
 
         /// <summary>
         /// Creates a file at the specified path and fills it with zeroes.

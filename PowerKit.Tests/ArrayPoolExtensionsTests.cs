@@ -18,7 +18,7 @@ public class ArrayPoolExtensionsTests
         using var owner = pool.RentOwner(16);
 
         // Assert
-        owner.Memory.Length.Should().Be(16);
+        owner.Span.Length.Should().Be(16);
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class ArrayPoolExtensionsTests
 
         // Act
         owner.Dispose();
-        var act = () => owner.Memory;
+        var act = () => owner.Span.Length;
 
         // Assert
         act.Should().Throw<ObjectDisposedException>();
