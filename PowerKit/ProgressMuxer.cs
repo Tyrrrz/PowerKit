@@ -40,12 +40,4 @@ internal class ProgressMuxer(IProgress<double> output)
         });
     }
 }
-
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-file sealed class DelegateProgress<T>(Action<T> report) : IProgress<T>
-{
-    public void Report(T value) => report(value);
-}
 #endif
