@@ -74,9 +74,8 @@ internal static class FileExtensions
             using var stream = File.OpenRead(path);
 
             var patternLength = bytes.Length;
-            var bufferSize = Math.Max(4096, patternLength * 2);
-            using var bufferOwner = ArrayPool<byte>.Shared.RentOwner(bufferSize);
-            var buffer = bufferOwner.Memory.Span;
+            using var bufferOwner = ArrayPool<byte>.Shared.RentOwner(patternLength * 2);
+            var buffer = new Span<byte>(bufferOwner.Array, 0, bufferOwner.Length);
             var bytesInBuffer = 0;
 
             while (true)
