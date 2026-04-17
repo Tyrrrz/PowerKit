@@ -32,7 +32,7 @@ public class TempDirectoryTests
     public void Create_WithoutPreCreate_Test()
     {
         // Act
-        using var tempDir = TempDirectory.Create(preCreate: false);
+        using var tempDir = TempDirectory.Create(false);
 
         // Assert
         Directory.Exists(tempDir.Path).Should().BeFalse();

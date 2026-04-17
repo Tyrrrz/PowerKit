@@ -18,7 +18,7 @@ public class BinaryWriterExtensionsTests
         writer.Write((byte)0x01); // advance to position 1
 
         // Act
-        writer.SkipPadding(boundaryBytes: 4);
+        writer.SkipPadding(4);
 
         // Assert
         stream.Position.Should().Be(4);
@@ -33,7 +33,7 @@ public class BinaryWriterExtensionsTests
         using var writer = new BinaryWriter(stream);
 
         // Act (position 0 is already aligned to 4 bytes)
-        writer.SkipPadding(boundaryBytes: 4);
+        writer.SkipPadding(4);
 
         // Assert
         stream.Position.Should().Be(0);

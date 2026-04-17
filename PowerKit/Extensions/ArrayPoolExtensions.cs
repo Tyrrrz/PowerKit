@@ -9,23 +9,6 @@ namespace PowerKit.Extensions;
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-internal static class ArrayPoolExtensions
-{
-    extension<T>(ArrayPool<T> pool)
-    {
-        /// <summary>
-        /// Rents a buffer of at least <paramref name="minimumLength" /> elements from the pool
-        /// and wraps it in an <see cref="IMemoryOwner{T}" /> that returns the buffer to the pool
-        /// when disposed.
-        /// </summary>
-        public IMemoryOwner<T> RentOwner(int minimumLength = 1) =>
-            new ArrayPoolMemoryOwner<T>(pool, pool.Rent(minimumLength), minimumLength);
-    }
-}
-
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 file sealed class ArrayPoolMemoryOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength)
     : IMemoryOwner<T>
 {
@@ -48,5 +31,22 @@ file sealed class ArrayPoolMemoryOwner<T>(ArrayPool<T> pool, T[] buffer, int min
         }
 
         pool.Return(buffer);
+    }
+}
+
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
+internal static class ArrayPoolExtensions
+{
+    extension<T>(ArrayPool<T> pool)
+    {
+        /// <summary>
+        /// Rents a buffer of at least <paramref name="minimumLength" /> elements from the pool
+        /// and wraps it in an <see cref="IMemoryOwner{T}" /> that returns the buffer to the pool
+        /// when disposed.
+        /// </summary>
+        public IMemoryOwner<T> RentOwner(int minimumLength = 1) =>
+            new ArrayPoolMemoryOwner<T>(pool, pool.Rent(minimumLength), minimumLength);
     }
 }

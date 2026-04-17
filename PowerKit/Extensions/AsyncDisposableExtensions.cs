@@ -11,6 +11,9 @@ namespace PowerKit.Extensions;
 // - Stream class on .NET Framework 4.6.1 -> calls Dispose()
 // - Stream class on .NET Core 3.0 -> calls DisposeAsync()
 // - Stream class on .NET Standard 2.0 -> calls DisposeAsync() or Dispose(), depending on the runtime
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 file class AsyncDisposableAdapter(IDisposable target) : IAsyncDisposable
 {
     public async ValueTask DisposeAsync()

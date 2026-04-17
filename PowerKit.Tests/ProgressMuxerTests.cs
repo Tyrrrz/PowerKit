@@ -29,7 +29,7 @@ public class ProgressMuxerTests
         // Arrange
         var progress = new ProgressCollector<double>();
         var muxer = new ProgressMuxer(progress);
-        var input = muxer.CreateInput(weight: 0.5);
+        var input = muxer.CreateInput(0.5);
 
         // Act
         input.Report(0.5);
@@ -45,8 +45,8 @@ public class ProgressMuxerTests
         // Arrange
         var progress = new ProgressCollector<double>();
         var muxer = new ProgressMuxer(progress);
-        var input1 = muxer.CreateInput(weight: 0.6);
-        var input2 = muxer.CreateInput(weight: 0.4);
+        var input1 = muxer.CreateInput(0.6);
+        var input2 = muxer.CreateInput(0.4);
 
         // Act
         input1.Report(1.0);
