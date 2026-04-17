@@ -14,12 +14,4 @@ public class CharExtensionsTests
         'x'.Repeat(1).Should().Be("x");
         'z'.Repeat(0).Should().Be("");
     }
-
-    [Fact]
-    public void AsString_Test()
-    {
-        // Act & assert
-        'a'.AsString().Should().Be("a");
-        ' '.AsString().Should().Be(" ");
-    }
 }

@@ -14,10 +14,5 @@ internal static class CharExtensions
         /// Returns a string that contains the character repeated the specified number of times.
         /// </summary>
         public string Repeat(int count) => new(c, count);
-
-        /// <summary>
-        /// Returns a string that contains only this character.
-        /// </summary>
-        public string AsString() => c.Repeat(1);
     }
 }
