@@ -18,9 +18,10 @@ internal static class RegexExtensions
         public static Regex FromWildcardPattern(
             string pattern,
             RegexOptions options = RegexOptions.None
-        ) => new(
-            "^" + Regex.Escape(pattern).Replace("\\?", ".").Replace("\\*", ".*") + "$",
-            options
-        );
+        ) =>
+            new(
+                "^" + Regex.Escape(pattern).Replace("\\?", ".").Replace("\\*", ".*") + "$",
+                options
+            );
     }
 }
