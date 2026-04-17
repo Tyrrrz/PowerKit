@@ -36,6 +36,13 @@ internal static class CollectionExtensions
     extension(IDictionary dictionary)
     {
         /// <summary>
+        /// Converts a non-generic dictionary to a typed <see cref="Dictionary{TKey, TValue}"/> using the default comparer.
+        /// </summary>
+        public Dictionary<TKey, TValue> ToDictionary<TKey, TValue>()
+            where TKey : notnull =>
+            dictionary.ToDictionary<TKey, TValue>(EqualityComparer<TKey>.Default);
+
+        /// <summary>
         /// Converts a non-generic dictionary to a typed <see cref="Dictionary{TKey, TValue}"/> using the specified comparer.
         /// </summary>
         public Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEqualityComparer<TKey> comparer)
