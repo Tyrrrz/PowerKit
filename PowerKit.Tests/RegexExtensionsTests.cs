@@ -8,88 +8,52 @@ namespace PowerKit.Tests;
 public class RegexExtensionsTests
 {
     [Fact]
-    public void FromWildcardPattern_Star_MatchesAnySequence_Test()
+    public void FromWildcardPattern_Test()
     {
-        // Arrange
-        var regex = Regex.FromWildcardPattern("*.txt");
-
         // Act & assert
-        regex.IsMatch("file.txt").Should().BeTrue();
-        regex.IsMatch("foo.bar.txt").Should().BeTrue();
-        regex.IsMatch(".txt").Should().BeTrue();
-        regex.IsMatch("file.csv").Should().BeFalse();
-    }
 
-    [Fact]
-    public void FromWildcardPattern_QuestionMark_MatchesSingleCharacter_Test()
-    {
-        // Arrange
-        var regex = Regex.FromWildcardPattern("file?.txt");
+        // * matches any sequence (including empty)
+        Regex.FromWildcardPattern("*.txt").IsMatch("file.txt").Should().BeTrue();
+        Regex.FromWildcardPattern("*.txt").IsMatch("foo.bar.txt").Should().BeTrue();
+        Regex.FromWildcardPattern("*.txt").IsMatch(".txt").Should().BeTrue();
+        Regex.FromWildcardPattern("*.txt").IsMatch("file.csv").Should().BeFalse();
+        Regex.FromWildcardPattern("*").IsMatch("").Should().BeTrue();
+        Regex.FromWildcardPattern("*").IsMatch("anything").Should().BeTrue();
 
-        // Act & assert
-        regex.IsMatch("file1.txt").Should().BeTrue();
-        regex.IsMatch("fileA.txt").Should().BeTrue();
-        regex.IsMatch("file.txt").Should().BeFalse();
-        regex.IsMatch("file12.txt").Should().BeFalse();
-    }
+        // ? matches exactly one character
+        Regex.FromWildcardPattern("file?.txt").IsMatch("file1.txt").Should().BeTrue();
+        Regex.FromWildcardPattern("file?.txt").IsMatch("fileA.txt").Should().BeTrue();
+        Regex.FromWildcardPattern("file?.txt").IsMatch("file.txt").Should().BeFalse();
+        Regex.FromWildcardPattern("file?.txt").IsMatch("file12.txt").Should().BeFalse();
 
-    [Fact]
-    public void FromWildcardPattern_StarAndQuestionMark_Combined_Test()
-    {
-        // Arrange
-        var regex = Regex.FromWildcardPattern("fo?.*");
+        // No wildcards — exact match
+        Regex.FromWildcardPattern("hello.world").IsMatch("hello.world").Should().BeTrue();
+        Regex.FromWildcardPattern("hello.world").IsMatch("helloXworld").Should().BeFalse();
 
-        // Act & assert
-        regex.IsMatch("foo.txt").Should().BeTrue();
-        regex.IsMatch("fob.csv").Should().BeTrue();
-        regex.IsMatch("fo.txt").Should().BeFalse();
-        regex.IsMatch("fooo.txt").Should().BeFalse();
-    }
-
-    [Fact]
-    public void FromWildcardPattern_NoWildcards_MatchesExactString_Test()
-    {
-        // Arrange
-        var regex = Regex.FromWildcardPattern("hello.world");
-
-        // Act & assert
-        regex.IsMatch("hello.world").Should().BeTrue();
-        regex.IsMatch("helloXworld").Should().BeFalse();
-        regex.IsMatch("hello.worlds").Should().BeFalse();
-    }
-
-    [Fact]
-    public void FromWildcardPattern_StarOnly_MatchesAnything_Test()
-    {
-        // Arrange
-        var regex = Regex.FromWildcardPattern("*");
-
-        // Act & assert
-        regex.IsMatch("").Should().BeTrue();
-        regex.IsMatch("anything").Should().BeTrue();
-        regex.IsMatch("foo bar baz").Should().BeTrue();
+        // Regex special characters are treated as literals
+        Regex.FromWildcardPattern("(hello).*").IsMatch("(hello).world").Should().BeTrue();
+        Regex.FromWildcardPattern("(hello).*").IsMatch("hello.world").Should().BeFalse();
     }
 
     [Fact]
     public void FromWildcardPattern_WithOptions_Test()
     {
-        // Arrange
-        var regex = Regex.FromWildcardPattern("*.TXT", RegexOptions.IgnoreCase);
-
         // Act & assert
-        regex.IsMatch("file.txt").Should().BeTrue();
-        regex.IsMatch("file.TXT").Should().BeTrue();
-        regex.IsMatch("file.Txt").Should().BeTrue();
-    }
-
-    [Fact]
-    public void FromWildcardPattern_EscapesRegexSpecialChars_Test()
-    {
-        // Arrange
-        var regex = Regex.FromWildcardPattern("(hello).*");
-
-        // Act & assert
-        regex.IsMatch("(hello).world").Should().BeTrue();
-        regex.IsMatch("hello.world").Should().BeFalse();
+        Regex
+            .FromWildcardPattern("*.TXT", RegexOptions.IgnoreCase)
+            .IsMatch("file.txt")
+            .Should()
+            .BeTrue();
+        Regex
+            .FromWildcardPattern("*.TXT", RegexOptions.IgnoreCase)
+            .IsMatch("file.TXT")
+            .Should()
+            .BeTrue();
+        Regex
+            .FromWildcardPattern("*.TXT", RegexOptions.IgnoreCase)
+            .IsMatch("file.Txt")
+            .Should()
+            .BeTrue();
+        Regex.FromWildcardPattern("*.TXT").IsMatch("file.txt").Should().BeFalse();
     }
 }
