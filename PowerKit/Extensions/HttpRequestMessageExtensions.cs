@@ -8,25 +8,25 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
+file class NonDisposableHttpContent(HttpContent content) : HttpContent
+{
+    protected override async Task SerializeToStreamAsync(
+        Stream stream,
+        TransportContext? context
+    ) => await content.CopyToAsync(stream);
+
+    protected override bool TryComputeLength(out long length)
+    {
+        length = 0;
+        return false;
+    }
+}
+
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
 internal static class HttpRequestMessageExtensions
 {
-    private class NonDisposableHttpContent(HttpContent content) : HttpContent
-    {
-        protected override async Task SerializeToStreamAsync(
-            Stream stream,
-            TransportContext? context
-        ) => await content.CopyToAsync(stream);
-
-        protected override bool TryComputeLength(out long length)
-        {
-            length = 0;
-            return false;
-        }
-    }
-
     extension(HttpRequestMessage request)
     {
         /// <summary>
