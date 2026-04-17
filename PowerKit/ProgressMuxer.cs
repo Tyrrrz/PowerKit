@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 
 namespace PowerKit;
 
@@ -16,7 +17,7 @@ namespace PowerKit;
 #endif
 internal class ProgressMuxer
 {
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
     private readonly IProgress<double> _output;
     private readonly Dictionary<int, double> _splitTotals;
 
@@ -42,7 +43,7 @@ internal class ProgressMuxer
         var index = _splitCount++;
         return new DelegateProgress(p =>
         {
-            lock (_lock)
+            using (_lock.EnterScope())
             {
                 _splitTotals[index] = weight * p;
                 _output.Report(_splitTotals.Values.Sum());
