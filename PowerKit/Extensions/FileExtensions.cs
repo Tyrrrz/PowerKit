@@ -75,17 +75,16 @@ internal static class FileExtensions
 
             var patternLength = bytes.Length;
             using var bufferOwner = ArrayPool<byte>.Shared.RentOwner(patternLength * 2);
-            var buffer = bufferOwner.Span;
             var bytesInBuffer = 0;
 
             while (true)
             {
-                var bytesRead = stream.Read(buffer.Slice(bytesInBuffer));
+                var bytesRead = stream.Read(bufferOwner.Span.Slice(bytesInBuffer));
                 bytesInBuffer += bytesRead;
 
                 for (var i = 0; i <= bytesInBuffer - patternLength; i++)
                 {
-                    if (buffer.Slice(i, patternLength).SequenceEqual(bytes))
+                    if (bufferOwner.Span.Slice(i, patternLength).SequenceEqual(bytes))
                         return true;
                 }
 
@@ -94,7 +93,7 @@ internal static class FileExtensions
 
                 var overlap = Math.Min(patternLength - 1, bytesInBuffer);
                 if (overlap > 0)
-                    buffer.Slice(bytesInBuffer - overlap, overlap).CopyTo(buffer);
+                    bufferOwner.Span.Slice(bytesInBuffer - overlap, overlap).CopyTo(bufferOwner.Span);
 
                 bytesInBuffer = overlap;
             }
