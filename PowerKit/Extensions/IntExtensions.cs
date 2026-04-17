@@ -27,5 +27,22 @@ internal static class IntExtensions
         /// </summary>
         public static int? ParseOrNull(string? str) =>
             int.ParseOrNull(str, NumberStyles.Integer, CultureInfo.CurrentCulture);
+
+        /// <summary>
+        /// Parses the string as an <see cref="int" /> using the specified styles and format provider,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static int ParseOrDefault(
+            string? str,
+            NumberStyles styles,
+            IFormatProvider? formatProvider,
+            int defaultValue = default
+        ) => int.ParseOrNull(str, styles, formatProvider) ?? defaultValue;
+
+        /// <summary>
+        /// Parses the string as an <see cref="int" />, returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static int ParseOrDefault(string? str, int defaultValue = default) =>
+            int.ParseOrNull(str) ?? defaultValue;
     }
 }

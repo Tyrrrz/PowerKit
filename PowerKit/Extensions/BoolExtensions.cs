@@ -15,5 +15,11 @@ internal static class BoolExtensions
         /// </summary>
         public static bool? ParseOrNull(string? str) =>
             bool.TryParse(str, out var result) ? result : null;
+
+        /// <summary>
+        /// Parses the string as a <see cref="bool" />, returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static bool ParseOrDefault(string? str, bool defaultValue = default) =>
+            bool.ParseOrNull(str) ?? defaultValue;
     }
 }

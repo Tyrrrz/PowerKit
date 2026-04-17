@@ -15,4 +15,15 @@ public class BoolExtensionsTests
         bool.ParseOrNull("yes").Should().BeNull();
         bool.ParseOrNull(null).Should().BeNull();
     }
+
+    [Fact]
+    public void ParseOrDefault_Test()
+    {
+        // Act & assert
+        bool.ParseOrDefault("true").Should().BeTrue();
+        bool.ParseOrDefault("false").Should().BeFalse();
+        bool.ParseOrDefault("yes").Should().BeFalse();
+        bool.ParseOrDefault("yes", true).Should().BeTrue();
+        bool.ParseOrDefault(null).Should().BeFalse();
+    }
 }

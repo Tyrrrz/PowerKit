@@ -15,4 +15,15 @@ public class LongExtensionsTests
         long.ParseOrNull("abc").Should().BeNull();
         long.ParseOrNull(null).Should().BeNull();
     }
+
+    [Fact]
+    public void ParseOrDefault_Test()
+    {
+        // Act & assert
+        long.ParseOrDefault("9876543210").Should().Be(9876543210L);
+        long.ParseOrDefault("-1").Should().Be(-1L);
+        long.ParseOrDefault("abc").Should().Be(0L);
+        long.ParseOrDefault("abc", -1L).Should().Be(-1L);
+        long.ParseOrDefault(null).Should().Be(0L);
+    }
 }

@@ -15,4 +15,15 @@ public class DoubleExtensionsTests
         double.ParseOrNull("abc").Should().BeNull();
         double.ParseOrNull(null).Should().BeNull();
     }
+
+    [Fact]
+    public void ParseOrDefault_Test()
+    {
+        // Act & assert
+        double.ParseOrDefault("3.14").Should().Be(3.14);
+        double.ParseOrDefault("-1.5").Should().Be(-1.5);
+        double.ParseOrDefault("abc").Should().Be(0.0);
+        double.ParseOrDefault("abc", -1.0).Should().Be(-1.0);
+        double.ParseOrDefault(null).Should().Be(0.0);
+    }
 }
