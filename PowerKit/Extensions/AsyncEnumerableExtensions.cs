@@ -39,26 +39,6 @@ internal static class AsyncEnumerableExtensions
         }
 
         /// <summary>
-        /// Projects each element of the async sequence to an <see cref="IEnumerable{TResult}" />
-        /// and flattens the resulting sequences into one async sequence.
-        /// </summary>
-        public async IAsyncEnumerable<TResult> SelectManyAsync<TResult>(
-            Func<T, IEnumerable<TResult>> transform,
-            [EnumeratorCancellation] CancellationToken cancellationToken = default
-        )
-        {
-            await foreach (
-                var item in source.WithCancellation(cancellationToken).ConfigureAwait(false)
-            )
-            {
-                foreach (var result in transform(item))
-                {
-                    yield return result;
-                }
-            }
-        }
-
-        /// <summary>
         /// Bypasses a specified number of elements from the start of the async sequence
         /// and returns the remaining elements.
         /// </summary>
@@ -80,6 +60,26 @@ internal static class AsyncEnumerableExtensions
                 }
 
                 yield return item;
+            }
+        }
+
+        /// <summary>
+        /// Projects each element of the async sequence to an <see cref="IEnumerable{TResult}" />
+        /// and flattens the resulting sequences into one async sequence.
+        /// </summary>
+        public async IAsyncEnumerable<TResult> SelectManyAsync<TResult>(
+            Func<T, IEnumerable<TResult>> transform,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default
+        )
+        {
+            await foreach (
+                var item in source.WithCancellation(cancellationToken).ConfigureAwait(false)
+            )
+            {
+                foreach (var result in transform(item))
+                {
+                    yield return result;
+                }
             }
         }
 
