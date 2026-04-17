@@ -19,7 +19,7 @@ public class StreamExtensionsTests
         using var destination = new MemoryStream();
 
         // Act
-        await source.CopyToAsync(destination, autoFlush: true);
+        await source.CopyToAsync(destination, true);
 
         // Assert
         destination.ToArray().Should().Equal(data);
@@ -36,12 +36,12 @@ public class StreamExtensionsTests
         var progress = new ProgressCollector<double>();
 
         // Act
-        await source.CopyToAsync(destination, progress: progress);
+        await source.CopyToAsync(destination, progress);
 
         // Assert
         var reports = progress.GetValues().ToArray();
         reports.Should().NotBeEmpty();
         reports.Should().AllSatisfy(v => v.Should().BeInRange(0.0, 1.0));
-        reports[^1].Should().BeApproximately(1.0, precision: 1e-5);
+        reports[^1].Should().BeApproximately(1.0, 1e-5);
     }
 }

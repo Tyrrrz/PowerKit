@@ -32,7 +32,7 @@ public class TempFileTests
     public void Create_WithoutPreCreate_Test()
     {
         // Act
-        using var tempFile = TempFile.Create(preCreate: false);
+        using var tempFile = TempFile.Create(false);
 
         // Assert
         File.Exists(tempFile.Path).Should().BeFalse();

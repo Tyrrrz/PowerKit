@@ -5,6 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit;
 
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 file class DelegateDisposable(Action dispose) : IDisposable
 {
     public void Dispose() => dispose();

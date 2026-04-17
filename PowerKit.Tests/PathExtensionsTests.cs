@@ -12,26 +12,22 @@ public class PathExtensionsTests
     public void GetInvalidFileNameChars_Test()
     {
         // Act & assert
-        Path.GetInvalidFileNameChars(crossPlatform: true).Should().Contain('/');
-        Path.GetInvalidFileNameChars(crossPlatform: true).Should().Contain('\\');
-        Path.GetInvalidFileNameChars(crossPlatform: true).Should().Contain('\0');
-        Path.GetInvalidFileNameChars(crossPlatform: true).Should().Contain('\x01');
-        Path.GetInvalidFileNameChars(crossPlatform: false)
-            .Should()
-            .BeEquivalentTo(Path.GetInvalidFileNameChars());
+        Path.GetInvalidFileNameChars(true).Should().Contain('/');
+        Path.GetInvalidFileNameChars(true).Should().Contain('\\');
+        Path.GetInvalidFileNameChars(true).Should().Contain('\0');
+        Path.GetInvalidFileNameChars(true).Should().Contain('\x01');
+        Path.GetInvalidFileNameChars(false).Should().BeEquivalentTo(Path.GetInvalidFileNameChars());
     }
 
     [Fact]
     public void GetInvalidPathChars_Test()
     {
         // Act & assert
-        Path.GetInvalidPathChars(crossPlatform: true).Should().Contain('\0');
-        Path.GetInvalidPathChars(crossPlatform: true).Should().Contain('|');
-        Path.GetInvalidPathChars(crossPlatform: true).Should().NotContain('/');
-        Path.GetInvalidPathChars(crossPlatform: true).Should().NotContain('\\');
-        Path.GetInvalidPathChars(crossPlatform: false)
-            .Should()
-            .BeEquivalentTo(Path.GetInvalidPathChars());
+        Path.GetInvalidPathChars(true).Should().Contain('\0');
+        Path.GetInvalidPathChars(true).Should().Contain('|');
+        Path.GetInvalidPathChars(true).Should().NotContain('/');
+        Path.GetInvalidPathChars(true).Should().NotContain('\\');
+        Path.GetInvalidPathChars(false).Should().BeEquivalentTo(Path.GetInvalidPathChars());
     }
 
     [Fact]

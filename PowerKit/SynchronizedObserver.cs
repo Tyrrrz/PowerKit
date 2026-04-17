@@ -1,3 +1,4 @@
+#if NET40_OR_GREATER || NETSTANDARD || NET
 #nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -5,7 +6,6 @@ using System.Threading;
 
 namespace PowerKit;
 
-#if NET40_OR_GREATER || NETSTANDARD || NET
 /// <summary>
 /// An observer that synchronizes access to the underlying observer.
 /// </summary>

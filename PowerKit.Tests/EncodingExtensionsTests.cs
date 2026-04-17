@@ -24,7 +24,7 @@ public class EncodingExtensionsTests
     public void WithoutPreamble_Test()
     {
         // Arrange
-        var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
+        var encoding = new UTF8Encoding(true);
         encoding.GetPreamble().Should().NotBeEmpty();
 
         // Act
@@ -39,7 +39,7 @@ public class EncodingExtensionsTests
     public void WithoutPreamble_WithoutPreamble_Test()
     {
         // Arrange
-        var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+        var encoding = new UTF8Encoding(false);
         encoding.GetPreamble().Should().BeEmpty();
 
         // Act
