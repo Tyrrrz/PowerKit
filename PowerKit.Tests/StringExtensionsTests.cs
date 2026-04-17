@@ -86,6 +86,15 @@ public class StringExtensionsTests
     }
 
     [Fact]
+    public void ToSecureString_Test()
+    {
+        // Act & assert
+        "hello".ToSecureString().Length.Should().Be(5);
+        "".ToSecureString().Length.Should().Be(0);
+        "abc".ToSecureString().Length.Should().Be(3);
+    }
+
+    [Fact]
     public void Reverse_Test()
     {
         // Act & assert
