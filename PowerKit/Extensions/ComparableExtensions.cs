@@ -27,13 +27,13 @@ internal static class ComparableExtensions
         }
 
         /// <summary>
-        /// Returns the smaller of the current value and the specified value.
-        /// </summary>
-        public T Min(T other) => value.CompareTo(other) <= 0 ? value : other;
-
-        /// <summary>
         /// Returns the larger of the current value and the specified value.
         /// </summary>
         public T Max(T other) => value.CompareTo(other) >= 0 ? value : other;
+
+        /// <summary>
+        /// Returns the smaller of the current value and the specified value.
+        /// </summary>
+        public T Min(T other) => value.CompareTo(other) <= 0 ? value : other;
     }
 }

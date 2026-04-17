@@ -18,16 +18,12 @@ public class AsyncEnumerableExtensionsTests
     }
 
     [Fact]
-    public async Task TakeAsync_Test()
+    public async Task SelectManyAsync_Test()
     {
         // Act & assert
-        (await ToAsyncEnumerable([1, 2, 3, 4, 5]).TakeAsync(3).ToListAsync())
+        (await ToAsyncEnumerable(["ab", "cd"]).SelectManyAsync(s => s.ToCharArray()).ToListAsync())
             .Should()
-            .Equal(1, 2, 3);
-
-        (await ToAsyncEnumerable([1, 2, 3]).TakeAsync(0).ToListAsync()).Should().BeEmpty();
-
-        (await ToAsyncEnumerable([1, 2, 3]).TakeAsync(10).ToListAsync()).Should().Equal(1, 2, 3);
+            .Equal('a', 'b', 'c', 'd');
     }
 
     [Fact]
@@ -41,6 +37,37 @@ public class AsyncEnumerableExtensionsTests
         (await ToAsyncEnumerable([1, 2, 3]).SkipAsync(0).ToListAsync()).Should().Equal(1, 2, 3);
 
         (await ToAsyncEnumerable([1, 2, 3]).SkipAsync(10).ToListAsync()).Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task TakeAsync_Test()
+    {
+        // Act & assert
+        (await ToAsyncEnumerable([1, 2, 3, 4, 5]).TakeAsync(3).ToListAsync())
+            .Should()
+            .Equal(1, 2, 3);
+
+        (await ToAsyncEnumerable([1, 2, 3]).TakeAsync(0).ToListAsync()).Should().BeEmpty();
+
+        (await ToAsyncEnumerable([1, 2, 3]).TakeAsync(10).ToListAsync()).Should().Equal(1, 2, 3);
+    }
+
+    [Fact]
+    public async Task ToListAsync_Test()
+    {
+        // Act & assert
+        (await ToAsyncEnumerable([1, 2, 3]).ToListAsync())
+            .Should()
+            .Equal(1, 2, 3);
+    }
+
+    [Fact]
+    public async Task GetAwaiter_Test()
+    {
+        // Act & assert
+        (await ToAsyncEnumerable([10, 20, 30]))
+            .Should()
+            .Equal(10, 20, 30);
     }
 
     [Fact]
@@ -66,32 +93,5 @@ public class AsyncEnumerableExtensionsTests
         (await ToAsyncEnumerable<object>([1, 2, 3]).OfTypeAsync<string>().ToListAsync())
             .Should()
             .BeEmpty();
-    }
-
-    [Fact]
-    public async Task SelectManyAsync_Test()
-    {
-        // Act & assert
-        (await ToAsyncEnumerable(["ab", "cd"]).SelectManyAsync(s => s.ToCharArray()).ToListAsync())
-            .Should()
-            .Equal('a', 'b', 'c', 'd');
-    }
-
-    [Fact]
-    public async Task ToListAsync_Test()
-    {
-        // Act & assert
-        (await ToAsyncEnumerable([1, 2, 3]).ToListAsync())
-            .Should()
-            .Equal(1, 2, 3);
-    }
-
-    [Fact]
-    public async Task GetAwaiter_Test()
-    {
-        // Act & assert
-        (await ToAsyncEnumerable([10, 20, 30]))
-            .Should()
-            .Equal(10, 20, 30);
     }
 }

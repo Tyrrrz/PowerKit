@@ -7,21 +7,25 @@ namespace PowerKit.Tests;
 public class StringExtensionsTests
 {
     [Fact]
-    public void SubstringUntil_Test()
+    public void Reverse_Test()
     {
         // Act & assert
-        "hello world".SubstringUntil(" ").Should().Be("hello");
-        "hello".SubstringUntil("x").Should().Be("hello");
-        "xhello".SubstringUntil("x").Should().Be("");
+        "hello".Reverse().Should().Be("olleh");
+        "abcde".Reverse().Should().Be("edcba");
+        "a".Reverse().Should().Be("a");
+        "".Reverse().Should().Be("");
     }
 
     [Fact]
-    public void SubstringUntilLast_Test()
+    public void SeparateWords_Test()
     {
         // Act & assert
-        "hello world foo".SubstringUntilLast(" ").Should().Be("hello world");
-        "hello".SubstringUntilLast("x").Should().Be("hello");
-        "a.b.c".SubstringUntilLast(".").Should().Be("a.b");
+        "HelloWorld".SeparateWords(' ').Should().Be("Hello World");
+        "Hello".SeparateWords(' ').Should().Be("Hello");
+        "hello".SeparateWords(' ').Should().Be("hello");
+        "".SeparateWords(' ').Should().Be("");
+        "FooBarBaz".SeparateWords(' ').Should().Be("Foo Bar Baz");
+        "FooBarBaz".SeparateWords('-').Should().Be("Foo-Bar-Baz");
     }
 
     [Fact]
@@ -43,24 +47,21 @@ public class StringExtensionsTests
     }
 
     [Fact]
-    public void Truncate_Test()
+    public void SubstringUntil_Test()
     {
         // Act & assert
-        "hi".Truncate(10).Should().Be("hi");
-        "hello".Truncate(5).Should().Be("hello");
-        "hello".Truncate(3).Should().Be("hel");
+        "hello world".SubstringUntil(" ").Should().Be("hello");
+        "hello".SubstringUntil("x").Should().Be("hello");
+        "xhello".SubstringUntil("x").Should().Be("");
     }
 
     [Fact]
-    public void SeparateWords_Test()
+    public void SubstringUntilLast_Test()
     {
         // Act & assert
-        "HelloWorld".SeparateWords(' ').Should().Be("Hello World");
-        "Hello".SeparateWords(' ').Should().Be("Hello");
-        "hello".SeparateWords(' ').Should().Be("hello");
-        "".SeparateWords(' ').Should().Be("");
-        "FooBarBaz".SeparateWords(' ').Should().Be("Foo Bar Baz");
-        "FooBarBaz".SeparateWords('-').Should().Be("Foo-Bar-Baz");
+        "hello world foo".SubstringUntilLast(" ").Should().Be("hello world");
+        "hello".SubstringUntilLast("x").Should().Be("hello");
+        "a.b.c".SubstringUntilLast(".").Should().Be("a.b");
     }
 
     [Fact]
@@ -72,17 +73,6 @@ public class StringExtensionsTests
         "Hello".ToKebabCase().Should().Be("hello");
         "hello".ToKebabCase().Should().Be("hello");
         "".ToKebabCase().Should().Be("");
-    }
-
-    [Fact]
-    public void ToSnakeCase_Test()
-    {
-        // Act & assert
-        "HelloWorld".ToSnakeCase().Should().Be("hello_world");
-        "FooBarBaz".ToSnakeCase().Should().Be("foo_bar_baz");
-        "Hello".ToSnakeCase().Should().Be("hello");
-        "hello".ToSnakeCase().Should().Be("hello");
-        "".ToSnakeCase().Should().Be("");
     }
 
     [Fact]
@@ -109,12 +99,22 @@ public class StringExtensionsTests
     }
 
     [Fact]
-    public void Reverse_Test()
+    public void ToSnakeCase_Test()
     {
         // Act & assert
-        "hello".Reverse().Should().Be("olleh");
-        "abcde".Reverse().Should().Be("edcba");
-        "a".Reverse().Should().Be("a");
-        "".Reverse().Should().Be("");
+        "HelloWorld".ToSnakeCase().Should().Be("hello_world");
+        "FooBarBaz".ToSnakeCase().Should().Be("foo_bar_baz");
+        "Hello".ToSnakeCase().Should().Be("hello");
+        "hello".ToSnakeCase().Should().Be("hello");
+        "".ToSnakeCase().Should().Be("");
+    }
+
+    [Fact]
+    public void Truncate_Test()
+    {
+        // Act & assert
+        "hi".Truncate(10).Should().Be("hi");
+        "hello".Truncate(5).Should().Be("hello");
+        "hello".Truncate(3).Should().Be("hel");
     }
 }

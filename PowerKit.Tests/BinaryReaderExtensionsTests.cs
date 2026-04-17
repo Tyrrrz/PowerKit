@@ -34,6 +34,36 @@ public class BinaryReaderExtensionsTests
     }
 
     [Fact]
+    public void ReadNullTerminatedString_Test()
+    {
+        // Arrange
+        var data = Encoding.ASCII.GetBytes("hello\0");
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream, Encoding.ASCII);
+
+        // Act
+        var result = reader.ReadNullTerminatedString();
+
+        // Assert
+        result.Should().Be("hello");
+    }
+
+    [Fact]
+    public void ReadNullTerminatedString_Empty_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream, Encoding.ASCII);
+
+        // Act
+        var result = reader.ReadNullTerminatedString();
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
     public void SkipPadding_Test()
     {
         // Arrange - 1 byte of data, then 3 padding bytes, then 1 more byte
@@ -110,35 +140,5 @@ public class BinaryReaderExtensionsTests
 
         // Assert
         stream.Position.Should().Be(3);
-    }
-
-    [Fact]
-    public void ReadNullTerminatedString_Test()
-    {
-        // Arrange
-        var data = Encoding.ASCII.GetBytes("hello\0");
-        using var stream = new MemoryStream(data);
-        using var reader = new BinaryReader(stream, Encoding.ASCII);
-
-        // Act
-        var result = reader.ReadNullTerminatedString();
-
-        // Assert
-        result.Should().Be("hello");
-    }
-
-    [Fact]
-    public void ReadNullTerminatedString_Empty_Test()
-    {
-        // Arrange
-        var data = new byte[] { 0 };
-        using var stream = new MemoryStream(data);
-        using var reader = new BinaryReader(stream, Encoding.ASCII);
-
-        // Act
-        var result = reader.ReadNullTerminatedString();
-
-        // Assert
-        result.Should().BeEmpty();
     }
 }

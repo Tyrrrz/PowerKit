@@ -18,20 +18,20 @@ public class ComparableExtensionsTests
     }
 
     [Fact]
-    public void Min_Test()
-    {
-        // Act & assert
-        5.Min(3).Should().Be(3);
-        2.Min(7).Should().Be(2);
-        4.Min(4).Should().Be(4);
-    }
-
-    [Fact]
     public void Max_Test()
     {
         // Act & assert
         5.Max(3).Should().Be(5);
         2.Max(7).Should().Be(7);
         4.Max(4).Should().Be(4);
+    }
+
+    [Fact]
+    public void Min_Test()
+    {
+        // Act & assert
+        5.Min(3).Should().Be(3);
+        2.Min(7).Should().Be(2);
+        4.Min(4).Should().Be(4);
     }
 }

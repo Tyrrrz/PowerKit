@@ -107,15 +107,6 @@ internal static class FileExtensions
             File.Contains(path, new ReadOnlySpan<byte>(bytes));
 
         /// <summary>
-        /// Creates a file at the specified path and fills it with zeroes.
-        /// </summary>
-        public static void WriteAllZeroes(string path, long count)
-        {
-            using var stream = File.Create(path);
-            stream.SetLength(count);
-        }
-
-        /// <summary>
         /// Reads all bytes from the specified file starting at the given offset.
         /// </summary>
         public static byte[] ReadAllBytes(string path, long offset)
@@ -217,5 +208,14 @@ internal static class FileExtensions
             return buffer;
         }
 #endif
+
+        /// <summary>
+        /// Creates a file at the specified path and fills it with zeroes.
+        /// </summary>
+        public static void WriteAllZeroes(string path, long count)
+        {
+            using var stream = File.Create(path);
+            stream.SetLength(count);
+        }
     }
 }

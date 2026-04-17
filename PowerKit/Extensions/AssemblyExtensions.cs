@@ -17,15 +17,45 @@ internal static class AssemblyExtensions
     extension(Assembly assembly)
     {
         /// <summary>
-        /// Returns the informational version string of the assembly, falling back to the
-        /// assembly version if the <see cref="AssemblyInformationalVersionAttribute" /> is not set.
-        /// Returns <see langword="null" /> if neither is available.
+        /// Extracts the specified manifest resource to a file at the given path.
+        /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
         /// </summary>
-        public string? TryGetVersionString() =>
-            assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                ?.InformationalVersion
-            ?? assembly.GetName().Version?.ToString();
+        public void ExtractManifestResource(string resourceName, string filePath)
+        {
+            using var source =
+                assembly.GetManifestResourceStream(resourceName)
+                ?? throw new MissingManifestResourceException(
+                    $"Failed to find resource '{resourceName}'."
+                );
+
+            using var destination = File.Create(filePath);
+            source.CopyTo(destination);
+            destination.Flush();
+        }
+
+#if NET40_OR_GREATER || NETSTANDARD || NET
+        /// <summary>
+        /// Extracts the specified manifest resource to a file at the given path asynchronously.
+        /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
+        /// </summary>
+        public async Task ExtractManifestResourceAsync(
+            string resourceName,
+            string filePath,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var source =
+                assembly.GetManifestResourceStream(resourceName)
+                ?? throw new MissingManifestResourceException(
+                    $"Failed to find resource '{resourceName}'."
+                );
+
+            using var destination = File.Create(filePath, 81920, FileOptions.Asynchronous);
+
+            await source.CopyToAsync(destination, cancellationToken).ConfigureAwait(false);
+            await destination.FlushAsync(cancellationToken).ConfigureAwait(false);
+        }
+#endif
 
         /// <summary>
         /// Reads the specified manifest resource as a string using the specified encoding.
@@ -85,44 +115,14 @@ internal static class AssemblyExtensions
 #endif
 
         /// <summary>
-        /// Extracts the specified manifest resource to a file at the given path.
-        /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
+        /// Returns the informational version string of the assembly, falling back to the
+        /// assembly version if the <see cref="AssemblyInformationalVersionAttribute" /> is not set.
+        /// Returns <see langword="null" /> if neither is available.
         /// </summary>
-        public void ExtractManifestResource(string resourceName, string filePath)
-        {
-            using var source =
-                assembly.GetManifestResourceStream(resourceName)
-                ?? throw new MissingManifestResourceException(
-                    $"Failed to find resource '{resourceName}'."
-                );
-
-            using var destination = File.Create(filePath);
-            source.CopyTo(destination);
-            destination.Flush();
-        }
-
-#if NET40_OR_GREATER || NETSTANDARD || NET
-        /// <summary>
-        /// Extracts the specified manifest resource to a file at the given path asynchronously.
-        /// Throws <see cref="MissingManifestResourceException" /> if the resource is not found.
-        /// </summary>
-        public async Task ExtractManifestResourceAsync(
-            string resourceName,
-            string filePath,
-            CancellationToken cancellationToken = default
-        )
-        {
-            using var source =
-                assembly.GetManifestResourceStream(resourceName)
-                ?? throw new MissingManifestResourceException(
-                    $"Failed to find resource '{resourceName}'."
-                );
-
-            using var destination = File.Create(filePath, 81920, FileOptions.Asynchronous);
-
-            await source.CopyToAsync(destination, cancellationToken).ConfigureAwait(false);
-            await destination.FlushAsync(cancellationToken).ConfigureAwait(false);
-        }
-#endif
+        public string? TryGetVersionString() =>
+            assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                ?.InformationalVersion
+            ?? assembly.GetName().Version?.ToString();
     }
 }
