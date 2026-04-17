@@ -31,6 +31,44 @@ public class AsyncEnumerableExtensionsTests
     }
 
     [Fact]
+    public async Task SkipAsync_Test()
+    {
+        // Act & assert
+        (await ToAsyncEnumerable([1, 2, 3, 4, 5]).SkipAsync(2).ToListAsync())
+            .Should()
+            .Equal(3, 4, 5);
+
+        (await ToAsyncEnumerable([1, 2, 3]).SkipAsync(0).ToListAsync()).Should().Equal(1, 2, 3);
+
+        (await ToAsyncEnumerable([1, 2, 3]).SkipAsync(10).ToListAsync()).Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task OfTypeAsync_Test()
+    {
+        // Act & assert
+        (
+            await ToAsyncEnumerable<object>([1, "hello", 2, "world", 3])
+                .OfTypeAsync<int>()
+                .ToListAsync()
+        )
+            .Should()
+            .Equal(1, 2, 3);
+
+        (
+            await ToAsyncEnumerable<object>([1, "hello", 2, "world", 3])
+                .OfTypeAsync<string>()
+                .ToListAsync()
+        )
+            .Should()
+            .Equal("hello", "world");
+
+        (await ToAsyncEnumerable<object>([1, 2, 3]).OfTypeAsync<string>().ToListAsync())
+            .Should()
+            .BeEmpty();
+    }
+
+    [Fact]
     public async Task SelectManyAsync_Test()
     {
         // Act & assert

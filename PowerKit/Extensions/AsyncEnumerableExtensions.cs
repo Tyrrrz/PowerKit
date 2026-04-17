@@ -39,6 +39,31 @@ internal static class AsyncEnumerableExtensions
         }
 
         /// <summary>
+        /// Bypasses a specified number of elements from the start of the async sequence
+        /// and returns the remaining elements.
+        /// </summary>
+        public async IAsyncEnumerable<T> SkipAsync(
+            int count,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default
+        )
+        {
+            var skipped = 0;
+
+            await foreach (
+                var item in source.WithCancellation(cancellationToken).ConfigureAwait(false)
+            )
+            {
+                if (skipped < count)
+                {
+                    skipped++;
+                    continue;
+                }
+
+                yield return item;
+            }
+        }
+
+        /// <summary>
         /// Projects each element of the async sequence to an <see cref="IEnumerable{TResult}" />
         /// and flattens the resulting sequences into one async sequence.
         /// </summary>
@@ -79,6 +104,27 @@ internal static class AsyncEnumerableExtensions
         /// Enables directly awaiting the async sequence, materializing it into a <see cref="List{T}" />.
         /// </summary>
         public ValueTaskAwaiter<List<T>> GetAwaiter() => source.ToListAsync().GetAwaiter();
+    }
+
+    extension(IAsyncEnumerable<object?> source)
+    {
+        /// <summary>
+        /// Filters elements of the async sequence to only those of the specified type.
+        /// </summary>
+        public async IAsyncEnumerable<T> OfTypeAsync<T>(
+            [EnumeratorCancellation] CancellationToken cancellationToken = default
+        )
+        {
+            await foreach (
+                var item in source.WithCancellation(cancellationToken).ConfigureAwait(false)
+            )
+            {
+                if (item is T match)
+                {
+                    yield return match;
+                }
+            }
+        }
     }
 }
 #endif
