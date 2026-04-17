@@ -9,33 +9,33 @@ using Xunit;
 
 namespace PowerKit.Tests;
 
+file class FakeClientDelegatingHandler(HttpStatusCode statusCode = HttpStatusCode.OK)
+    : HttpMessageHandler
+{
+    public HttpRequestMessage? LastRequest { get; private set; }
+
+    protected override Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
+        CancellationToken cancellationToken
+    )
+    {
+        LastRequest = request;
+        return Task.FromResult(new HttpResponseMessage(statusCode));
+    }
+}
+
+file class PassthroughClientDelegatingHandler(HttpClient http, bool disposeClient = false)
+    : ClientDelegatingHandler(http, disposeClient);
+
 public class ClientDelegatingHandlerTests
 {
-    private sealed class FakeInnerHandler(HttpStatusCode statusCode = HttpStatusCode.OK)
-        : HttpMessageHandler
-    {
-        public HttpRequestMessage? LastRequest { get; private set; }
-
-        protected override Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken
-        )
-        {
-            LastRequest = request;
-            return Task.FromResult(new HttpResponseMessage(statusCode));
-        }
-    }
-
-    private sealed class PassthroughHandler(HttpClient http, bool disposeClient = false)
-        : ClientDelegatingHandler(http, disposeClient);
-
     [Fact]
-    public async Task SendAsync_DelegatesRequestToInnerClient()
+    public async Task SendAsync_Test()
     {
         // Arrange
-        var inner = new FakeInnerHandler();
+        var inner = new FakeClientDelegatingHandler();
         using var innerClient = new HttpClient(inner);
-        using var handler = new PassthroughHandler(innerClient);
+        using var handler = new PassthroughClientDelegatingHandler(innerClient);
         using var http = new HttpClient(handler);
 
         // Act
@@ -47,12 +47,12 @@ public class ClientDelegatingHandlerTests
     }
 
     [Fact]
-    public async Task SendAsync_ClonesRequest()
+    public async Task SendAsync_Reuse_Test()
     {
         // Arrange
-        var inner = new FakeInnerHandler();
+        var inner = new FakeClientDelegatingHandler();
         using var innerClient = new HttpClient(inner);
-        using var handler = new PassthroughHandler(innerClient);
+        using var handler = new PassthroughClientDelegatingHandler(innerClient);
         using var http = new HttpClient(handler);
 
         // Act — send two requests to the same URI to verify clone reuse works
@@ -65,12 +65,12 @@ public class ClientDelegatingHandlerTests
     }
 
     [Fact]
-    public async Task Dispose_DisposesInnerClientWhenRequested()
+    public async Task Dispose_DisposeClient_Test()
     {
         // Arrange
-        var inner = new FakeInnerHandler();
+        var inner = new FakeClientDelegatingHandler();
         var innerClient = new HttpClient(inner);
-        var handler = new PassthroughHandler(innerClient, disposeClient: true);
+        var handler = new PassthroughClientDelegatingHandler(innerClient, disposeClient: true);
 
         // Act
         handler.Dispose();
@@ -81,12 +81,12 @@ public class ClientDelegatingHandlerTests
     }
 
     [Fact]
-    public async Task Dispose_DoesNotDisposeInnerClientByDefault()
+    public async Task Dispose_KeepClient_Test()
     {
         // Arrange
-        var inner = new FakeInnerHandler();
+        var inner = new FakeClientDelegatingHandler();
         using var innerClient = new HttpClient(inner);
-        var handler = new PassthroughHandler(innerClient);
+        var handler = new PassthroughClientDelegatingHandler(innerClient);
 
         // Act
         handler.Dispose();

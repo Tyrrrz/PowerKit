@@ -9,7 +9,7 @@ namespace PowerKit.Tests;
 public class HttpRequestMessageExtensionsTests
 {
     [Fact]
-    public void Clone_CopiesMethodAndUri()
+    public void Clone_Test()
     {
         // Arrange
         using var request = new HttpRequestMessage(HttpMethod.Post, "https://example.com/api");
@@ -23,7 +23,7 @@ public class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
-    public void Clone_CopiesHeaders()
+    public void Clone_WithHeaders_Test()
     {
         // Arrange
         using var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com");
@@ -37,7 +37,7 @@ public class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
-    public void Clone_WithNoContent_HasNullContent()
+    public void Clone_WithoutContent_Test()
     {
         // Arrange
         using var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com");
@@ -50,7 +50,7 @@ public class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
-    public async Task Clone_WithContent_CopiesContent()
+    public async Task Clone_WithContent_Test()
     {
         // Arrange
         using var request = new HttpRequestMessage(HttpMethod.Post, "https://example.com");
@@ -65,7 +65,7 @@ public class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
-    public async Task Clone_WithContent_CopiesContentHeaders()
+    public async Task Clone_WithContentHeaders_Test()
     {
         // Arrange
         using var request = new HttpRequestMessage(HttpMethod.Post, "https://example.com");
@@ -82,7 +82,7 @@ public class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
-    public async Task Clone_DoesNotDisposeOriginalContent()
+    public async Task Clone_DoesNotDisposeContent_Test()
     {
         // Arrange
         using var request = new HttpRequestMessage(HttpMethod.Post, "https://example.com");

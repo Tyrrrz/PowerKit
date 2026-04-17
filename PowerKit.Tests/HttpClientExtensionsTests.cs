@@ -9,39 +9,39 @@ using Xunit;
 
 namespace PowerKit.Tests;
 
+file class FakeHttpClientHandler(
+    HttpStatusCode statusCode = HttpStatusCode.OK,
+    string? body = null,
+    HttpMethod? expectedMethod = null
+) : HttpMessageHandler
+{
+    public HttpRequestMessage? LastRequest { get; private set; }
+
+    protected override Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
+        CancellationToken cancellationToken
+    )
+    {
+        LastRequest = request;
+
+        if (expectedMethod is not null)
+            request.Method.Should().Be(expectedMethod);
+
+        var response = new HttpResponseMessage(statusCode);
+        if (body is not null)
+            response.Content = new StringContent(body);
+
+        return Task.FromResult(response);
+    }
+}
+
 public class HttpClientExtensionsTests
 {
-    private sealed class FakeHandler(
-        HttpStatusCode statusCode = HttpStatusCode.OK,
-        string? body = null,
-        HttpMethod? expectedMethod = null
-    ) : HttpMessageHandler
-    {
-        public HttpRequestMessage? LastRequest { get; private set; }
-
-        protected override Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken
-        )
-        {
-            LastRequest = request;
-
-            if (expectedMethod is not null)
-                request.Method.Should().Be(expectedMethod);
-
-            var response = new HttpResponseMessage(statusCode);
-            if (body is not null)
-                response.Content = new StringContent(body);
-
-            return Task.FromResult(response);
-        }
-    }
-
     [Fact]
-    public async Task DownloadAsync_WritesContentToFile()
+    public async Task DownloadAsync_Test()
     {
         // Arrange
-        var handler = new FakeHandler(body: "file-content");
+        var handler = new FakeHttpClientHandler(body: "file-content");
         using var http = new HttpClient(handler);
         var filePath = Path.GetTempFileName();
 
@@ -60,10 +60,10 @@ public class HttpClientExtensionsTests
     }
 
     [Fact]
-    public async Task DownloadAsync_ThrowsOnNonSuccessStatus()
+    public async Task DownloadAsync_NonSuccessStatus_Test()
     {
         // Arrange
-        var handler = new FakeHandler(HttpStatusCode.NotFound);
+        var handler = new FakeHttpClientHandler(HttpStatusCode.NotFound);
         using var http = new HttpClient(handler);
         var filePath = Path.GetTempFileName();
 
@@ -81,10 +81,10 @@ public class HttpClientExtensionsTests
     }
 
     [Fact]
-    public async Task HeadAsync_SendsHeadRequest()
+    public async Task HeadAsync_Test()
     {
         // Arrange
-        var handler = new FakeHandler(expectedMethod: HttpMethod.Head);
+        var handler = new FakeHttpClientHandler(expectedMethod: HttpMethod.Head);
         using var http = new HttpClient(handler);
 
         // Act
