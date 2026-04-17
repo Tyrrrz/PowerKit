@@ -27,7 +27,7 @@ internal static class CollectionExtensions
         /// </summary>
         public void RemoveRange(IEnumerable<T> items)
         {
-            foreach (var item in items)
+            foreach (var item in items.ToArray())
                 source.Remove(item);
         }
 
