@@ -56,6 +56,6 @@ public class ProgressMuxerTests
 
         // Assert
         var values = progress.GetValues();
-        values[^1].Should().BeApproximately(1.0, precision: 1e-10);
+        values[^1].Should().BeApproximately(1.0, 1e-10);
     }
 }
