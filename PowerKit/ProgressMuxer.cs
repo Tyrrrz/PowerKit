@@ -29,7 +29,7 @@ internal class ProgressMuxer(IProgress<double> output)
     /// </summary>
     public IProgress<double> CreateInput(double weight = 1)
     {
-        var index = _splitCount++;
+        var index = Interlocked.Increment(ref _splitCount) - 1;
         return new DelegateProgress<double>(p =>
         {
             using (_lock.EnterScope())
