@@ -56,7 +56,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(onNext: received.Add));
+        observable.Subscribe(new FakeObserver<int>(received.Add));
 
         // Assert
         received.Should().Equal(1, 2, 3);
@@ -130,7 +130,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(onNext: received.Add));
+        observable.Subscribe(new FakeObserver<int>(received.Add));
 
         // Assert
         received.Should().Equal(1, 2, 3);
@@ -169,7 +169,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(onNext: v => received.Add(v)));
+        observable.Subscribe(new FakeObserver<int>(v => received.Add(v)));
 
         // Assert
         received.Should().HaveCount(threadCount * valuesPerThread);

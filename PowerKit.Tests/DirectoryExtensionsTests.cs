@@ -230,7 +230,7 @@ public class DirectoryExtensionsTests
         File.WriteAllText(Path.Combine(tempDir.Path, "file.txt"), "hello");
 
         // Act
-        var result = Directory.TryDelete(tempDir.Path, recursive: false);
+        var result = Directory.TryDelete(tempDir.Path, false);
 
         // Assert
         result.Should().BeFalse();
@@ -245,7 +245,7 @@ public class DirectoryExtensionsTests
         File.WriteAllText(Path.Combine(tempDir.Path, "file.txt"), "hello");
 
         // Act
-        var result = Directory.TryDelete(tempDir.Path, recursive: true);
+        var result = Directory.TryDelete(tempDir.Path, true);
 
         // Assert
         result.Should().BeTrue();

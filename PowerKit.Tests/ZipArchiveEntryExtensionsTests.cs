@@ -11,7 +11,7 @@ namespace PowerKit.Tests;
 public class ZipArchiveEntryExtensionsTests
 {
     private static ZipArchive CreateArchive(ZipArchiveMode mode = ZipArchiveMode.Update) =>
-        new(new MemoryStream(), mode, leaveOpen: false);
+        new(new MemoryStream(), mode, false);
 
     [Fact]
     public void ReadAllBytes_Test()
