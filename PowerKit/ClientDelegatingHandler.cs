@@ -11,8 +11,11 @@ namespace PowerKit;
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-// Like DelegatingHandler, but wraps an HttpClient instead of an HttpMessageHandler.
-// Used to extend an externally provided HttpClient with additional behavior.
+/// <summary>
+/// Like <see cref="DelegatingHandler" />, but wraps an <see cref="HttpClient" /> instead of an
+/// <see cref="HttpMessageHandler" />. Used to extend an externally provided <see cref="HttpClient" />
+/// with additional behavior.
+/// </summary>
 internal abstract class ClientDelegatingHandler(HttpClient http, bool disposeClient = false)
     : HttpMessageHandler
 {
