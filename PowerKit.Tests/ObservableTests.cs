@@ -66,7 +66,7 @@ public class ObservableTests
     public void Observable_Create_OnError_Test()
     {
         // Arrange
-        Exception? receivedError = null;
+        var receivedError = default(Exception);
         var observable = Observable.Create<int>(observer =>
         {
             observer.OnError(new InvalidOperationException("test error"));
@@ -197,7 +197,7 @@ public class ObservableTests
     public void SynchronizedObserver_OnError_Test()
     {
         // Arrange
-        Exception? receivedError = null;
+        var receivedError = default(Exception);
         var synchronized = new SynchronizedObserver<int>(
             new DelegateObserver<int>(onError: ex => receivedError = ex)
         );
