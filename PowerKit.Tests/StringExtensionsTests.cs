@@ -86,6 +86,29 @@ public class StringExtensionsTests
     }
 
     [Fact]
+    public void ToSecureString_Test()
+    {
+        // Act & assert
+        using (var s1 = "hello".ToSecureString())
+        {
+            s1.Length.Should().Be(5);
+            s1.IsReadOnly().Should().BeTrue();
+        }
+
+        using (var s2 = "".ToSecureString())
+        {
+            s2.Length.Should().Be(0);
+            s2.IsReadOnly().Should().BeTrue();
+        }
+
+        using (var s3 = "abc".ToSecureString())
+        {
+            s3.Length.Should().Be(3);
+            s3.IsReadOnly().Should().BeTrue();
+        }
+    }
+
+    [Fact]
     public void Reverse_Test()
     {
         // Act & assert
