@@ -106,7 +106,7 @@ internal static class AsyncEnumerableExtensions
         public ValueTaskAwaiter<List<T>> GetAwaiter() => source.ToListAsync().GetAwaiter();
     }
 
-    extension(IAsyncEnumerable<object> source)
+    extension(IAsyncEnumerable<object?> source)
     {
         /// <summary>
         /// Filters elements of the async sequence to only those of the specified type.
