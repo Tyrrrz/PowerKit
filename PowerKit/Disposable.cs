@@ -36,7 +36,7 @@ internal partial class Disposable
     public static IDisposable Merge(params IEnumerable<IDisposable> disposables) =>
         Create(() =>
         {
-            List<Exception>? exceptions = null;
+            var exceptions = default(List<Exception>);
 
             foreach (var disposable in disposables)
             {
