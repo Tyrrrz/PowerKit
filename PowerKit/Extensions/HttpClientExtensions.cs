@@ -33,7 +33,14 @@ internal static class HttpClientExtensions
             response.EnsureSuccessStatusCode();
 
             using var source = await response.Content.ReadAsStreamAsync(cancellationToken);
-            using var destination = File.Create(filePath);
+            using var destination = new FileStream(
+                filePath,
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.None,
+                81920,
+                FileOptions.Asynchronous
+            );
 
             await source.CopyToAsync(destination, cancellationToken);
         }
