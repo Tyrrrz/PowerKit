@@ -32,7 +32,7 @@ internal abstract class ClientDelegatingHandler(HttpClient http, bool disposeCli
             clonedRequest,
             HttpCompletionOption.ResponseHeadersRead,
             cancellationToken
-        );
+        ).ConfigureAwait(false);
     }
 
     protected override void Dispose(bool disposing)
