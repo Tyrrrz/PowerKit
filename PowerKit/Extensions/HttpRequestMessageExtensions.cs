@@ -13,12 +13,12 @@ file class NonDisposableHttpContent(HttpContent content) : HttpContent
     protected override async Task SerializeToStreamAsync(
         Stream stream,
         TransportContext? context
-    ) => await content.CopyToAsync(stream);
+    ) => await content.CopyToAsync(stream).ConfigureAwait(false);
 
     protected override bool TryComputeLength(out long length)
     {
-        length = 0;
-        return false;
+        length = content.Headers.ContentLength ?? 0;
+        return content.Headers.ContentLength.HasValue;
     }
 }
 
@@ -48,7 +48,10 @@ internal static class HttpRequestMessageExtensions
 
 #if NET5_0_OR_GREATER
             foreach (var option in request.Options)
-                clonedRequest.Options.Set(new HttpRequestOptionsKey<object?>(option.Key), option.Value);
+                clonedRequest.Options.Set(
+                    new HttpRequestOptionsKey<object?>(option.Key),
+                    option.Value
+                );
 #else
             foreach (var property in request.Properties)
                 clonedRequest.Properties[property.Key] = property.Value;

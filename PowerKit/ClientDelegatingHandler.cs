@@ -29,10 +29,11 @@ internal abstract class ClientDelegatingHandler(HttpClient http, bool disposeCli
         using var clonedRequest = request.Clone();
 
         return await http.SendAsync(
-            clonedRequest,
-            HttpCompletionOption.ResponseHeadersRead,
-            cancellationToken
-        );
+                clonedRequest,
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken
+            )
+            .ConfigureAwait(false);
     }
 
     protected override void Dispose(bool disposing)

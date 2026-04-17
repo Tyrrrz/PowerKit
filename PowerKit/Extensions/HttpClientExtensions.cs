@@ -25,17 +25,20 @@ internal static class HttpClientExtensions
         )
         {
             using var response = await http.GetAsync(
-                url,
-                HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken
-            );
+                    url,
+                    HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
 
-            using var source = await response.Content.ReadAsStreamAsync(cancellationToken);
-            using var destination = File.Create(filePath);
+            using var source = await response
+                .Content.ReadAsStreamAsync(cancellationToken)
+                .ConfigureAwait(false);
+            using var destination = File.Create(filePath, 81920, FileOptions.Asynchronous);
 
-            await source.CopyToAsync(destination, cancellationToken);
+            await source.CopyToAsync(destination, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -49,10 +52,11 @@ internal static class HttpClientExtensions
             using var request = new HttpRequestMessage(HttpMethod.Head, requestUri);
 
             return await http.SendAsync(
-                request,
-                HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken
-            );
+                    request,
+                    HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
         }
     }
 }

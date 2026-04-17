@@ -65,7 +65,7 @@ public class ClientDelegatingHandlerTests
     }
 
     [Fact]
-    public void Dispose_DisposesInnerClientWhenRequested()
+    public async Task Dispose_DisposesInnerClientWhenRequested()
     {
         // Arrange
         var inner = new FakeInnerHandler();
@@ -77,11 +77,11 @@ public class ClientDelegatingHandlerTests
 
         // Assert — sending on the disposed client throws ObjectDisposedException
         var act = () => innerClient.GetAsync("https://example.com");
-        act.Should().ThrowAsync<ObjectDisposedException>();
+        await act.Should().ThrowAsync<ObjectDisposedException>();
     }
 
     [Fact]
-    public void Dispose_DoesNotDisposeInnerClientByDefault()
+    public async Task Dispose_DoesNotDisposeInnerClientByDefault()
     {
         // Arrange
         var inner = new FakeInnerHandler();
@@ -93,6 +93,6 @@ public class ClientDelegatingHandlerTests
 
         // Assert — inner client still usable
         var act = () => innerClient.GetAsync("https://example.com");
-        act.Should().NotThrowAsync();
+        await act.Should().NotThrowAsync();
     }
 }
