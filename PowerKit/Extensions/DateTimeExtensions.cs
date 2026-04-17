@@ -27,5 +27,22 @@ internal static class DateTimeExtensions
         /// </summary>
         public static DateTime? ParseOrNull(string? str) =>
             DateTime.ParseOrNull(str, CultureInfo.CurrentCulture, DateTimeStyles.None);
+
+        /// <summary>
+        /// Parses the string as a <see cref="DateTime" /> using the specified format provider and styles,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static DateTime ParseOrDefault(
+            string? str,
+            IFormatProvider? formatProvider,
+            DateTimeStyles styles,
+            DateTime defaultValue = default
+        ) => DateTime.ParseOrNull(str, formatProvider, styles) ?? defaultValue;
+
+        /// <summary>
+        /// Parses the string as a <see cref="DateTime" />, returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static DateTime ParseOrDefault(string? str, DateTime defaultValue = default) =>
+            DateTime.ParseOrNull(str) ?? defaultValue;
     }
 }

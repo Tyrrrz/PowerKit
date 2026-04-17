@@ -31,5 +31,22 @@ internal static class DoubleExtensions
                 NumberStyles.Float | NumberStyles.AllowThousands,
                 CultureInfo.CurrentCulture
             );
+
+        /// <summary>
+        /// Parses the string as a <see cref="double" /> using the specified styles and format provider,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static double ParseOrDefault(
+            string? str,
+            NumberStyles styles,
+            IFormatProvider? formatProvider,
+            double defaultValue = default
+        ) => double.ParseOrNull(str, styles, formatProvider) ?? defaultValue;
+
+        /// <summary>
+        /// Parses the string as a <see cref="double" />, returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static double ParseOrDefault(string? str, double defaultValue = default) =>
+            double.ParseOrNull(str) ?? defaultValue;
     }
 }

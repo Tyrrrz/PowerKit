@@ -27,5 +27,22 @@ internal static class LongExtensions
         /// </summary>
         public static long? ParseOrNull(string? str) =>
             long.ParseOrNull(str, NumberStyles.Integer, CultureInfo.CurrentCulture);
+
+        /// <summary>
+        /// Parses the string as a <see cref="long" /> using the specified styles and format provider,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static long ParseOrDefault(
+            string? str,
+            NumberStyles styles,
+            IFormatProvider? formatProvider,
+            long defaultValue = default
+        ) => long.ParseOrNull(str, styles, formatProvider) ?? defaultValue;
+
+        /// <summary>
+        /// Parses the string as a <see cref="long" />, returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static long ParseOrDefault(string? str, long defaultValue = default) =>
+            long.ParseOrNull(str) ?? defaultValue;
     }
 }
