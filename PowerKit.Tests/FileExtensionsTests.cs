@@ -214,4 +214,176 @@ public class FileExtensionsTests
         // Assert
         bytes.Should().Equal(2, 3, 4);
     }
+
+    [Fact]
+    public void ContainsBytes_EmptyPattern_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, []);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_EmptyPattern_EmptyFile_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, []);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_Found_AtStart_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [1, 2, 3]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_Found_AtMiddle_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [2, 3, 4]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_Found_AtEnd_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [3, 4, 5]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_Found_ExactMatch_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [1, 2, 3]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_NotFound_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [9, 8, 7]);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void ContainsBytes_NotFound_EmptyFile_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [1, 2, 3]);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void ContainsBytes_NotFound_PatternLongerThanFile_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [1, 2, 3]);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void ContainsBytes_Found_SpanningChunkBoundary_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+
+        // Write a file large enough to span the default 4096-byte buffer boundary
+        var data = new byte[4097];
+        data[4094] = 0xAA;
+        data[4095] = 0xBB;
+        data[4096] = 0xCC;
+        File.WriteAllBytes(tempFile.Path, data);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, [0xAA, 0xBB, 0xCC]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_SpanOverload_Found_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, new ReadOnlySpan<byte>([2, 3, 4]));
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ContainsBytes_SpanOverload_NotFound_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
+
+        // Act
+        var result = File.ContainsBytes(tempFile.Path, new ReadOnlySpan<byte>([9, 8, 7]));
+
+        // Assert
+        result.Should().BeFalse();
+    }
 }

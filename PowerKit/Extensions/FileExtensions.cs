@@ -108,6 +108,53 @@ internal static class FileExtensions
             return buffer;
         }
 
+        /// <summary>
+        /// Checks whether the file at the specified path contains the given byte sequence.
+        /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
+        /// </summary>
+        public static bool ContainsBytes(string path, ReadOnlySpan<byte> bytes)
+        {
+            if (bytes.IsEmpty)
+                return true;
+
+            using var stream = File.OpenRead(path);
+
+            var patternLength = bytes.Length;
+            var bufferSize = Math.Max(4096, patternLength * 2);
+            var buffer = new byte[bufferSize];
+            var bytesInBuffer = 0;
+
+            while (true)
+            {
+                var bytesRead = stream.Read(buffer, bytesInBuffer, buffer.Length - bytesInBuffer);
+                bytesInBuffer += bytesRead;
+
+                for (var i = 0; i <= bytesInBuffer - patternLength; i++)
+                {
+                    if (new ReadOnlySpan<byte>(buffer, i, patternLength).SequenceEqual(bytes))
+                        return true;
+                }
+
+                if (bytesRead == 0)
+                    break;
+
+                var overlap = Math.Min(patternLength - 1, bytesInBuffer);
+                if (overlap > 0)
+                    Array.Copy(buffer, bytesInBuffer - overlap, buffer, 0, overlap);
+
+                bytesInBuffer = overlap;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks whether the file at the specified path contains the given byte sequence.
+        /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
+        /// </summary>
+        public static bool ContainsBytes(string path, byte[] bytes) =>
+            File.ContainsBytes(path, new ReadOnlySpan<byte>(bytes));
+
 #if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Reads all bytes from the specified file starting at the given offset asynchronously.
