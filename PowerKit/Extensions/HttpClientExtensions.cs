@@ -1,5 +1,6 @@
 #if NET40_OR_GREATER || NETSTANDARD || NET
 #nullable enable
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
@@ -21,6 +22,7 @@ internal static class HttpClientExtensions
         public async Task DownloadAsync(
             string url,
             string filePath,
+            IProgress<double>? progress = null,
             CancellationToken cancellationToken = default
         )
         {
@@ -39,7 +41,10 @@ internal static class HttpClientExtensions
 
             using var destination = File.Create(filePath, 81920, FileOptions.Asynchronous);
 
-            await source.CopyToAsync(destination, cancellationToken).ConfigureAwait(false);
+            var contentLength = response.Content.Headers.ContentLength ?? -1;
+            await source
+                .CopyToAsync(destination, contentLength, progress, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <summary>

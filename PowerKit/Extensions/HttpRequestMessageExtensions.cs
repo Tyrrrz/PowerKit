@@ -40,21 +40,22 @@ internal static class HttpRequestMessageExtensions
 #if NET5_0_OR_GREATER
                 VersionPolicy = request.VersionPolicy,
 #endif
-                // Don't dispose the original request's content
-                Content = request.Content is not null
-                    ? new NonDisposableHttpContent(request.Content)
-                    : null,
+                Content = request.Content?.Pipe(c => (HttpContent)new NonDisposableHttpContent(c)),
             };
 
 #if NET5_0_OR_GREATER
             foreach (var option in request.Options)
+            {
                 clonedRequest.Options.Set(
                     new HttpRequestOptionsKey<object?>(option.Key),
                     option.Value
                 );
+            }
 #else
             foreach (var property in request.Properties)
+            {
                 clonedRequest.Properties[property.Key] = property.Value;
+            }
 #endif
             foreach (var (key, value) in request.Headers)
                 clonedRequest.Headers.TryAddWithoutValidation(key, value);
