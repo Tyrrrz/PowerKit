@@ -11,7 +11,7 @@ namespace PowerKit;
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-internal class Observable<T>(Func<IObserver<T>, IDisposable> subscribe) : IObservable<T>
+file class Observable<T>(Func<IObserver<T>, IDisposable> subscribe) : IObservable<T>
 {
     /// <inheritdoc />
     public IDisposable Subscribe(IObserver<T> observer) => subscribe(observer);
