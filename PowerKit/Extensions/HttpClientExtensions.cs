@@ -59,7 +59,7 @@ internal static class HttpClientExtensions
                 request,
                 HttpCompletionOption.ResponseHeadersRead,
                 cancellationToken
-            );
+            ).ConfigureAwait(false);
         }
     }
 }
