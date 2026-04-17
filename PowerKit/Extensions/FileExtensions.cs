@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
@@ -74,17 +75,18 @@ internal static class FileExtensions
 
             var patternLength = bytes.Length;
             var bufferSize = Math.Max(4096, patternLength * 2);
-            var buffer = new byte[bufferSize];
+            using var bufferOwner = ArrayPool<byte>.Shared.RentOwner(bufferSize);
+            var buffer = bufferOwner.Memory.Span;
             var bytesInBuffer = 0;
 
             while (true)
             {
-                var bytesRead = stream.Read(buffer, bytesInBuffer, buffer.Length - bytesInBuffer);
+                var bytesRead = stream.Read(buffer.Slice(bytesInBuffer));
                 bytesInBuffer += bytesRead;
 
                 for (var i = 0; i <= bytesInBuffer - patternLength; i++)
                 {
-                    if (new ReadOnlySpan<byte>(buffer, i, patternLength).SequenceEqual(bytes))
+                    if (buffer.Slice(i, patternLength).SequenceEqual(bytes))
                         return true;
                 }
 
@@ -93,7 +95,7 @@ internal static class FileExtensions
 
                 var overlap = Math.Min(patternLength - 1, bytesInBuffer);
                 if (overlap > 0)
-                    Array.Copy(buffer, bytesInBuffer - overlap, buffer, 0, overlap);
+                    buffer.Slice(bytesInBuffer - overlap, overlap).CopyTo(buffer);
 
                 bytesInBuffer = overlap;
             }
