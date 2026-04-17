@@ -11,6 +11,44 @@ namespace PowerKit.Tests;
 public class DirectoryExtensionsTests
 {
     [Fact]
+    public void CheckWriteAccess_Test()
+    {
+        // Arrange
+        using var tempDir = TempDirectory.Create();
+
+        // Act
+        var result = Directory.CheckWriteAccess(tempDir.Path);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [SkippableFact]
+    public void CheckWriteAccess_ReadOnly_Test()
+    {
+        // FileAttributes.ReadOnly removes write bits on Unix but has no effect on directories on Windows
+        Skip.If(OperatingSystem.IsWindows() || Environment.IsPrivilegedProcess);
+
+        // Arrange
+        using var tempDir = TempDirectory.Create();
+        var dirInfo = new DirectoryInfo(tempDir.Path);
+        dirInfo.Attributes |= FileAttributes.ReadOnly;
+
+        try
+        {
+            // Act
+            var result = Directory.CheckWriteAccess(tempDir.Path);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+        finally
+        {
+            dirInfo.Attributes &= ~FileAttributes.ReadOnly;
+        }
+    }
+
+    [Fact]
     public void Copy_Test()
     {
         // Arrange
@@ -126,44 +164,6 @@ public class DirectoryExtensionsTests
         File.GetUnixFileMode(Path.Combine(destinationDirectory.Path, "file.sh"))
             .Should()
             .Be(File.GetUnixFileMode(sourceFilePath));
-    }
-
-    [Fact]
-    public void CheckWriteAccess_Test()
-    {
-        // Arrange
-        using var tempDir = TempDirectory.Create();
-
-        // Act
-        var result = Directory.CheckWriteAccess(tempDir.Path);
-
-        // Assert
-        result.Should().BeTrue();
-    }
-
-    [SkippableFact]
-    public void CheckWriteAccess_ReadOnly_Test()
-    {
-        // FileAttributes.ReadOnly removes write bits on Unix but has no effect on directories on Windows
-        Skip.If(OperatingSystem.IsWindows() || Environment.IsPrivilegedProcess);
-
-        // Arrange
-        using var tempDir = TempDirectory.Create();
-        var dirInfo = new DirectoryInfo(tempDir.Path);
-        dirInfo.Attributes |= FileAttributes.ReadOnly;
-
-        try
-        {
-            // Act
-            var result = Directory.CheckWriteAccess(tempDir.Path);
-
-            // Assert
-            result.Should().BeFalse();
-        }
-        finally
-        {
-            dirInfo.Attributes &= ~FileAttributes.ReadOnly;
-        }
     }
 
     [Fact]

@@ -11,6 +11,30 @@ namespace PowerKit.Tests;
 public class FileExtensionsTests
 {
     [Fact]
+    public void TryDelete_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+
+        // Act
+        var result = File.TryDelete(tempFile.Path);
+
+        // Assert
+        result.Should().BeTrue();
+        File.Exists(tempFile.Path).Should().BeFalse();
+    }
+
+    [Fact]
+    public void TryDelete_NonExisting_Test()
+    {
+        // Act
+        var result = File.TryDelete(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
     public void CheckWriteAccess_Test()
     {
         // Arrange
@@ -94,45 +118,6 @@ public class FileExtensionsTests
 
         // Assert
         result.Should().BeFalse();
-    }
-
-    [Fact]
-    public void TryDelete_Test()
-    {
-        // Arrange
-        using var tempFile = TempFile.Create();
-
-        // Act
-        var result = File.TryDelete(tempFile.Path);
-
-        // Assert
-        result.Should().BeTrue();
-        File.Exists(tempFile.Path).Should().BeFalse();
-    }
-
-    [Fact]
-    public void TryDelete_NonExisting_Test()
-    {
-        // Act
-        var result = File.TryDelete(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
-
-        // Assert
-        result.Should().BeTrue();
-    }
-
-    [Fact]
-    public async Task WriteAllZeroes_Test()
-    {
-        // Arrange
-        using var tempFile = TempFile.Create();
-
-        // Act
-        File.WriteAllZeroes(tempFile.Path, 1024);
-
-        // Assert
-        var bytes = await File.ReadAllBytesAsync(tempFile.Path);
-        bytes.Should().HaveCount(1024);
-        bytes.Should().AllSatisfy(b => b.Should().Be(0));
     }
 
     [Fact]
@@ -241,5 +226,20 @@ public class FileExtensionsTests
 
         // Assert
         bytes.Should().Equal(2, 3, 4);
+    }
+
+    [Fact]
+    public async Task WriteAllZeroes_Test()
+    {
+        // Arrange
+        using var tempFile = TempFile.Create();
+
+        // Act
+        File.WriteAllZeroes(tempFile.Path, 1024);
+
+        // Assert
+        var bytes = await File.ReadAllBytesAsync(tempFile.Path);
+        bytes.Should().HaveCount(1024);
+        bytes.Should().AllSatisfy(b => b.Should().Be(0));
     }
 }

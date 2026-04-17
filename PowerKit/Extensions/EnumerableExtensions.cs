@@ -92,6 +92,19 @@ internal static class EnumerableExtensions
         where T : struct
     {
         /// <summary>
+        /// Returns the element at the specified index, or <see langword="null" /> if the index is out of range.
+        /// </summary>
+        public T? ElementAtOrNull(int index)
+        {
+#if NET40_OR_GREATER || NETSTANDARD || NET
+            var list = source as IReadOnlyList<T> ?? source.ToArray();
+#else
+            var list = source as IList<T> ?? source.ToArray();
+#endif
+            return index >= 0 && index < list.Count ? list[index] : null;
+        }
+
+        /// <summary>
         /// Returns the first element of the sequence, or <see langword="null" /> if the sequence is empty.
         /// </summary>
         public T? FirstOrNull()
@@ -124,19 +137,6 @@ internal static class EnumerableExtensions
             }
 
             return last;
-        }
-
-        /// <summary>
-        /// Returns the element at the specified index, or <see langword="null" /> if the index is out of range.
-        /// </summary>
-        public T? ElementAtOrNull(int index)
-        {
-#if NET40_OR_GREATER || NETSTANDARD || NET
-            var list = source as IReadOnlyList<T> ?? source.ToArray();
-#else
-            var list = source as IList<T> ?? source.ToArray();
-#endif
-            return index >= 0 && index < list.Count ? list[index] : null;
         }
     }
 }

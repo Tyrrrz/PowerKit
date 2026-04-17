@@ -34,6 +34,20 @@ public class CollectionExtensionsTests
     }
 
     [Fact]
+    public void RemoveAll_Test()
+    {
+        // Arrange
+        var collection = (ICollection<int>)new List<int> { 1, 2, 3, 4, 5 };
+
+        // Act
+        var removed = collection.RemoveAll(x => x % 2 == 0);
+
+        // Assert
+        removed.Should().Be(2);
+        collection.Should().Equal(1, 3, 5);
+    }
+
+    [Fact]
     public void RemoveRange_Test()
     {
         // Arrange
@@ -57,19 +71,5 @@ public class CollectionExtensionsTests
 
         // Assert
         collection.Should().BeEmpty();
-    }
-
-    [Fact]
-    public void RemoveAll_Test()
-    {
-        // Arrange
-        var collection = (ICollection<int>)new List<int> { 1, 2, 3, 4, 5 };
-
-        // Act
-        var removed = collection.RemoveAll(x => x % 2 == 0);
-
-        // Assert
-        removed.Should().Be(2);
-        collection.Should().Equal(1, 3, 5);
     }
 }

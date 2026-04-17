@@ -12,17 +12,6 @@ internal static class ConsoleExtensions
     extension(Console)
     {
         /// <summary>
-        /// Temporarily changes the console foreground color and returns a handle that restores the original color when disposed.
-        /// </summary>
-        public static IDisposable WithForegroundColor(ConsoleColor color)
-        {
-            var lastColor = Console.ForegroundColor;
-            Console.ForegroundColor = color;
-
-            return Disposable.Create(() => Console.ForegroundColor = lastColor);
-        }
-
-        /// <summary>
         /// Temporarily changes the console background color and returns a handle that restores the original color when disposed.
         /// </summary>
         public static IDisposable WithBackgroundColor(ConsoleColor color)
@@ -31,6 +20,17 @@ internal static class ConsoleExtensions
             Console.BackgroundColor = color;
 
             return Disposable.Create(() => Console.BackgroundColor = lastColor);
+        }
+
+        /// <summary>
+        /// Temporarily changes the console foreground color and returns a handle that restores the original color when disposed.
+        /// </summary>
+        public static IDisposable WithForegroundColor(ConsoleColor color)
+        {
+            var lastColor = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+
+            return Disposable.Create(() => Console.ForegroundColor = lastColor);
         }
 
         /// <summary>

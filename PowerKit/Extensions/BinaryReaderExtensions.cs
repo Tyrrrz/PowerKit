@@ -22,6 +22,27 @@ internal static class BinaryReaderExtensions
                 : reader.PeekChar() == -1;
 
         /// <summary>
+        /// Reads a null-terminated string from the binary reader.
+        /// </summary>
+        public string ReadNullTerminatedString()
+        {
+            var buffer = new StringBuilder();
+
+            while (true)
+            {
+                var ch = reader.ReadChar();
+                if (ch == '\0')
+                {
+                    break;
+                }
+
+                buffer.Append(ch);
+            }
+
+            return buffer.ToString();
+        }
+
+        /// <summary>
         /// Skips bytes until the current position is aligned to the specified byte boundary.
         /// </summary>
         public void SkipPadding(int boundaryBytes = 4)
@@ -51,27 +72,6 @@ internal static class BinaryReaderExtensions
                 reader.ReadByte();
                 skipped++;
             }
-        }
-
-        /// <summary>
-        /// Reads a null-terminated string from the binary reader.
-        /// </summary>
-        public string ReadNullTerminatedString()
-        {
-            var buffer = new StringBuilder();
-
-            while (true)
-            {
-                var ch = reader.ReadChar();
-                if (ch == '\0')
-                {
-                    break;
-                }
-
-                buffer.Append(ch);
-            }
-
-            return buffer.ToString();
         }
     }
 }

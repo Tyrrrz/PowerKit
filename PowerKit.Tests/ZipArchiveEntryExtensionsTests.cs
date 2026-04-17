@@ -32,55 +32,21 @@ public class ZipArchiveEntryExtensionsTests
     }
 
     [Fact]
-    public void WriteAllBytes_Test()
+    public async Task ReadAllBytesAsync_Test()
     {
         // Arrange
         using var archive = CreateArchive();
         var entry = archive.CreateEntry("file.bin");
-
-        // Act
-        entry.WriteAllBytes([10, 20, 30]);
-
-        // Assert
-        using var stream = entry.Open();
-        using var buffer = new MemoryStream();
-        stream.CopyTo(buffer);
-        buffer.ToArray().Should().Equal(10, 20, 30);
-    }
-
-    [Fact]
-    public void ReadAllText_Test()
-    {
-        // Arrange
-        using var archive = CreateArchive();
-        var entry = archive.CreateEntry("file.txt");
         using (var stream = entry.Open())
-        using (var writer = new StreamWriter(stream, Encoding.UTF8))
         {
-            writer.Write("hello world");
+            stream.Write([1, 2, 3, 4, 5], 0, 5);
         }
 
         // Act
-        var text = entry.ReadAllText();
+        var bytes = await entry.ReadAllBytesAsync();
 
         // Assert
-        text.Should().Be("hello world");
-    }
-
-    [Fact]
-    public void WriteAllText_Test()
-    {
-        // Arrange
-        using var archive = CreateArchive();
-        var entry = archive.CreateEntry("file.txt");
-
-        // Act
-        entry.WriteAllText("hello world");
-
-        // Assert
-        using var stream = entry.Open();
-        using var reader = new StreamReader(stream, Encoding.UTF8);
-        reader.ReadToEnd().Should().Be("hello world");
+        bytes.Should().Equal(1, 2, 3, 4, 5);
     }
 
     [Fact]
@@ -105,56 +71,43 @@ public class ZipArchiveEntryExtensionsTests
     }
 
     [Fact]
-    public void WriteAllLines_Test()
+    public async Task ReadAllLinesAsync_Test()
     {
         // Arrange
         using var archive = CreateArchive();
         var entry = archive.CreateEntry("file.txt");
-
-        // Act
-        entry.WriteAllLines(["line1", "line2", "line3"]);
-
-        // Assert
-        using var stream = entry.Open();
-        using var reader = new StreamReader(stream, Encoding.UTF8);
-        reader.ReadLine().Should().Be("line1");
-        reader.ReadLine().Should().Be("line2");
-        reader.ReadLine().Should().Be("line3");
-    }
-
-    [Fact]
-    public async Task ReadAllBytesAsync_Test()
-    {
-        // Arrange
-        using var archive = CreateArchive();
-        var entry = archive.CreateEntry("file.bin");
         using (var stream = entry.Open())
+        using (var writer = new StreamWriter(stream, Encoding.UTF8))
         {
-            stream.Write([1, 2, 3, 4, 5], 0, 5);
+            writer.WriteLine("line1");
+            writer.WriteLine("line2");
+            writer.Write("line3");
         }
 
         // Act
-        var bytes = await entry.ReadAllBytesAsync();
+        var lines = await entry.ReadAllLinesAsync();
 
         // Assert
-        bytes.Should().Equal(1, 2, 3, 4, 5);
+        lines.Should().Equal("line1", "line2", "line3");
     }
 
     [Fact]
-    public async Task WriteAllBytesAsync_Test()
+    public void ReadAllText_Test()
     {
         // Arrange
         using var archive = CreateArchive();
-        var entry = archive.CreateEntry("file.bin");
+        var entry = archive.CreateEntry("file.txt");
+        using (var stream = entry.Open())
+        using (var writer = new StreamWriter(stream, Encoding.UTF8))
+        {
+            writer.Write("hello world");
+        }
 
         // Act
-        await entry.WriteAllBytesAsync([10, 20, 30]);
+        var text = entry.ReadAllText();
 
         // Assert
-        using var stream = entry.Open();
-        using var buffer = new MemoryStream();
-        stream.CopyTo(buffer);
-        buffer.ToArray().Should().Equal(10, 20, 30);
+        text.Should().Be("hello world");
     }
 
     [Fact]
@@ -177,40 +130,55 @@ public class ZipArchiveEntryExtensionsTests
     }
 
     [Fact]
-    public async Task WriteAllTextAsync_Test()
+    public void WriteAllBytes_Test()
+    {
+        // Arrange
+        using var archive = CreateArchive();
+        var entry = archive.CreateEntry("file.bin");
+
+        // Act
+        entry.WriteAllBytes([10, 20, 30]);
+
+        // Assert
+        using var stream = entry.Open();
+        using var buffer = new MemoryStream();
+        stream.CopyTo(buffer);
+        buffer.ToArray().Should().Equal(10, 20, 30);
+    }
+
+    [Fact]
+    public async Task WriteAllBytesAsync_Test()
+    {
+        // Arrange
+        using var archive = CreateArchive();
+        var entry = archive.CreateEntry("file.bin");
+
+        // Act
+        await entry.WriteAllBytesAsync([10, 20, 30]);
+
+        // Assert
+        using var stream = entry.Open();
+        using var buffer = new MemoryStream();
+        stream.CopyTo(buffer);
+        buffer.ToArray().Should().Equal(10, 20, 30);
+    }
+
+    [Fact]
+    public void WriteAllLines_Test()
     {
         // Arrange
         using var archive = CreateArchive();
         var entry = archive.CreateEntry("file.txt");
 
         // Act
-        await entry.WriteAllTextAsync("hello world");
+        entry.WriteAllLines(["line1", "line2", "line3"]);
 
         // Assert
         using var stream = entry.Open();
         using var reader = new StreamReader(stream, Encoding.UTF8);
-        reader.ReadToEnd().Should().Be("hello world");
-    }
-
-    [Fact]
-    public async Task ReadAllLinesAsync_Test()
-    {
-        // Arrange
-        using var archive = CreateArchive();
-        var entry = archive.CreateEntry("file.txt");
-        using (var stream = entry.Open())
-        using (var writer = new StreamWriter(stream, Encoding.UTF8))
-        {
-            writer.WriteLine("line1");
-            writer.WriteLine("line2");
-            writer.Write("line3");
-        }
-
-        // Act
-        var lines = await entry.ReadAllLinesAsync();
-
-        // Assert
-        lines.Should().Equal("line1", "line2", "line3");
+        reader.ReadLine().Should().Be("line1");
+        reader.ReadLine().Should().Be("line2");
+        reader.ReadLine().Should().Be("line3");
     }
 
     [Fact]
@@ -229,5 +197,37 @@ public class ZipArchiveEntryExtensionsTests
         reader.ReadLine().Should().Be("line1");
         reader.ReadLine().Should().Be("line2");
         reader.ReadLine().Should().Be("line3");
+    }
+
+    [Fact]
+    public void WriteAllText_Test()
+    {
+        // Arrange
+        using var archive = CreateArchive();
+        var entry = archive.CreateEntry("file.txt");
+
+        // Act
+        entry.WriteAllText("hello world");
+
+        // Assert
+        using var stream = entry.Open();
+        using var reader = new StreamReader(stream, Encoding.UTF8);
+        reader.ReadToEnd().Should().Be("hello world");
+    }
+
+    [Fact]
+    public async Task WriteAllTextAsync_Test()
+    {
+        // Arrange
+        using var archive = CreateArchive();
+        var entry = archive.CreateEntry("file.txt");
+
+        // Act
+        await entry.WriteAllTextAsync("hello world");
+
+        // Assert
+        using var stream = entry.Open();
+        using var reader = new StreamReader(stream, Encoding.UTF8);
+        reader.ReadToEnd().Should().Be("hello world");
     }
 }

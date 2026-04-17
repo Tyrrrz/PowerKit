@@ -17,36 +17,6 @@ public class AssemblyExtensionsTests
     private const string ResourceName = "PowerKit.Tests.TestData.TestResource.txt";
 
     [Fact]
-    public void TryGetVersionString_Test()
-    {
-        // Act
-        var version = ThisAssembly.TryGetVersionString();
-
-        // Assert
-        version.Should().NotBeNullOrWhiteSpace();
-    }
-
-    [Fact]
-    public void GetManifestResourceString_Test()
-    {
-        // Act
-        var content = ThisAssembly.GetManifestResourceString(ResourceName);
-
-        // Assert
-        content.Should().Be("hello");
-    }
-
-    [Fact]
-    public async Task GetManifestResourceStringAsync_Test()
-    {
-        // Act
-        var content = await ThisAssembly.GetManifestResourceStringAsync(ResourceName);
-
-        // Assert
-        content.Should().Be("hello");
-    }
-
-    [Fact]
     public void ExtractManifestResource_Test()
     {
         // Arrange
@@ -72,5 +42,35 @@ public class AssemblyExtensionsTests
         (await File.ReadAllTextAsync(tempFile.Path))
             .Should()
             .Be("hello");
+    }
+
+    [Fact]
+    public void GetManifestResourceString_Test()
+    {
+        // Act
+        var content = ThisAssembly.GetManifestResourceString(ResourceName);
+
+        // Assert
+        content.Should().Be("hello");
+    }
+
+    [Fact]
+    public async Task GetManifestResourceStringAsync_Test()
+    {
+        // Act
+        var content = await ThisAssembly.GetManifestResourceStringAsync(ResourceName);
+
+        // Assert
+        content.Should().Be("hello");
+    }
+
+    [Fact]
+    public void TryGetVersionString_Test()
+    {
+        // Act
+        var version = ThisAssembly.TryGetVersionString();
+
+        // Assert
+        version.Should().NotBeNullOrWhiteSpace();
     }
 }

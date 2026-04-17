@@ -58,6 +58,20 @@ public class EnumerableExtensionsTests
     }
 
     [Fact]
+    public void ElementAtOrNull_Test()
+    {
+        // Act & assert
+        new[] { 10, 20, 30 }
+            .ElementAtOrNull(1)
+            .Should()
+            .Be(20);
+        new[] { 10, 20, 30 }.ElementAtOrNull(0).Should().Be(10);
+        new[] { 10, 20, 30 }.ElementAtOrNull(10).Should().BeNull();
+        new[] { 10, 20, 30 }.ElementAtOrNull(-1).Should().BeNull();
+        Array.Empty<int>().ElementAtOrNull(0).Should().BeNull();
+    }
+
+    [Fact]
     public void FirstOrNull_Test()
     {
         // Act & assert
@@ -79,19 +93,5 @@ public class EnumerableExtensionsTests
             .Be(15);
         new[] { 42 }.LastOrNull().Should().Be(42);
         Array.Empty<int>().LastOrNull().Should().BeNull();
-    }
-
-    [Fact]
-    public void ElementAtOrNull_Test()
-    {
-        // Act & assert
-        new[] { 10, 20, 30 }
-            .ElementAtOrNull(1)
-            .Should()
-            .Be(20);
-        new[] { 10, 20, 30 }.ElementAtOrNull(0).Should().Be(10);
-        new[] { 10, 20, 30 }.ElementAtOrNull(10).Should().BeNull();
-        new[] { 10, 20, 30 }.ElementAtOrNull(-1).Should().BeNull();
-        Array.Empty<int>().ElementAtOrNull(0).Should().BeNull();
     }
 }

@@ -23,15 +23,6 @@ internal static class CollectionExtensions
         }
 
         /// <summary>
-        /// Removes all elements in the specified sequence from the collection.
-        /// </summary>
-        public void RemoveRange(IEnumerable<T> items)
-        {
-            foreach (var item in items.ToArray())
-                source.Remove(item);
-        }
-
-        /// <summary>
         /// Removes all elements from the collection that match the specified predicate.
         /// </summary>
         public int RemoveAll(Func<T, bool> predicate)
@@ -47,6 +38,15 @@ internal static class CollectionExtensions
             }
 
             return removedCount;
+        }
+
+        /// <summary>
+        /// Removes all elements in the specified sequence from the collection.
+        /// </summary>
+        public void RemoveRange(IEnumerable<T> items)
+        {
+            foreach (var item in items.ToArray())
+                source.Remove(item);
         }
     }
 }

@@ -32,34 +32,16 @@ internal static class ZipArchiveEntryExtensions
         }
 
         /// <summary>
-        /// Writes all bytes to the zip archive entry.
+        /// Reads all bytes from the zip archive entry asynchronously.
         /// </summary>
-        public void WriteAllBytes(byte[] bytes)
+        public async Task<byte[]> ReadAllBytesAsync(CancellationToken cancellationToken = default)
         {
             using var stream = entry.Open();
-            stream.Write(bytes, 0, bytes.Length);
-        }
+            using var buffer = new MemoryStream();
 
-        /// <summary>
-        /// Reads all text from the zip archive entry using the specified encoding.
-        /// </summary>
-        public string ReadAllText(Encoding? encoding = null)
-        {
-            using var stream = entry.Open();
-            using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
+            await stream.CopyToAsync(buffer, cancellationToken).ConfigureAwait(false);
 
-            return reader.ReadToEnd();
-        }
-
-        /// <summary>
-        /// Writes all text to the zip archive entry using the specified encoding.
-        /// </summary>
-        public void WriteAllText(string text, Encoding? encoding = null)
-        {
-            using var stream = entry.Open();
-            using var writer = new StreamWriter(stream, encoding ?? Encoding.Utf8WithoutBom);
-
-            writer.Write(text);
+            return buffer.ToArray();
         }
 
         /// <summary>
@@ -77,77 +59,6 @@ internal static class ZipArchiveEntryExtensions
             }
 
             return lines.ToArray();
-        }
-
-        /// <summary>
-        /// Writes all lines to the zip archive entry using the specified encoding.
-        /// </summary>
-        public void WriteAllLines(IEnumerable<string> lines, Encoding? encoding = null)
-        {
-            using var stream = entry.Open();
-            using var writer = new StreamWriter(stream, encoding ?? Encoding.Utf8WithoutBom);
-
-            foreach (var line in lines)
-            {
-                writer.WriteLine(line);
-            }
-        }
-
-        /// <summary>
-        /// Reads all bytes from the zip archive entry asynchronously.
-        /// </summary>
-        public async Task<byte[]> ReadAllBytesAsync(CancellationToken cancellationToken = default)
-        {
-            using var stream = entry.Open();
-            using var buffer = new MemoryStream();
-
-            await stream.CopyToAsync(buffer, cancellationToken).ConfigureAwait(false);
-
-            return buffer.ToArray();
-        }
-
-        /// <summary>
-        /// Writes all bytes to the zip archive entry asynchronously.
-        /// </summary>
-        public async Task WriteAllBytesAsync(
-            byte[] bytes,
-            CancellationToken cancellationToken = default
-        )
-        {
-            using var stream = entry.Open();
-            await stream
-                .WriteAsync(bytes, 0, bytes.Length, cancellationToken)
-                .ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Reads all text from the zip archive entry using the specified encoding asynchronously.
-        /// </summary>
-        public async Task<string> ReadAllTextAsync(
-            Encoding? encoding = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            using var stream = entry.Open();
-            using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
-
-            return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Writes all text to the zip archive entry using the specified encoding asynchronously.
-        /// </summary>
-        public async Task WriteAllTextAsync(
-            string text,
-            Encoding? encoding = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            using var stream = entry.Open();
-            using var writer = new StreamWriter(stream, encoding ?? Encoding.Utf8WithoutBom);
-
-            await writer.WriteAsync(text.AsMemory(), cancellationToken).ConfigureAwait(false);
-            await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -171,6 +82,68 @@ internal static class ZipArchiveEntryExtensions
         }
 
         /// <summary>
+        /// Reads all text from the zip archive entry using the specified encoding.
+        /// </summary>
+        public string ReadAllText(Encoding? encoding = null)
+        {
+            using var stream = entry.Open();
+            using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
+
+            return reader.ReadToEnd();
+        }
+
+        /// <summary>
+        /// Reads all text from the zip archive entry using the specified encoding asynchronously.
+        /// </summary>
+        public async Task<string> ReadAllTextAsync(
+            Encoding? encoding = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var stream = entry.Open();
+            using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
+
+            return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Writes all bytes to the zip archive entry.
+        /// </summary>
+        public void WriteAllBytes(byte[] bytes)
+        {
+            using var stream = entry.Open();
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        /// <summary>
+        /// Writes all bytes to the zip archive entry asynchronously.
+        /// </summary>
+        public async Task WriteAllBytesAsync(
+            byte[] bytes,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var stream = entry.Open();
+            await stream
+                .WriteAsync(bytes, 0, bytes.Length, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Writes all lines to the zip archive entry using the specified encoding.
+        /// </summary>
+        public void WriteAllLines(IEnumerable<string> lines, Encoding? encoding = null)
+        {
+            using var stream = entry.Open();
+            using var writer = new StreamWriter(stream, encoding ?? Encoding.Utf8WithoutBom);
+
+            foreach (var line in lines)
+            {
+                writer.WriteLine(line);
+            }
+        }
+
+        /// <summary>
         /// Writes all lines to the zip archive entry using the specified encoding asynchronously.
         /// </summary>
         public async Task WriteAllLinesAsync(
@@ -189,6 +162,33 @@ internal static class ZipArchiveEntryExtensions
                     .ConfigureAwait(false);
             }
 
+            await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Writes all text to the zip archive entry using the specified encoding.
+        /// </summary>
+        public void WriteAllText(string text, Encoding? encoding = null)
+        {
+            using var stream = entry.Open();
+            using var writer = new StreamWriter(stream, encoding ?? Encoding.Utf8WithoutBom);
+
+            writer.Write(text);
+        }
+
+        /// <summary>
+        /// Writes all text to the zip archive entry using the specified encoding asynchronously.
+        /// </summary>
+        public async Task WriteAllTextAsync(
+            string text,
+            Encoding? encoding = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var stream = entry.Open();
+            using var writer = new StreamWriter(stream, encoding ?? Encoding.Utf8WithoutBom);
+
+            await writer.WriteAsync(text.AsMemory(), cancellationToken).ConfigureAwait(false);
             await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
     }
