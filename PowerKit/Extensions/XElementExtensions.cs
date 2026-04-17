@@ -13,8 +13,9 @@ internal static class XElementExtensions
     extension(XElement element)
     {
         /// <summary>
-        /// Returns a copy of the element with all namespace declarations and namespace prefixes
-        /// removed from the element and its descendants.
+        /// Returns a copy of the element with element namespaces, namespace declarations, and
+        /// non-reserved attribute namespace prefixes removed from the element and its descendants.
+        /// Attributes in the reserved <c>xml</c> namespace are preserved.
         /// </summary>
         public XElement StripNamespaces()
         {
