@@ -75,7 +75,7 @@ internal static class FileExtensions
 
             var patternLength = bytes.Length;
             using var bufferOwner = ArrayPool<byte>.Shared.RentOwner(patternLength * 2);
-            var buffer = new Span<byte>(bufferOwner.Array, 0, bufferOwner.Length);
+            var buffer = bufferOwner.Span;
             var bytesInBuffer = 0;
 
             while (true)

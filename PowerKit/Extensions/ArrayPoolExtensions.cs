@@ -6,30 +6,27 @@ using System.Threading;
 
 namespace PowerKit.Extensions;
 
-internal interface IArrayOwner<T> : IDisposable
+internal interface ISpanOwner<T> : IDisposable
 {
-    T[] Array { get; }
-    int Length { get; }
+    Span<T> Span { get; }
 }
 
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-file sealed class ArrayPoolArrayOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength)
-    : IArrayOwner<T>
+file sealed class ArrayPoolSpanOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength)
+    : ISpanOwner<T>
 {
     private int _disposed;
 
-    public T[] Array
+    public Span<T> Span
     {
         get
         {
             ObjectDisposedException.ThrowIf(_disposed != 0, this);
-            return buffer;
+            return new Span<T>(buffer, 0, minimumLength);
         }
     }
-
-    public int Length => minimumLength;
 
     public void Dispose()
     {
@@ -51,10 +48,10 @@ internal static class ArrayPoolExtensions
     {
         /// <summary>
         /// Rents a buffer of at least <paramref name="minimumLength" /> elements from the pool
-        /// and wraps it in an <see cref="IArrayOwner{T}" /> that returns the buffer to the pool
+        /// and wraps it in an <see cref="ISpanOwner{T}" /> that returns the buffer to the pool
         /// when disposed.
         /// </summary>
-        public IArrayOwner<T> RentOwner(int minimumLength = 1) =>
-            new ArrayPoolArrayOwner<T>(pool, pool.Rent(minimumLength), minimumLength);
+        public ISpanOwner<T> RentOwner(int minimumLength = 1) =>
+            new ArrayPoolSpanOwner<T>(pool, pool.Rent(minimumLength), minimumLength);
     }
 }
