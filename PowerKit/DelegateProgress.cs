@@ -1,4 +1,3 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
 #nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -17,4 +16,3 @@ internal sealed class DelegateProgress<T>(Action<T> report) : IProgress<T>
     /// <inheritdoc />
     public void Report(T value) => report(value);
 }
-#endif

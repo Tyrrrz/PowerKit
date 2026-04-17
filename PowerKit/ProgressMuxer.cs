@@ -1,4 +1,3 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
 #nullable enable
 using System;
 using System.Collections.Generic;
@@ -40,4 +39,3 @@ internal class ProgressMuxer(IProgress<double> output)
         });
     }
 }
-#endif
