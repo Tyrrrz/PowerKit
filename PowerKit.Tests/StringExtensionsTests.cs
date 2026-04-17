@@ -89,9 +89,14 @@ public class StringExtensionsTests
     public void ToSecureString_Test()
     {
         // Act & assert
-        "hello".ToSecureString().Length.Should().Be(5);
-        "".ToSecureString().Length.Should().Be(0);
-        "abc".ToSecureString().Length.Should().Be(3);
+        using (var s1 = "hello".ToSecureString())
+            s1.Length.Should().Be(5);
+
+        using (var s2 = "".ToSecureString())
+            s2.Length.Should().Be(0);
+
+        using (var s3 = "abc".ToSecureString())
+            s3.Length.Should().Be(3);
     }
 
     [Fact]

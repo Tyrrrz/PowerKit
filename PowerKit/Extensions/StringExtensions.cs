@@ -116,6 +116,7 @@ internal static class StringExtensions
                 secure.AppendChar(ch);
             }
 
+            secure.MakeReadOnly();
             return secure;
         }
 
