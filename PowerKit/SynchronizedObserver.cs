@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 namespace PowerKit;
 
@@ -13,7 +14,7 @@ namespace PowerKit;
 #endif
 internal class SynchronizedObserver<T>(IObserver<T> observer) : IObserver<T>
 {
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     /// <inheritdoc />
     public void OnCompleted()
