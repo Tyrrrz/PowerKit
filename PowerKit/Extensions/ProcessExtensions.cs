@@ -26,5 +26,11 @@ internal static class ProcessExtensions
                 return false;
             }
         }
+
+        /// <summary>
+        /// Starts the process associated with the specified file path or URL, using the operating system shell.
+        /// </summary>
+        public static Process? StartShellExecute(string fileName) =>
+            Process.Start(new ProcessStartInfo(fileName) { UseShellExecute = true });
     }
 }
