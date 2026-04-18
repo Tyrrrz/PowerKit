@@ -59,7 +59,7 @@ internal class ProgressMuxer(IProgress<double> output)
                 }
 
                 value = weightedMax > 0 ? weightedSum / weightedMax : 0;
-                version = ++_version;
+                version = Interlocked.Increment(ref _version);
             }
 
             if (Interlocked.Read(ref _version) == version)
