@@ -12,7 +12,7 @@ file class FakeNotifyPropertyChanged : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public string? StringValue
+    public string? StringProperty
     {
         get;
         set
@@ -22,7 +22,7 @@ file class FakeNotifyPropertyChanged : INotifyPropertyChanged
         }
     }
 
-    public int IntValue
+    public int IntProperty
     {
         get;
         set
@@ -45,17 +45,17 @@ public class NotifyPropertyChangedExtensionsTests
     public void WatchProperty_Test()
     {
         // Arrange
-        var obj = new FakeNotifyPropertyChanged { StringValue = "initial" };
+        var obj = new FakeNotifyPropertyChanged { StringProperty = "initial" };
         var values = new List<string?>();
 
         // Act
-        var sub = obj.WatchProperty(x => x.StringValue, v => values.Add(v), true);
+        var sub = obj.WatchProperty(x => x.StringProperty, v => values.Add(v), true);
 
-        obj.StringValue = "hello";
-        obj.IntValue = 42;
+        obj.StringProperty = "hello";
+        obj.IntProperty = 42;
         obj.RaiseAllPropertiesChanged();
         sub.Dispose();
-        obj.StringValue = "world";
+        obj.StringProperty = "world";
 
         // Assert
         values.Should().Equal("initial", "hello", "hello");
@@ -70,16 +70,16 @@ public class NotifyPropertyChangedExtensionsTests
 
         // Act
         var sub = obj.WatchProperties(
-            [x => x.StringValue, x => (object?)x.IntValue],
+            [x => x.StringProperty, x => (object?)x.IntProperty],
             () => callCount++,
             true
         );
 
-        obj.StringValue = "hello";
-        obj.IntValue = 42;
+        obj.StringProperty = "hello";
+        obj.IntProperty = 42;
         obj.RaiseAllPropertiesChanged();
         sub.Dispose();
-        obj.StringValue = "world";
+        obj.StringProperty = "world";
 
         // Assert
         callCount.Should().Be(4);
@@ -94,10 +94,10 @@ public class NotifyPropertyChangedExtensionsTests
 
         // Act
         var sub = obj.WatchAllProperties(() => callCount++, true);
-        obj.StringValue = "hello";
-        obj.IntValue = 42;
+        obj.StringProperty = "hello";
+        obj.IntProperty = 42;
         sub.Dispose();
-        obj.StringValue = "world";
+        obj.StringProperty = "world";
 
         // Assert
         callCount.Should().Be(3);

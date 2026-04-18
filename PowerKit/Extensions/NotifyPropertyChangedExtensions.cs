@@ -37,10 +37,12 @@ internal static class NotifyPropertyChangedExtensions
                 memberExpression?.Member is not PropertyInfo property
                 || !property.DeclaringType!.IsAssignableFrom(typeof(TOwner))
             )
+            {
                 throw new ArgumentException(
                     "Provided expression must reference a property of the owner type.",
                     nameof(propertyExpression)
                 );
+            }
 
             var getValue = propertyExpression.Compile();
 
@@ -56,6 +58,7 @@ internal static class NotifyPropertyChangedExtensions
             }
 
             owner.PropertyChanged += OnPropertyChanged;
+            var disposable = Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
 
             if (watchInitialValue)
             {
@@ -65,12 +68,12 @@ internal static class NotifyPropertyChangedExtensions
                 }
                 catch
                 {
-                    owner.PropertyChanged -= OnPropertyChanged;
+                    disposable.Dispose();
                     throw;
                 }
             }
 
-            return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
+            return disposable;
         }
 
         /// <summary>
@@ -96,10 +99,12 @@ internal static class NotifyPropertyChangedExtensions
                         memberExpression?.Member is not PropertyInfo property
                         || !property.DeclaringType!.IsAssignableFrom(typeof(TOwner))
                     )
+                    {
                         throw new ArgumentException(
                             "Provided expression must reference a property of the owner type.",
                             nameof(propertyExpressions)
                         );
+                    }
 
                     return property;
                 })
@@ -119,6 +124,7 @@ internal static class NotifyPropertyChangedExtensions
             }
 
             owner.PropertyChanged += OnPropertyChanged;
+            var disposable = Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
 
             if (watchInitialValue)
             {
@@ -128,12 +134,12 @@ internal static class NotifyPropertyChangedExtensions
                 }
                 catch
                 {
-                    owner.PropertyChanged -= OnPropertyChanged;
+                    disposable.Dispose();
                     throw;
                 }
             }
 
-            return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
+            return disposable;
         }
 
         /// <summary>
@@ -144,6 +150,7 @@ internal static class NotifyPropertyChangedExtensions
         {
             void OnPropertyChanged(object? sender, PropertyChangedEventArgs args) => callback();
             owner.PropertyChanged += OnPropertyChanged;
+            var disposable = Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
 
             if (watchInitialValue)
             {
@@ -153,12 +160,12 @@ internal static class NotifyPropertyChangedExtensions
                 }
                 catch
                 {
-                    owner.PropertyChanged -= OnPropertyChanged;
+                    disposable.Dispose();
                     throw;
                 }
             }
 
-            return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
+            return disposable;
         }
     }
 }
