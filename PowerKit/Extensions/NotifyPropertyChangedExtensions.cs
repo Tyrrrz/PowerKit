@@ -58,22 +58,13 @@ internal static class NotifyPropertyChangedExtensions
             }
 
             owner.PropertyChanged += OnPropertyChanged;
-            var disposable = Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
 
             if (watchInitialValue)
             {
-                try
-                {
-                    callback(getValue(owner));
-                }
-                catch
-                {
-                    disposable.Dispose();
-                    throw;
-                }
+                callback(getValue(owner));
             }
 
-            return disposable;
+            return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
         }
 
         /// <summary>
@@ -124,22 +115,13 @@ internal static class NotifyPropertyChangedExtensions
             }
 
             owner.PropertyChanged += OnPropertyChanged;
-            var disposable = Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
 
             if (watchInitialValue)
             {
-                try
-                {
-                    callback();
-                }
-                catch
-                {
-                    disposable.Dispose();
-                    throw;
-                }
+                callback();
             }
 
-            return disposable;
+            return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
         }
 
         /// <summary>
@@ -150,22 +132,13 @@ internal static class NotifyPropertyChangedExtensions
         {
             void OnPropertyChanged(object? sender, PropertyChangedEventArgs args) => callback();
             owner.PropertyChanged += OnPropertyChanged;
-            var disposable = Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
 
             if (watchInitialValue)
             {
-                try
-                {
-                    callback();
-                }
-                catch
-                {
-                    disposable.Dispose();
-                    throw;
-                }
+                callback();
             }
 
-            return disposable;
+            return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
         }
     }
 }
