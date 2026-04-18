@@ -17,7 +17,6 @@ internal static class RegistryExtensions
         /// <summary>
         /// Returns the short moniker for the registry hive (e.g. <c>HKCU</c>, <c>HKLM</c>).
         /// </summary>
-        [SupportedOSPlatform("windows")]
         public string GetShortMoniker() =>
             hive switch
             {
