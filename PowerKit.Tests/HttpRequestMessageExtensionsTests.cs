@@ -19,6 +19,7 @@ public class HttpRequestMessageExtensionsTests
         using var clone = request.Clone();
 
         // Assert
+        clone.Should().NotBeSameAs(request);
         clone.Method.Should().Be(HttpMethod.Post);
         clone.RequestUri.Should().Be(request.RequestUri);
         clone.Headers.GetValues("X-Custom").Should().Equal("value");
