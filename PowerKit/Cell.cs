@@ -16,6 +16,11 @@ internal class Cell<T>
     private T _value = default!;
 
     /// <summary>
+    /// Gets a value indicating whether the cell has no value stored.
+    /// </summary>
+    public bool IsEmpty => !_isValueSet;
+
+    /// <summary>
     /// Clears the value stored in the cell, returning it to an unset state.
     /// </summary>
     public void Clear()

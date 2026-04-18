@@ -51,6 +51,33 @@ public class CellTests
     }
 
     [Fact]
+    public void IsEmpty_Test()
+    {
+        // Arrange
+        var cell = new Cell<int?>();
+
+        // Act & assert
+        cell.IsEmpty.Should().BeTrue();
+
+        cell.Store(42);
+        cell.IsEmpty.Should().BeFalse();
+
+        cell.Clear();
+        cell.IsEmpty.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsEmpty_Null_Test()
+    {
+        // Arrange
+        var cell = new Cell<int?>();
+        cell.Store(null);
+
+        // Act & assert
+        cell.IsEmpty.Should().BeFalse();
+    }
+
+    [Fact]
     public void OpenOrDefault_Test()
     {
         // Arrange
