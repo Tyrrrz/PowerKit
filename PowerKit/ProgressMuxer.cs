@@ -41,7 +41,7 @@ internal class ProgressMuxer(IProgress<double> output)
 
         return new DelegateProgress<double>(p =>
         {
-            double value;
+            var value = 0.0;
 
             using (_lock.EnterScope())
             {
