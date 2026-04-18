@@ -36,7 +36,7 @@ public class ProgressMuxerTests
         input.Report(1.0);
 
         // Assert
-        progress.GetValues().Should().Equal(0.25, 0.5);
+        progress.GetValues().Should().Equal(0.5, 1.0);
     }
 
     [Fact]

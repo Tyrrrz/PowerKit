@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading;
 
 namespace PowerKit;
@@ -17,24 +16,41 @@ namespace PowerKit;
 internal class ProgressMuxer(IProgress<double> output)
 {
     private readonly Lock _lock = new();
-    private readonly Dictionary<int, double> _splitTotals = new();
-
-    private int _splitCount;
+    private readonly Dictionary<int, double> _splitWeights = new();
+    private readonly Dictionary<int, double> _splitValues = new();
 
     /// <summary>
     /// Creates a new progress input with the specified weight.
-    /// Progress reported to this input is multiplied by <paramref name="weight" />
-    /// and combined with all other inputs before being forwarded to the output.
+    /// Progress reported to this input is combined with all other inputs as a normalized
+    /// weighted average before being forwarded to the output.
     /// </summary>
     public IProgress<double> CreateInput(double weight = 1)
     {
-        var index = Interlocked.Increment(ref _splitCount) - 1;
+        int index;
+
+        using (_lock.EnterScope())
+        {
+            index = _splitWeights.Count;
+            _splitWeights[index] = weight;
+            _splitValues[index] = 0;
+        }
+
         return new DelegateProgress<double>(p =>
         {
             using (_lock.EnterScope())
             {
-                _splitTotals[index] = weight * p;
-                output.Report(_splitTotals.Values.Sum());
+                _splitValues[index] = p;
+
+                var weightedSum = 0.0;
+                var weightedMax = 0.0;
+
+                for (var i = 0; i < _splitWeights.Count; i++)
+                {
+                    weightedSum += _splitWeights[i] * _splitValues[i];
+                    weightedMax += _splitWeights[i];
+                }
+
+                output.Report(weightedSum / weightedMax);
             }
         });
     }
