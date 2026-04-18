@@ -6,6 +6,20 @@ using Xunit;
 
 namespace PowerKit.Tests.Extensions;
 
+file class FakeCommand(Func<object?, bool>? canExecute = null, Action<object?>? execute = null)
+    : ICommand
+{
+    public event EventHandler? CanExecuteChanged
+    {
+        add { }
+        remove { }
+    }
+
+    public bool CanExecute(object? parameter) => canExecute?.Invoke(parameter) ?? true;
+
+    public void Execute(object? parameter) => execute?.Invoke(parameter);
+}
+
 public class CommandExtensionsTests
 {
     [Fact]
@@ -35,18 +49,4 @@ public class CommandExtensionsTests
         // Assert
         executed.Should().BeFalse();
     }
-}
-
-file class FakeCommand(Func<object?, bool>? canExecute = null, Action<object?>? execute = null)
-    : ICommand
-{
-    public event EventHandler? CanExecuteChanged
-    {
-        add { }
-        remove { }
-    }
-
-    public bool CanExecute(object? parameter) => canExecute?.Invoke(parameter) ?? true;
-
-    public void Execute(object? parameter) => execute?.Invoke(parameter);
 }
