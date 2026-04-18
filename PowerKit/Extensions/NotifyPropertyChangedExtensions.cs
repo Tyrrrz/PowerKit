@@ -27,10 +27,18 @@ internal static class NotifyPropertyChangedExtensions
             bool watchInitialValue = false
         )
         {
-            var memberExpression = propertyExpression.Body as MemberExpression;
-            if (memberExpression?.Member is not PropertyInfo property)
+            var memberExpression =
+                propertyExpression.Body as MemberExpression
+                // The compiler implicitly wraps value types in a conversion expression when
+                // the expression is typed to return a reference type.
+                ?? (propertyExpression.Body as UnaryExpression)?.Operand as MemberExpression;
+
+            if (
+                memberExpression?.Member is not PropertyInfo property
+                || !property.DeclaringType!.IsAssignableFrom(typeof(TOwner))
+            )
                 throw new ArgumentException(
-                    "Provided expression must reference a property.",
+                    "Provided expression must reference a property of the owner type.",
                     nameof(propertyExpression)
                 );
 
@@ -50,7 +58,17 @@ internal static class NotifyPropertyChangedExtensions
             owner.PropertyChanged += OnPropertyChanged;
 
             if (watchInitialValue)
-                callback(getValue(owner));
+            {
+                try
+                {
+                    callback(getValue(owner));
+                }
+                catch
+                {
+                    owner.PropertyChanged -= OnPropertyChanged;
+                    throw;
+                }
+            }
 
             return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
         }
@@ -74,9 +92,12 @@ internal static class NotifyPropertyChangedExtensions
                         // implicitly wrap it in a conversion unary expression if it's of any other type.
                         ?? (expression.Body as UnaryExpression)?.Operand as MemberExpression;
 
-                    if (memberExpression?.Member is not PropertyInfo property)
+                    if (
+                        memberExpression?.Member is not PropertyInfo property
+                        || !property.DeclaringType!.IsAssignableFrom(typeof(TOwner))
+                    )
                         throw new ArgumentException(
-                            "Provided expression must reference a property.",
+                            "Provided expression must reference a property of the owner type.",
                             nameof(propertyExpressions)
                         );
 
@@ -100,7 +121,17 @@ internal static class NotifyPropertyChangedExtensions
             owner.PropertyChanged += OnPropertyChanged;
 
             if (watchInitialValue)
-                callback();
+            {
+                try
+                {
+                    callback();
+                }
+                catch
+                {
+                    owner.PropertyChanged -= OnPropertyChanged;
+                    throw;
+                }
+            }
 
             return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
         }
@@ -115,7 +146,17 @@ internal static class NotifyPropertyChangedExtensions
             owner.PropertyChanged += OnPropertyChanged;
 
             if (watchInitialValue)
-                callback();
+            {
+                try
+                {
+                    callback();
+                }
+                catch
+                {
+                    owner.PropertyChanged -= OnPropertyChanged;
+                    throw;
+                }
+            }
 
             return Disposable.Create(() => owner.PropertyChanged -= OnPropertyChanged);
         }

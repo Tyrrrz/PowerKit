@@ -49,11 +49,7 @@ public class NotifyPropertyChangedExtensionsTests
         var received = new List<string?>();
 
         // Act
-        var sub = obj.WatchProperty(
-            x => x.StringValue,
-            v => received.Add(v),
-            true
-        );
+        var sub = obj.WatchProperty(x => x.StringValue, v => received.Add(v), true);
 
         obj.StringValue = "hello";
         obj.IntValue = 42;
