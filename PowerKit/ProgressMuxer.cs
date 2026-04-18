@@ -16,8 +16,8 @@ namespace PowerKit;
 internal class ProgressMuxer(IProgress<double> output)
 {
     private readonly Lock _lock = new();
-    private readonly Dictionary<int, double> _splitWeights = new();
-    private readonly Dictionary<int, double> _splitValues = new();
+    private readonly List<double> _splitWeights = new();
+    private readonly List<double> _splitValues = new();
 
     /// <summary>
     /// Creates a new progress input with the specified weight.
@@ -31,8 +31,8 @@ internal class ProgressMuxer(IProgress<double> output)
         using (_lock.EnterScope())
         {
             index = _splitWeights.Count;
-            _splitWeights[index] = weight;
-            _splitValues[index] = 0;
+            _splitWeights.Add(weight);
+            _splitValues.Add(0);
         }
 
         return new DelegateProgress<double>(p =>
