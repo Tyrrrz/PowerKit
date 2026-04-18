@@ -50,7 +50,7 @@ internal class ProgressMuxer(IProgress<double> output)
                     weightedMax += _splitWeights[i];
                 }
 
-                output.Report(weightedSum / weightedMax);
+                output.Report(weightedMax > 0 ? weightedSum / weightedMax : 0);
             }
         });
     }
