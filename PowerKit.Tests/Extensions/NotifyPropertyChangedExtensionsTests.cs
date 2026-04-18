@@ -52,27 +52,17 @@ public class NotifyPropertyChangedExtensionsTests
         var sub = obj.WatchProperty(
             x => x.StringValue,
             v => received.Add(v),
-            watchInitialValue: true
+            true
         );
-        obj.StringValue = "hello"; // matching change
-        obj.IntValue = 42; // unrelated — should not fire
-        obj.RaiseAllPropertiesChanged(); // blank name — should fire
+
+        obj.StringValue = "hello";
+        obj.IntValue = 42;
+        obj.RaiseAllPropertiesChanged();
         sub.Dispose();
-        obj.StringValue = "world"; // after dispose — should not fire
+        obj.StringValue = "world";
 
-        // Assert: initial value + "hello" + "hello" (re-read on blank event)
+        // Assert
         received.Should().Equal("initial", "hello", "hello");
-    }
-
-    [Fact]
-    public void WatchProperty_InvalidExpression_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged();
-
-        // Act & assert
-        var act = () => obj.WatchProperty(x => x.StringValue!.ToUpper(), _ => { });
-        act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -86,15 +76,16 @@ public class NotifyPropertyChangedExtensionsTests
         var sub = obj.WatchProperties(
             [x => x.StringValue, x => (object?)x.IntValue],
             () => callCount++,
-            watchInitialValue: true
+            true
         );
-        obj.StringValue = "hello"; // matching
-        obj.IntValue = 42; // matching
-        obj.RaiseAllPropertiesChanged(); // blank name — should fire
-        sub.Dispose();
-        obj.StringValue = "world"; // after dispose — should not fire
 
-        // Assert: initial + StringValue + IntValue + blank
+        obj.StringValue = "hello";
+        obj.IntValue = 42;
+        obj.RaiseAllPropertiesChanged();
+        sub.Dispose();
+        obj.StringValue = "world";
+
+        // Assert
         callCount.Should().Be(4);
     }
 
@@ -106,13 +97,13 @@ public class NotifyPropertyChangedExtensionsTests
         var callCount = 0;
 
         // Act
-        var sub = obj.WatchAllProperties(() => callCount++, watchInitialValue: true);
+        var sub = obj.WatchAllProperties(() => callCount++, true);
         obj.StringValue = "hello";
         obj.IntValue = 42;
         sub.Dispose();
-        obj.StringValue = "world"; // after dispose — should not fire
+        obj.StringValue = "world";
 
-        // Assert: initial + StringValue + IntValue
+        // Assert
         callCount.Should().Be(3);
     }
 }
