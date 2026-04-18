@@ -65,8 +65,8 @@ public class ProgressMuxerTests
         var input2 = muxer.CreateInput(1);
 
         // Act
-        input1.Report(1.0);
-        input2.Report(1.0);
+        input1.Report(1.0); // (3×1.0 + 1×0.0) / (3+1) = 0.75
+        input2.Report(1.0); // (3×1.0 + 1×1.0) / (3+1) = 1.0
 
         // Assert
         // With weights 3 and 1 (total = 4), the normalized weighted average is:
