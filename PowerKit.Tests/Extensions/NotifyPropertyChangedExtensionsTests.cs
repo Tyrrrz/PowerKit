@@ -46,10 +46,10 @@ public class NotifyPropertyChangedExtensionsTests
     {
         // Arrange
         var obj = new FakeNotifyPropertyChanged { StringValue = "initial" };
-        var received = new List<string?>();
+        var values = new List<string?>();
 
         // Act
-        var sub = obj.WatchProperty(x => x.StringValue, v => received.Add(v), true);
+        var sub = obj.WatchProperty(x => x.StringValue, v => values.Add(v), true);
 
         obj.StringValue = "hello";
         obj.IntValue = 42;
@@ -58,7 +58,7 @@ public class NotifyPropertyChangedExtensionsTests
         obj.StringValue = "world";
 
         // Assert
-        received.Should().Equal("initial", "hello", "hello");
+        values.Should().Equal("initial", "hello", "hello");
     }
 
     [Fact]
