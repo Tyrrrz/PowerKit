@@ -20,21 +20,21 @@ internal class Cell<T>
     public bool IsEmpty { get; private set; } = true;
 
     /// <summary>
-    /// Clears the value stored in the cell, returning it to an unset state.
-    /// </summary>
-    public void Clear()
-    {
-        _value = default!;
-        IsEmpty = true;
-    }
-
-    /// <summary>
     /// Stores the specified value in the cell.
     /// </summary>
     public void Store(T value)
     {
         _value = value;
         IsEmpty = false;
+    }
+
+    /// <summary>
+    /// Clears the value stored in the cell, returning it to an unset state.
+    /// </summary>
+    public void Clear()
+    {
+        _value = default!;
+        IsEmpty = true;
     }
 
     /// <summary>

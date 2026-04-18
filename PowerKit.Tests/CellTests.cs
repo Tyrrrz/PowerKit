@@ -34,6 +34,37 @@ public class CellTests
     }
 
     [Fact]
+    public void Clear_Test()
+    {
+        // Arrange
+        var cell = new Cell<int?>();
+        cell.Store(42);
+
+        // Act
+        cell.Clear();
+        var result = cell.TryOpen(out var value);
+
+        // Assert
+        result.Should().BeFalse();
+        value.Should().BeNull();
+    }
+
+    [Fact]
+    public void Clear_Unset_Test()
+    {
+        // Arrange
+        var cell = new Cell<int?>();
+
+        // Act
+        cell.Clear();
+        var result = cell.TryOpen(out var value);
+
+        // Assert
+        result.Should().BeFalse();
+        value.Should().BeNull();
+    }
+
+    [Fact]
     public void TryOpen_Test()
     {
         // Arrange
@@ -106,37 +137,6 @@ public class CellTests
         // Act & assert
         value.Should().BeNull();
         valueOrFallback.Should().Be(99);
-    }
-
-    [Fact]
-    public void Clear_Test()
-    {
-        // Arrange
-        var cell = new Cell<int?>();
-        cell.Store(42);
-
-        // Act
-        cell.Clear();
-        var result = cell.TryOpen(out var value);
-
-        // Assert
-        result.Should().BeFalse();
-        value.Should().BeNull();
-    }
-
-    [Fact]
-    public void Clear_Unset_Test()
-    {
-        // Arrange
-        var cell = new Cell<int?>();
-
-        // Act
-        cell.Clear();
-        var result = cell.TryOpen(out var value);
-
-        // Assert
-        result.Should().BeFalse();
-        value.Should().BeNull();
     }
 
     [Fact]
