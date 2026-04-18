@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
 using PowerKit.Extensions;
@@ -29,5 +30,27 @@ public class ProcessExtensionsTests
 
         // Act & assert
         Process.IsRunning(processId).Should().BeFalse();
+    }
+
+    [SkippableFact]
+    public void StartShellExecute_Test()
+    {
+        Skip.IfNot(OperatingSystem.IsWindows());
+
+        // Arrange
+        var filePath = Path.GetTempFileName();
+
+        try
+        {
+            // Act
+            using var process = Process.StartShellExecute(filePath);
+
+            // Assert
+            process.Should().NotBeNull();
+        }
+        finally
+        {
+            File.TryDelete(filePath);
+        }
     }
 }
