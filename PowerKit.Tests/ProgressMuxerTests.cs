@@ -61,15 +61,19 @@ public class ProgressMuxerTests
         // Arrange
         var progress = new ProgressCollector<double>();
         var muxer = new ProgressMuxer(progress);
-        var input1 = muxer.CreateInput(0.6);
-        var input2 = muxer.CreateInput(0.4);
+        var input1 = muxer.CreateInput(3);
+        var input2 = muxer.CreateInput(1);
 
         // Act
         input1.Report(1.0);
         input2.Report(1.0);
 
         // Assert
+        // With weights 3 and 1 (total = 4), the normalized weighted average is:
+        // after input1 = 1.0: (3×1.0 + 1×0.0) / 4 = 0.75
+        // after input2 = 1.0: (3×1.0 + 1×1.0) / 4 = 1.0
         var values = progress.GetValues();
-        values[^1].Should().BeApproximately(1.0, 1e-10);
+        values[0].Should().BeApproximately(0.75, 1e-10);
+        values[1].Should().BeApproximately(1.0, 1e-10);
     }
 }

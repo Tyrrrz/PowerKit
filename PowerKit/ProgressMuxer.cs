@@ -41,6 +41,8 @@ internal class ProgressMuxer(IProgress<double> output)
 
         return new DelegateProgress<double>(p =>
         {
+            double value;
+
             using (_lock.EnterScope())
             {
                 _splitValues[index] = p;
@@ -54,8 +56,10 @@ internal class ProgressMuxer(IProgress<double> output)
                     weightedMax += _splitWeights[i];
                 }
 
-                output.Report(weightedMax > 0 ? weightedSum / weightedMax : 0);
+                value = weightedMax > 0 ? weightedSum / weightedMax : 0;
             }
+
+            output.Report(value);
         });
     }
 }
