@@ -9,11 +9,11 @@ namespace PowerKit.Tests.Extensions;
 public class CommandExtensionsTests
 {
     [Fact]
-    public void ExecuteIfCan_CanExecute_Test()
+    public void ExecuteIfCan_Test()
     {
         // Arrange
         var executed = false;
-        var command = new FakeCommand(canExecute: _ => true, execute: _ => executed = true);
+        var command = new FakeCommand(_ => true, _ => executed = true);
 
         // Act
         command.ExecuteIfCan();
@@ -27,7 +27,7 @@ public class CommandExtensionsTests
     {
         // Arrange
         var executed = false;
-        var command = new FakeCommand(canExecute: _ => false, execute: _ => executed = true);
+        var command = new FakeCommand(_ => false, _ => executed = true);
 
         // Act
         command.ExecuteIfCan();
