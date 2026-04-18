@@ -12,25 +12,22 @@ file class FakeNotifyPropertyChanged : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private string? _stringValue;
-    private int _intValue;
-
     public string? StringValue
     {
-        get => _stringValue;
+        get;
         set
         {
-            _stringValue = value;
+            field = value;
             OnPropertyChanged();
         }
     }
 
     public int IntValue
     {
-        get => _intValue;
+        get;
         set
         {
-            _intValue = value;
+            field = value;
             OnPropertyChanged();
         }
     }
