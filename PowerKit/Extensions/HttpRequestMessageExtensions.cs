@@ -40,7 +40,7 @@ internal static class HttpRequestMessageExtensions
 #if NET5_0_OR_GREATER
                 VersionPolicy = request.VersionPolicy,
 #endif
-                Content = request.Content?.Pipe(c => (HttpContent)new NonDisposableHttpContent(c)),
+                Content = request.Content?.Pipe(c => new NonDisposableHttpContent(c)),
             };
 
 #if NET5_0_OR_GREATER
@@ -57,6 +57,7 @@ internal static class HttpRequestMessageExtensions
                 clonedRequest.Properties[property.Key] = property.Value;
             }
 #endif
+
             foreach (var (key, value) in request.Headers)
                 clonedRequest.Headers.TryAddWithoutValidation(key, value);
 
