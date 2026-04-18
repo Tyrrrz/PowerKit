@@ -4,7 +4,7 @@ using Xunit;
 
 namespace PowerKit.Tests;
 
-public class UIntExtensionsTests
+public class UInt32ExtensionsTests
 {
     [Fact]
     public void ParseOrNull_Test()

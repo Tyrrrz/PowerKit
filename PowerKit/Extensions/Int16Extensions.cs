@@ -8,7 +8,7 @@ namespace PowerKit.Extensions;
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-internal static class ShortExtensions
+internal static class Int16Extensions
 {
     extension(short)
     {

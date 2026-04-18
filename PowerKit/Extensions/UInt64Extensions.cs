@@ -8,7 +8,7 @@ namespace PowerKit.Extensions;
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-internal static class ULongExtensions
+internal static class UInt64Extensions
 {
     extension(ulong)
     {
