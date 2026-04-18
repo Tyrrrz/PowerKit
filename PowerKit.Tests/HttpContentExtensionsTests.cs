@@ -15,21 +15,6 @@ public class HttpContentExtensionsTests
     public async Task CopyToStreamAsync_Test()
     {
         // Arrange
-        var data = new byte[] { 1, 2, 3, 4, 5 };
-        using var content = new ByteArrayContent(data);
-        using var destination = new MemoryStream();
-
-        // Act
-        await content.CopyToStreamAsync(destination);
-
-        // Assert
-        destination.ToArray().Should().Equal(data);
-    }
-
-    [Fact]
-    public async Task CopyToStreamAsync_Progress_Test()
-    {
-        // Arrange
         var data = new byte[1024];
         using var content = new ByteArrayContent(data);
         using var destination = new MemoryStream();
@@ -40,6 +25,8 @@ public class HttpContentExtensionsTests
         await content.CopyToStreamAsync(destination, progress);
 
         // Assert
+        destination.ToArray().Should().Equal(data);
+
         var reports = progress.GetValues().ToArray();
         reports.Should().NotBeEmpty();
         reports.Should().AllSatisfy(v => v.Should().BeInRange(0.0, 1.0));
