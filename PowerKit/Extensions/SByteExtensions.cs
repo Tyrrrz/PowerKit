@@ -23,10 +23,17 @@ internal static class SByteExtensions
         ) => sbyte.TryParse(str, styles, formatProvider, out var result) ? result : null;
 
         /// <summary>
+        /// Parses the string as an <see cref="sbyte" /> using the specified format provider,
+        /// returning <see langword="null" /> if parsing fails.
+        /// </summary>
+        public static sbyte? ParseOrNull(string? str, IFormatProvider? formatProvider) =>
+            sbyte.ParseOrNull(str, NumberStyles.Integer, formatProvider);
+
+        /// <summary>
         /// Parses the string as an <see cref="sbyte" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static sbyte? ParseOrNull(string? str) =>
-            sbyte.ParseOrNull(str, NumberStyles.Integer, CultureInfo.CurrentCulture);
+            sbyte.ParseOrNull(str, CultureInfo.CurrentCulture);
 
         /// <summary>
         /// Parses the string as an <see cref="sbyte" /> using the specified styles and format provider,
@@ -40,9 +47,19 @@ internal static class SByteExtensions
         ) => sbyte.ParseOrNull(str, styles, formatProvider) ?? defaultValue;
 
         /// <summary>
+        /// Parses the string as an <see cref="sbyte" /> using the specified format provider,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static sbyte ParseOrDefault(
+            string? str,
+            IFormatProvider? formatProvider,
+            sbyte defaultValue = default
+        ) => sbyte.ParseOrNull(str, formatProvider) ?? defaultValue;
+
+        /// <summary>
         /// Parses the string as an <see cref="sbyte" />, returning <paramref name="defaultValue" /> if parsing fails.
         /// </summary>
         public static sbyte ParseOrDefault(string? str, sbyte defaultValue = default) =>
-            sbyte.ParseOrNull(str) ?? defaultValue;
+            sbyte.ParseOrDefault(str, CultureInfo.CurrentCulture, defaultValue);
     }
 }

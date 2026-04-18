@@ -23,10 +23,17 @@ internal static class DecimalExtensions
         ) => decimal.TryParse(str, styles, formatProvider, out var result) ? result : null;
 
         /// <summary>
+        /// Parses the string as a <see cref="decimal" /> using the specified format provider,
+        /// returning <see langword="null" /> if parsing fails.
+        /// </summary>
+        public static decimal? ParseOrNull(string? str, IFormatProvider? formatProvider) =>
+            decimal.ParseOrNull(str, NumberStyles.Number, formatProvider);
+
+        /// <summary>
         /// Parses the string as a <see cref="decimal" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static decimal? ParseOrNull(string? str) =>
-            decimal.ParseOrNull(str, NumberStyles.Number, CultureInfo.CurrentCulture);
+            decimal.ParseOrNull(str, CultureInfo.CurrentCulture);
 
         /// <summary>
         /// Parses the string as a <see cref="decimal" /> using the specified styles and format provider,
@@ -40,9 +47,19 @@ internal static class DecimalExtensions
         ) => decimal.ParseOrNull(str, styles, formatProvider) ?? defaultValue;
 
         /// <summary>
+        /// Parses the string as a <see cref="decimal" /> using the specified format provider,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static decimal ParseOrDefault(
+            string? str,
+            IFormatProvider? formatProvider,
+            decimal defaultValue = default
+        ) => decimal.ParseOrNull(str, formatProvider) ?? defaultValue;
+
+        /// <summary>
         /// Parses the string as a <see cref="decimal" />, returning <paramref name="defaultValue" /> if parsing fails.
         /// </summary>
         public static decimal ParseOrDefault(string? str, decimal defaultValue = default) =>
-            decimal.ParseOrNull(str) ?? defaultValue;
+            decimal.ParseOrDefault(str, CultureInfo.CurrentCulture, defaultValue);
     }
 }

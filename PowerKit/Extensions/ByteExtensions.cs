@@ -23,10 +23,17 @@ internal static class ByteExtensions
         ) => byte.TryParse(str, styles, formatProvider, out var result) ? result : null;
 
         /// <summary>
+        /// Parses the string as a <see cref="byte" /> using the specified format provider,
+        /// returning <see langword="null" /> if parsing fails.
+        /// </summary>
+        public static byte? ParseOrNull(string? str, IFormatProvider? formatProvider) =>
+            byte.ParseOrNull(str, NumberStyles.Integer, formatProvider);
+
+        /// <summary>
         /// Parses the string as a <see cref="byte" />, returning <see langword="null" /> if parsing fails.
         /// </summary>
         public static byte? ParseOrNull(string? str) =>
-            byte.ParseOrNull(str, NumberStyles.Integer, CultureInfo.CurrentCulture);
+            byte.ParseOrNull(str, CultureInfo.CurrentCulture);
 
         /// <summary>
         /// Parses the string as a <see cref="byte" /> using the specified styles and format provider,
@@ -40,9 +47,19 @@ internal static class ByteExtensions
         ) => byte.ParseOrNull(str, styles, formatProvider) ?? defaultValue;
 
         /// <summary>
+        /// Parses the string as a <see cref="byte" /> using the specified format provider,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static byte ParseOrDefault(
+            string? str,
+            IFormatProvider? formatProvider,
+            byte defaultValue = default
+        ) => byte.ParseOrNull(str, formatProvider) ?? defaultValue;
+
+        /// <summary>
         /// Parses the string as a <see cref="byte" />, returning <paramref name="defaultValue" /> if parsing fails.
         /// </summary>
         public static byte ParseOrDefault(string? str, byte defaultValue = default) =>
-            byte.ParseOrNull(str) ?? defaultValue;
+            byte.ParseOrDefault(str, CultureInfo.CurrentCulture, defaultValue);
     }
 }

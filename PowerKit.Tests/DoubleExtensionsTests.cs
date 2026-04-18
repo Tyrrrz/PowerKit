@@ -11,20 +11,8 @@ public class DoubleExtensionsTests
     public void ParseOrNull_Test()
     {
         // Act & assert
-        double.ParseOrNull(
-                "3.14",
-                NumberStyles.Float | NumberStyles.AllowThousands,
-                CultureInfo.InvariantCulture
-            )
-            .Should()
-            .Be(3.14);
-        double.ParseOrNull(
-                "-1.5",
-                NumberStyles.Float | NumberStyles.AllowThousands,
-                CultureInfo.InvariantCulture
-            )
-            .Should()
-            .Be(-1.5);
+        double.ParseOrNull("3.14", CultureInfo.InvariantCulture).Should().Be(3.14);
+        double.ParseOrNull("-1.5", CultureInfo.InvariantCulture).Should().Be(-1.5);
         double.ParseOrNull("abc").Should().BeNull();
         double.ParseOrNull(null).Should().BeNull();
     }
@@ -33,20 +21,8 @@ public class DoubleExtensionsTests
     public void ParseOrDefault_Test()
     {
         // Act & assert
-        double.ParseOrDefault(
-                "3.14",
-                NumberStyles.Float | NumberStyles.AllowThousands,
-                CultureInfo.InvariantCulture
-            )
-            .Should()
-            .Be(3.14);
-        double.ParseOrDefault(
-                "-1.5",
-                NumberStyles.Float | NumberStyles.AllowThousands,
-                CultureInfo.InvariantCulture
-            )
-            .Should()
-            .Be(-1.5);
+        double.ParseOrDefault("3.14", CultureInfo.InvariantCulture).Should().Be(3.14);
+        double.ParseOrDefault("-1.5", CultureInfo.InvariantCulture).Should().Be(-1.5);
         double.ParseOrDefault("abc").Should().Be(0.0);
         double.ParseOrDefault("abc", -1.0).Should().Be(-1.0);
         double.ParseOrDefault(null).Should().Be(0.0);

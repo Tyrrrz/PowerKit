@@ -23,14 +23,21 @@ internal static class SingleExtensions
         ) => float.TryParse(str, styles, formatProvider, out var result) ? result : null;
 
         /// <summary>
-        /// Parses the string as a <see cref="float" />, returning <see langword="null" /> if parsing fails.
+        /// Parses the string as a <see cref="float" /> using the specified format provider,
+        /// returning <see langword="null" /> if parsing fails.
         /// </summary>
-        public static float? ParseOrNull(string? str) =>
+        public static float? ParseOrNull(string? str, IFormatProvider? formatProvider) =>
             float.ParseOrNull(
                 str,
                 NumberStyles.Float | NumberStyles.AllowThousands,
-                CultureInfo.CurrentCulture
+                formatProvider
             );
+
+        /// <summary>
+        /// Parses the string as a <see cref="float" />, returning <see langword="null" /> if parsing fails.
+        /// </summary>
+        public static float? ParseOrNull(string? str) =>
+            float.ParseOrNull(str, CultureInfo.CurrentCulture);
 
         /// <summary>
         /// Parses the string as a <see cref="float" /> using the specified styles and format provider,
@@ -44,9 +51,19 @@ internal static class SingleExtensions
         ) => float.ParseOrNull(str, styles, formatProvider) ?? defaultValue;
 
         /// <summary>
+        /// Parses the string as a <see cref="float" /> using the specified format provider,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static float ParseOrDefault(
+            string? str,
+            IFormatProvider? formatProvider,
+            float defaultValue = default
+        ) => float.ParseOrNull(str, formatProvider) ?? defaultValue;
+
+        /// <summary>
         /// Parses the string as a <see cref="float" />, returning <paramref name="defaultValue" /> if parsing fails.
         /// </summary>
         public static float ParseOrDefault(string? str, float defaultValue = default) =>
-            float.ParseOrNull(str) ?? defaultValue;
+            float.ParseOrDefault(str, CultureInfo.CurrentCulture, defaultValue);
     }
 }

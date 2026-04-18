@@ -23,14 +23,21 @@ internal static class DoubleExtensions
         ) => double.TryParse(str, styles, formatProvider, out var result) ? result : null;
 
         /// <summary>
-        /// Parses the string as a <see cref="double" />, returning <see langword="null" /> if parsing fails.
+        /// Parses the string as a <see cref="double" /> using the specified format provider,
+        /// returning <see langword="null" /> if parsing fails.
         /// </summary>
-        public static double? ParseOrNull(string? str) =>
+        public static double? ParseOrNull(string? str, IFormatProvider? formatProvider) =>
             double.ParseOrNull(
                 str,
                 NumberStyles.Float | NumberStyles.AllowThousands,
-                CultureInfo.CurrentCulture
+                formatProvider
             );
+
+        /// <summary>
+        /// Parses the string as a <see cref="double" />, returning <see langword="null" /> if parsing fails.
+        /// </summary>
+        public static double? ParseOrNull(string? str) =>
+            double.ParseOrNull(str, CultureInfo.CurrentCulture);
 
         /// <summary>
         /// Parses the string as a <see cref="double" /> using the specified styles and format provider,
@@ -44,9 +51,19 @@ internal static class DoubleExtensions
         ) => double.ParseOrNull(str, styles, formatProvider) ?? defaultValue;
 
         /// <summary>
+        /// Parses the string as a <see cref="double" /> using the specified format provider,
+        /// returning <paramref name="defaultValue" /> if parsing fails.
+        /// </summary>
+        public static double ParseOrDefault(
+            string? str,
+            IFormatProvider? formatProvider,
+            double defaultValue = default
+        ) => double.ParseOrNull(str, formatProvider) ?? defaultValue;
+
+        /// <summary>
         /// Parses the string as a <see cref="double" />, returning <paramref name="defaultValue" /> if parsing fails.
         /// </summary>
         public static double ParseOrDefault(string? str, double defaultValue = default) =>
-            double.ParseOrNull(str) ?? defaultValue;
+            double.ParseOrDefault(str, CultureInfo.CurrentCulture, defaultValue);
     }
 }
