@@ -16,6 +16,15 @@ internal class Cell<T>
     private T _value = default!;
 
     /// <summary>
+    /// Clears the value stored in the cell, returning it to an unset state.
+    /// </summary>
+    public void Clear()
+    {
+        _value = default!;
+        _isValueSet = false;
+    }
+
+    /// <summary>
     /// Stores the specified value in the cell.
     /// </summary>
     public void Store(T value)
