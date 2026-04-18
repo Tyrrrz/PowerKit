@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading;
 
 namespace PowerKit;
@@ -17,25 +16,51 @@ namespace PowerKit;
 internal class ProgressMuxer(IProgress<double> output)
 {
     private readonly Lock _lock = new();
-    private readonly Dictionary<int, double> _splitTotals = new();
-
-    private int _splitCount;
+    private readonly List<double> _splitWeights = new();
+    private readonly List<double> _splitValues = new();
+    private long _version;
 
     /// <summary>
     /// Creates a new progress input with the specified weight.
-    /// Progress reported to this input is multiplied by <paramref name="weight" />
-    /// and combined with all other inputs before being forwarded to the output.
+    /// Progress reported to this input is combined with all other inputs as a normalized
+    /// weighted average before being forwarded to the output.
     /// </summary>
     public IProgress<double> CreateInput(double weight = 1)
     {
-        var index = Interlocked.Increment(ref _splitCount) - 1;
+        if (double.IsNaN(weight) || double.IsInfinity(weight) || weight < 0)
+            throw new ArgumentOutOfRangeException(nameof(weight));
+
+        var index = 0;
+        using (_lock.EnterScope())
+        {
+            index = _splitWeights.Count;
+            _splitWeights.Add(weight);
+            _splitValues.Add(0);
+        }
+
         return new DelegateProgress<double>(p =>
         {
+            var value = 0.0;
+            var version = 0L;
             using (_lock.EnterScope())
             {
-                _splitTotals[index] = weight * p;
-                output.Report(_splitTotals.Values.Sum());
+                _splitValues[index] = p;
+
+                var weightedSum = 0.0;
+                var totalWeight = 0.0;
+
+                for (var i = 0; i < _splitWeights.Count; i++)
+                {
+                    weightedSum += _splitWeights[i] * _splitValues[i];
+                    totalWeight += _splitWeights[i];
+                }
+
+                value = totalWeight > 0 ? weightedSum / totalWeight : 0;
+                version = Interlocked.Increment(ref _version);
             }
+
+            if (Interlocked.Read(ref _version) == version)
+                output.Report(value);
         });
     }
 }
