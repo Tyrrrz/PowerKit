@@ -26,7 +26,7 @@ internal class ProgressMuxer(IProgress<double> output)
     /// </summary>
     public IProgress<double> CreateInput(double weight = 1)
     {
-        int index;
+        var index = 0;
 
         using (_lock.EnterScope())
         {
