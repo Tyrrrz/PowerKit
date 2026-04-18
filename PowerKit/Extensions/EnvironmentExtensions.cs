@@ -1,6 +1,5 @@
 #nullable enable
 using System;
-using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
@@ -31,21 +30,22 @@ internal static class EnvironmentExtensions
                 return;
             }
 
-            var machineVariables = Environment.GetEnvironmentVariables(
-                EnvironmentVariableTarget.Machine
-            );
-            var userVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.User);
+            var machineVariables = Environment
+                .GetEnvironmentVariables(EnvironmentVariableTarget.Machine)
+                .ToDictionary<string, string>(StringComparer.Ordinal);
+
+            var userVariables = Environment
+                .GetEnvironmentVariables(EnvironmentVariableTarget.User)
+                .ToDictionary<string, string>(StringComparer.Ordinal);
 
             // Remove missing
             foreach (
-                DictionaryEntry environmentVariable in Environment.GetEnvironmentVariables(
-                    EnvironmentVariableTarget.Process
-                )
+                var (key, _) in Environment
+                    .GetEnvironmentVariables(EnvironmentVariableTarget.Process)
+                    .ToDictionary<string, string>(StringComparer.Ordinal)
             )
             {
-                var key = (string)environmentVariable.Key;
-
-                if (!machineVariables.Contains(key) && !userVariables.Contains(key))
+                if (!machineVariables.ContainsKey(key) && !userVariables.ContainsKey(key))
                 {
                     Environment.SetEnvironmentVariable(
                         key,
@@ -56,20 +56,14 @@ internal static class EnvironmentExtensions
             }
 
             // Add/set machine variables
-            foreach (DictionaryEntry environmentVariable in machineVariables)
+            foreach (var (key, value) in machineVariables)
             {
-                var key = (string)environmentVariable.Key;
-                var value = (string?)environmentVariable.Value;
-
                 Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Process);
             }
 
             // Add/set user variables
-            foreach (DictionaryEntry environmentVariable in userVariables)
+            foreach (var (key, value) in userVariables)
             {
-                var key = (string)environmentVariable.Key;
-                var value = (string?)environmentVariable.Value;
-
                 Environment.SetEnvironmentVariable(key, value, EnvironmentVariableTarget.Process);
             }
         }
