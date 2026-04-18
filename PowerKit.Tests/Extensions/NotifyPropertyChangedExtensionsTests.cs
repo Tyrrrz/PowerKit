@@ -42,89 +42,30 @@ file class FakeNotifyPropertyChanged : INotifyPropertyChanged
 public class NotifyPropertyChangedExtensionsTests
 {
     [Fact]
-    public void WatchProperty_FiresOnChange_Test()
+    public void WatchProperty_Test()
     {
         // Arrange
         var obj = new FakeNotifyPropertyChanged { StringValue = "initial" };
         var received = new List<string?>();
 
         // Act
-        using var _ = obj.WatchProperty(x => x.StringValue, v => received.Add(v));
-        obj.StringValue = "hello";
-        obj.StringValue = "world";
-
-        // Assert
-        received.Should().Equal("hello", "world");
-    }
-
-    [Fact]
-    public void WatchProperty_WatchInitialValue_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged { StringValue = "initial" };
-        var received = new List<string?>();
-
-        // Act
-        using var _ = obj.WatchProperty(
+        var sub = obj.WatchProperty(
             x => x.StringValue,
             v => received.Add(v),
             watchInitialValue: true
         );
-        obj.StringValue = "hello";
+        obj.StringValue = "hello"; // matching change
+        obj.IntValue = 42; // unrelated — should not fire
+        obj.RaiseAllPropertiesChanged(); // blank name — should fire
+        sub.Dispose();
+        obj.StringValue = "world"; // after dispose — should not fire
 
-        // Assert
-        received.Should().Equal("initial", "hello");
+        // Assert: initial value + "hello" + "hello" (re-read on blank event)
+        received.Should().Equal("initial", "hello", "hello");
     }
 
     [Fact]
-    public void WatchProperty_DoesNotFireForOtherProperties_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged();
-        var received = new List<string?>();
-
-        // Act
-        using var _ = obj.WatchProperty(x => x.StringValue, v => received.Add(v));
-        obj.IntValue = 42;
-
-        // Assert
-        received.Should().BeEmpty();
-    }
-
-    [Fact]
-    public void WatchProperty_FiresOnAllPropertiesChanged_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged { StringValue = "initial" };
-        var received = new List<string?>();
-
-        // Act
-        using var _ = obj.WatchProperty(x => x.StringValue, v => received.Add(v));
-        obj.RaiseAllPropertiesChanged();
-
-        // Assert
-        received.Should().Equal("initial");
-    }
-
-    [Fact]
-    public void WatchProperty_Unsubscribes_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged();
-        var received = new List<string?>();
-
-        // Act
-        var subscription = obj.WatchProperty(x => x.StringValue, v => received.Add(v));
-        obj.StringValue = "hello";
-        subscription.Dispose();
-        obj.StringValue = "world";
-
-        // Assert
-        received.Should().Equal("hello");
-    }
-
-    [Fact]
-    public void WatchProperty_NonPropertyExpression_Throws_Test()
+    public void WatchProperty_InvalidExpression_Test()
     {
         // Arrange
         var obj = new FakeNotifyPropertyChanged();
@@ -135,118 +76,43 @@ public class NotifyPropertyChangedExtensionsTests
     }
 
     [Fact]
-    public void WatchProperties_FiresOnMatchingChange_Test()
+    public void WatchProperties_Test()
     {
         // Arrange
         var obj = new FakeNotifyPropertyChanged();
         var callCount = 0;
 
         // Act
-        using var _ = obj.WatchProperties(
-            [x => x.StringValue, x => (object?)x.IntValue],
-            () => callCount++
-        );
-        obj.StringValue = "hello";
-        obj.IntValue = 42;
-
-        // Assert
-        callCount.Should().Be(2);
-    }
-
-    [Fact]
-    public void WatchProperties_WatchInitialValue_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged();
-        var callCount = 0;
-
-        // Act
-        using var _ = obj.WatchProperties(
+        var sub = obj.WatchProperties(
             [x => x.StringValue, x => (object?)x.IntValue],
             () => callCount++,
             watchInitialValue: true
         );
+        obj.StringValue = "hello"; // matching
+        obj.IntValue = 42; // matching
+        obj.RaiseAllPropertiesChanged(); // blank name — should fire
+        sub.Dispose();
+        obj.StringValue = "world"; // after dispose — should not fire
 
-        // Assert
-        callCount.Should().Be(1);
+        // Assert: initial + StringValue + IntValue + blank
+        callCount.Should().Be(4);
     }
 
     [Fact]
-    public void WatchProperties_FiresOnAllPropertiesChanged_Test()
+    public void WatchAllProperties_Test()
     {
         // Arrange
         var obj = new FakeNotifyPropertyChanged();
         var callCount = 0;
 
         // Act
-        using var _ = obj.WatchProperties([x => x.StringValue], () => callCount++);
-        obj.RaiseAllPropertiesChanged();
-
-        // Assert
-        callCount.Should().Be(1);
-    }
-
-    [Fact]
-    public void WatchProperties_Unsubscribes_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged();
-        var callCount = 0;
-
-        // Act
-        var subscription = obj.WatchProperties([x => x.StringValue], () => callCount++);
-        obj.StringValue = "hello";
-        subscription.Dispose();
-        obj.StringValue = "world";
-
-        // Assert
-        callCount.Should().Be(1);
-    }
-
-    [Fact]
-    public void WatchAllProperties_FiresOnAnyChange_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged();
-        var callCount = 0;
-
-        // Act
-        using var _ = obj.WatchAllProperties(() => callCount++);
+        var sub = obj.WatchAllProperties(() => callCount++, watchInitialValue: true);
         obj.StringValue = "hello";
         obj.IntValue = 42;
+        sub.Dispose();
+        obj.StringValue = "world"; // after dispose — should not fire
 
-        // Assert
-        callCount.Should().Be(2);
-    }
-
-    [Fact]
-    public void WatchAllProperties_WatchInitialValue_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged();
-        var callCount = 0;
-
-        // Act
-        using var _ = obj.WatchAllProperties(() => callCount++, watchInitialValue: true);
-
-        // Assert
-        callCount.Should().Be(1);
-    }
-
-    [Fact]
-    public void WatchAllProperties_Unsubscribes_Test()
-    {
-        // Arrange
-        var obj = new FakeNotifyPropertyChanged();
-        var callCount = 0;
-
-        // Act
-        var subscription = obj.WatchAllProperties(() => callCount++);
-        obj.StringValue = "hello";
-        subscription.Dispose();
-        obj.StringValue = "world";
-
-        // Assert
-        callCount.Should().Be(1);
+        // Assert: initial + StringValue + IntValue
+        callCount.Should().Be(3);
     }
 }
