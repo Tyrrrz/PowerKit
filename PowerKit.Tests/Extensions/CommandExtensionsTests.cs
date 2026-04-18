@@ -12,40 +12,41 @@ public class CommandExtensionsTests
     public void ExecuteIfCan_CanExecute_Test()
     {
         // Arrange
-        var command = new FakeCommand(canExecute: true);
+        var executed = false;
+        var command = new FakeCommand(canExecute: _ => true, execute: _ => executed = true);
 
         // Act
         command.ExecuteIfCan();
 
         // Assert
-        command.ExecuteCount.Should().Be(1);
+        executed.Should().BeTrue();
     }
 
     [Fact]
     public void ExecuteIfCan_CannotExecute_Test()
     {
         // Arrange
-        var command = new FakeCommand(canExecute: false);
+        var executed = false;
+        var command = new FakeCommand(canExecute: _ => false, execute: _ => executed = true);
 
         // Act
         command.ExecuteIfCan();
 
         // Assert
-        command.ExecuteCount.Should().Be(0);
+        executed.Should().BeFalse();
     }
 }
 
-file class FakeCommand(bool canExecute) : ICommand
+file class FakeCommand(Func<object?, bool>? canExecute = null, Action<object?>? execute = null)
+    : ICommand
 {
-    public int ExecuteCount { get; private set; }
-
     public event EventHandler? CanExecuteChanged
     {
         add { }
         remove { }
     }
 
-    public bool CanExecute(object? parameter) => canExecute;
+    public bool CanExecute(object? parameter) => canExecute?.Invoke(parameter) ?? true;
 
-    public void Execute(object? parameter) => ExecuteCount++;
+    public void Execute(object? parameter) => execute?.Invoke(parameter);
 }
