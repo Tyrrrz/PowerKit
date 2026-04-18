@@ -7,9 +7,6 @@ using Xunit;
 
 namespace PowerKit.Tests;
 
-file class PassthroughClientDelegatingHandler(HttpClient http, bool disposeClient = false)
-    : ClientDelegatingHandler(http, disposeClient);
-
 public class ClientDelegatingHandlerTests
 {
     [Fact]
@@ -17,7 +14,7 @@ public class ClientDelegatingHandlerTests
     {
         // Arrange
         using var innerClient = new HttpClient();
-        using var handler = new PassthroughClientDelegatingHandler(innerClient);
+        using var handler = new ClientDelegatingHandler(innerClient);
         using var http = new HttpClient(handler);
 
         // Act

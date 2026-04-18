@@ -16,7 +16,7 @@ namespace PowerKit;
 /// <see cref="HttpMessageHandler" />. Used to extend an externally provided <see cref="HttpClient" />
 /// with additional behavior.
 /// </summary>
-internal abstract class ClientDelegatingHandler(HttpClient http, bool disposeClient = false)
+internal class ClientDelegatingHandler(HttpClient http, bool disposeClient = false)
     : HttpMessageHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(
