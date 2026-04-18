@@ -8,14 +8,14 @@ using PowerKit.Extensions;
 
 namespace PowerKit;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 /// <summary>
 /// Like <see cref="DelegatingHandler" />, but wraps an <see cref="HttpClient" /> instead of an
 /// <see cref="HttpMessageHandler" />. Used to extend an externally provided <see cref="HttpClient" />
 /// with additional behavior.
 /// </summary>
+#if !POWERKIT_INCLUDE_COVERAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal class ClientDelegatingHandler(HttpClient http, bool disposeClient = false)
     : HttpMessageHandler
 {
