@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
+using PowerKit;
 using PowerKit.Extensions;
 using Xunit;
 
@@ -15,22 +16,15 @@ public class HttpClientExtensionsTests
     {
         // Arrange
         using var http = new HttpClient();
-        var filePath = Path.GetTempFileName();
+        using var tempFile = TempFile.Create(false);
 
-        try
-        {
-            // Act
-            await http.DownloadAsync("https://example.com", filePath);
+        // Act
+        await http.DownloadAsync("https://example.com", tempFile.Path);
 
-            // Assert
-            new FileInfo(filePath)
-                .Length.Should()
-                .BeGreaterThan(0);
-        }
-        finally
-        {
-            File.Delete(filePath);
-        }
+        // Assert
+        new FileInfo(tempFile.Path)
+            .Length.Should()
+            .BeGreaterThan(0);
     }
 
     [Fact]
