@@ -47,15 +47,15 @@ internal class ProgressMuxer(IProgress<double> output)
                 _splitValues[index] = p;
 
                 var weightedSum = 0.0;
-                var weightedMax = 0.0;
+                var totalWeight = 0.0;
 
                 for (var i = 0; i < _splitWeights.Count; i++)
                 {
                     weightedSum += _splitWeights[i] * _splitValues[i];
-                    weightedMax += _splitWeights[i];
+                    totalWeight += _splitWeights[i];
                 }
 
-                value = weightedMax > 0 ? weightedSum / weightedMax : 0;
+                value = totalWeight > 0 ? weightedSum / totalWeight : 0;
                 version = Interlocked.Increment(ref _version);
             }
 
