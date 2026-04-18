@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
+using PowerKit;
 using PowerKit.Extensions;
 using Xunit;
 
@@ -38,19 +38,12 @@ public class ProcessExtensionsTests
         Skip.IfNot(OperatingSystem.IsWindows());
 
         // Arrange
-        var filePath = Path.GetTempFileName();
+        using var tempFile = TempFile.Create();
 
-        try
-        {
-            // Act
-            using var process = Process.StartShellExecute(filePath);
+        // Act
+        using var process = Process.StartShellExecute(tempFile.Path);
 
-            // Assert
-            process.Should().NotBeNull();
-        }
-        finally
-        {
-            File.TryDelete(filePath);
-        }
+        // Assert
+        process.Should().NotBeNull();
     }
 }
