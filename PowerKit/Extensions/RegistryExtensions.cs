@@ -17,6 +17,7 @@ internal static class RegistryExtensions
         /// <summary>
         /// Returns the short moniker for the registry hive (e.g. <c>HKCU</c>, <c>HKLM</c>).
         /// </summary>
+        [SupportedOSPlatform("windows")]
         public string Moniker =>
             hive switch
             {
@@ -29,12 +30,14 @@ internal static class RegistryExtensions
                 _ => throw new ArgumentOutOfRangeException(nameof(hive)),
             };
 
+#if NET40_OR_GREATER || NET5_0_OR_GREATER
         /// <summary>
         /// Opens the base registry key for the hive using the specified <paramref name="view" />.
         /// </summary>
         [SupportedOSPlatform("windows")]
         public RegistryKey OpenKey(RegistryView view = RegistryView.Default) =>
             RegistryKey.OpenBaseKey(hive, view);
+#endif
     }
 
     extension(RegistryKey key)
