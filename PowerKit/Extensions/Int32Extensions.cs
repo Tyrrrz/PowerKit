@@ -8,7 +8,7 @@ namespace PowerKit.Extensions;
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-internal static class IntExtensions
+internal static class Int32Extensions
 {
     extension(int)
     {

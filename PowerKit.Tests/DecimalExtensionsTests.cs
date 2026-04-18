@@ -1,3 +1,4 @@
+using System.Globalization;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
@@ -9,6 +10,8 @@ public class DecimalExtensionsTests
     [Fact]
     public void ParseOrNull_Test()
     {
+        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
         // Act & assert
         decimal.ParseOrNull("3.14").Should().Be(3.14m);
         decimal.ParseOrNull("-1.5").Should().Be(-1.5m);
@@ -19,6 +22,8 @@ public class DecimalExtensionsTests
     [Fact]
     public void ParseOrDefault_Test()
     {
+        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
         // Act & assert
         decimal.ParseOrDefault("3.14").Should().Be(3.14m);
         decimal.ParseOrDefault("-1.5").Should().Be(-1.5m);
