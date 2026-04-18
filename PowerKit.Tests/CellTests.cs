@@ -7,33 +7,6 @@ namespace PowerKit.Tests;
 public class CellTests
 {
     [Fact]
-    public void IsEmpty_Test()
-    {
-        // Arrange
-        var cell = new Cell<int?>();
-
-        // Act & assert
-        cell.IsEmpty.Should().BeTrue();
-
-        cell.Store(42);
-        cell.IsEmpty.Should().BeFalse();
-
-        cell.Clear();
-        cell.IsEmpty.Should().BeTrue();
-    }
-
-    [Fact]
-    public void IsEmpty_Null_Test()
-    {
-        // Arrange
-        var cell = new Cell<int?>();
-        cell.Store(null);
-
-        // Act & assert
-        cell.IsEmpty.Should().BeFalse();
-    }
-
-    [Fact]
     public void Clear_Test()
     {
         // Arrange
@@ -41,10 +14,12 @@ public class CellTests
         cell.Store(42);
 
         // Act
+        cell.IsEmpty.Should().BeFalse();
         cell.Clear();
-        var result = cell.TryOpen(out var value);
 
         // Assert
+        cell.IsEmpty.Should().BeTrue();
+        var result = cell.TryOpen(out var value);
         result.Should().BeFalse();
         value.Should().BeNull();
     }
@@ -56,10 +31,12 @@ public class CellTests
         var cell = new Cell<int?>();
 
         // Act
+        cell.IsEmpty.Should().BeTrue();
         cell.Clear();
-        var result = cell.TryOpen(out var value);
 
         // Assert
+        cell.IsEmpty.Should().BeTrue();
+        var result = cell.TryOpen(out var value);
         result.Should().BeFalse();
         value.Should().BeNull();
     }
@@ -101,6 +78,7 @@ public class CellTests
         cell.Store(null);
 
         // Act
+        cell.IsEmpty.Should().BeFalse();
         var result = cell.TryOpen(out var value);
 
         // Assert
