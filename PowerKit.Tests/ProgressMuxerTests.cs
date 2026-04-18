@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using Gress;
 using PowerKit;
@@ -37,6 +38,21 @@ public class ProgressMuxerTests
 
         // Assert
         progress.GetValues().Should().Equal(0.5, 1.0);
+    }
+
+    [Fact]
+    public void CreateInput_InvalidWeight_Test()
+    {
+        // Arrange
+        var progress = new ProgressCollector<double>();
+        var muxer = new ProgressMuxer(progress);
+
+        // Act & Assert
+        Assert.Throws<ArgumentOutOfRangeException>(() => muxer.CreateInput(-1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => muxer.CreateInput(double.NaN));
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            muxer.CreateInput(double.PositiveInfinity)
+        );
     }
 
     [Fact]

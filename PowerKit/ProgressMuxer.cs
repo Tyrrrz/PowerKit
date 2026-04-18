@@ -23,9 +23,13 @@ internal class ProgressMuxer(IProgress<double> output)
     /// Creates a new progress input with the specified weight.
     /// Progress reported to this input is combined with all other inputs as a normalized
     /// weighted average before being forwarded to the output.
+    /// Weight must be a non-negative finite value.
     /// </summary>
     public IProgress<double> CreateInput(double weight = 1)
     {
+        if (double.IsNaN(weight) || double.IsInfinity(weight) || weight < 0)
+            throw new ArgumentOutOfRangeException(nameof(weight));
+
         var index = 0;
 
         using (_lock.EnterScope())
