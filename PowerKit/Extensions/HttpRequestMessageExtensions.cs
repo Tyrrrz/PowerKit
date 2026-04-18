@@ -34,7 +34,7 @@ internal static class HttpRequestMessageExtensions
         /// </summary>
         public HttpRequestMessage Clone()
         {
-            var clonedRequest = new HttpRequestMessage(request.Method, request.RequestUri)
+            var clone = new HttpRequestMessage(request.Method, request.RequestUri)
             {
                 Version = request.Version,
 #if NET5_0_OR_GREATER
@@ -46,28 +46,25 @@ internal static class HttpRequestMessageExtensions
 #if NET5_0_OR_GREATER
             foreach (var option in request.Options)
             {
-                clonedRequest.Options.Set(
-                    new HttpRequestOptionsKey<object?>(option.Key),
-                    option.Value
-                );
+                clone.Options.Set(new HttpRequestOptionsKey<object?>(option.Key), option.Value);
             }
 #else
             foreach (var property in request.Properties)
             {
-                clonedRequest.Properties[property.Key] = property.Value;
+                clone.Properties[property.Key] = property.Value;
             }
 #endif
 
             foreach (var (key, value) in request.Headers)
-                clonedRequest.Headers.TryAddWithoutValidation(key, value);
+                clone.Headers.TryAddWithoutValidation(key, value);
 
-            if (request.Content is not null && clonedRequest.Content is not null)
+            if (request.Content is not null && clone.Content is not null)
             {
                 foreach (var (key, value) in request.Content.Headers)
-                    clonedRequest.Content.Headers.TryAddWithoutValidation(key, value);
+                    clone.Content.Headers.TryAddWithoutValidation(key, value);
             }
 
-            return clonedRequest;
+            return clone;
         }
     }
 }
