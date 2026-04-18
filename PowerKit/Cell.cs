@@ -12,8 +12,12 @@ namespace PowerKit;
 #endif
 internal class Cell<T>
 {
-    private bool _isValueSet;
     private T _value = default!;
+
+    /// <summary>
+    /// Gets a value indicating whether the cell has no value stored.
+    /// </summary>
+    public bool IsEmpty { get; private set; } = true;
 
     /// <summary>
     /// Stores the specified value in the cell.
@@ -21,7 +25,16 @@ internal class Cell<T>
     public void Store(T value)
     {
         _value = value;
-        _isValueSet = true;
+        IsEmpty = false;
+    }
+
+    /// <summary>
+    /// Clears the value stored in the cell, returning it to an unset state.
+    /// </summary>
+    public void Clear()
+    {
+        _value = default!;
+        IsEmpty = true;
     }
 
     /// <summary>
@@ -30,7 +43,7 @@ internal class Cell<T>
     /// </summary>
     public bool TryOpen(out T value)
     {
-        if (_isValueSet)
+        if (!IsEmpty)
         {
             value = _value;
             return true;
