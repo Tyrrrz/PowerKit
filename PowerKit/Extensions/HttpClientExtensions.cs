@@ -17,17 +17,17 @@ internal static class HttpClientExtensions
     extension(HttpClient http)
     {
         /// <summary>
-        /// Downloads the content at the specified URL to a local file.
+        /// Downloads the content at the specified URI to a local file.
         /// </summary>
         public async Task DownloadAsync(
-            string url,
+            string requestUri,
             string filePath,
             IProgress<double>? progress = null,
             CancellationToken cancellationToken = default
         )
         {
             using var response = await http.GetAsync(
-                    url,
+                    requestUri,
                     HttpCompletionOption.ResponseHeadersRead,
                     cancellationToken
                 )
