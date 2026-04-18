@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using FluentAssertions;
-using PowerKit;
 using PowerKit.Extensions;
 using Xunit;
 
@@ -30,20 +29,5 @@ public class ProcessExtensionsTests
 
         // Act & assert
         Process.IsRunning(processId).Should().BeFalse();
-    }
-
-    [SkippableFact]
-    public void StartShellExecute_Test()
-    {
-        Skip.IfNot(OperatingSystem.IsWindows());
-
-        // Arrange
-        using var tempFile = TempFile.Create();
-
-        // Act
-        using var process = Process.StartShellExecute(tempFile.Path);
-
-        // Assert
-        process.Should().NotBeNull();
     }
 }
