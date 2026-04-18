@@ -70,7 +70,7 @@ public class NotifyPropertyChangedExtensionsTests
 
         // Act
         var sub = obj.WatchProperties(
-            [x => x.StringProperty, x => (object?)x.IntProperty],
+            [x => x.StringProperty, x => x.IntProperty],
             () => callCount++,
             true
         );
