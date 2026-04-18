@@ -18,6 +18,7 @@ internal class ProgressMuxer(IProgress<double> output)
     private readonly Lock _lock = new();
     private readonly List<double> _splitWeights = new();
     private readonly List<double> _splitValues = new();
+    private long _version;
 
     /// <summary>
     /// Creates a new progress input with the specified weight.
@@ -41,7 +42,8 @@ internal class ProgressMuxer(IProgress<double> output)
 
         return new DelegateProgress<double>(p =>
         {
-            var value = 0.0;
+            double value;
+            long version;
 
             using (_lock.EnterScope())
             {
@@ -57,9 +59,11 @@ internal class ProgressMuxer(IProgress<double> output)
                 }
 
                 value = weightedMax > 0 ? weightedSum / weightedMax : 0;
+                version = ++_version;
             }
 
-            output.Report(value);
+            if (Interlocked.Read(ref _version) == version)
+                output.Report(value);
         });
     }
 }
