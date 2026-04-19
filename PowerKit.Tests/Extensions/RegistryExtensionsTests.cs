@@ -11,6 +11,20 @@ public class RegistryExtensionsTests
 {
     [SkippableFact]
     [SupportedOSPlatform("windows")]
+    public void OpenKey_Test()
+    {
+        Skip.IfNot(OperatingSystem.IsWindows());
+
+        // Act
+        using var key = RegistryHive.CurrentUser.OpenKey(RegistryView.Default);
+
+        // Assert
+        key.Should().NotBeNull();
+        key.Name.Should().Be(Registry.CurrentUser.Name);
+    }
+
+    [SkippableFact]
+    [SupportedOSPlatform("windows")]
     public void ContainsSubKey_Exists_Test()
     {
         Skip.IfNot(OperatingSystem.IsWindows());
