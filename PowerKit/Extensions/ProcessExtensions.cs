@@ -66,7 +66,10 @@ internal static class ProcessExtensions
         /// <summary>
         /// Starts the process associated with the specified file path or URL, using the operating system shell.
         /// </summary>
-        public static Process? StartShellExecute(string path, IReadOnlyList<string>? arguments = null)
+        public static Process? StartShellExecute(
+            string path,
+            IReadOnlyList<string>? arguments = null
+        )
         {
             var startInfo = new ProcessStartInfo(path) { UseShellExecute = true };
 
@@ -88,7 +91,7 @@ internal static class ProcessExtensions
                     sb.Append(argument.Replace("\\", "\\\\").Replace("\"", "\\\""));
                     sb.Append('"');
                 }
-                process.StartInfo.Arguments = sb.ToString();
+                startInfo.Arguments = sb.ToString();
             }
 #endif
 
