@@ -29,8 +29,8 @@ internal sealed class ThrottleLock(TimeSpan interval) : IDisposable
 
         try
         {
-            var elapsed = DateTimeOffset.Now - _lastRequestInstant;
-            var remaining = interval - elapsed;
+            var now = DateTimeOffset.Now;
+            var remaining = interval - (now - _lastRequestInstant);
             if (remaining > TimeSpan.Zero)
                 await Task.Delay(remaining, cancellationToken).ConfigureAwait(false);
 
