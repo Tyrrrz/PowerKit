@@ -42,6 +42,7 @@ internal static class ProcessExtensions
             }
 
             process.Start();
+
             return process;
         }
 
