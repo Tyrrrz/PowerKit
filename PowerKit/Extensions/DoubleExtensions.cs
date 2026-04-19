@@ -70,8 +70,15 @@ internal static class DoubleExtensions
     extension(double value)
     {
         /// <summary>
-        /// Wraps the value to the specified range, cycling it back around when it exceeds the bounds.
+        /// Wraps the value into the half-open range [<paramref name="min" />, <paramref name="max" />).
+        /// A value equal to <paramref name="max" /> wraps to <paramref name="min" />.
         /// </summary>
+        /// <param name="min">The inclusive lower bound of the range.</param>
+        /// <param name="max">The exclusive upper bound of the range.</param>
+        /// <remarks>
+        /// This method requires <paramref name="max" /> to be greater than <paramref name="min" />.
+        /// If <paramref name="max" /> is less than or equal to <paramref name="min" />, the behavior is invalid.
+        /// </remarks>
         public double Wrap(double min, double max) =>
             value < min ? max - (min - value) % (max - min) : min + (value - min) % (max - min);
     }
