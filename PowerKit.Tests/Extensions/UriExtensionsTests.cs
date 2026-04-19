@@ -29,22 +29,10 @@ public class UriExtensionsTests
             .TryGetFileName()
             .Should()
             .Be("document.pdf");
-    }
-
-    [Fact]
-    public void TryGetFileName_Encoded_Test()
-    {
-        // Act & assert
         new Uri("https://example.com/files/my%20file.txt")
             .TryGetFileName()
             .Should()
             .Be("my file.txt");
-    }
-
-    [Fact]
-    public void TryGetFileName_NoFileName_Test()
-    {
-        // Act & assert
         new Uri("https://example.com/")
             .TryGetFileName()
             .Should()
