@@ -70,8 +70,17 @@ internal static class SingleExtensions
     extension(float value)
     {
         /// <summary>
-        /// Wraps the value to the specified range, cycling it back around when it exceeds the bounds.
+        /// Wraps the value into the half-open range [<paramref name="min" />, <paramref name="max" />),
+        /// cycling it back around when it exceeds the bounds.
         /// </summary>
+        /// <remarks>
+        /// The returned value is greater than or equal to <paramref name="min" /> and less than
+        /// <paramref name="max" /> for valid ranges. A value equal to <paramref name="max" />
+        /// wraps to <paramref name="min" />.
+        /// When <paramref name="max" /> is less than or equal to <paramref name="min" />, this
+        /// method does not throw; it follows floating-point arithmetic and may return
+        /// <see cref="float.NaN" />.
+        /// </remarks>
         public float Wrap(float min, float max) =>
             value < min ? max - (min - value) % (max - min) : min + (value - min) % (max - min);
     }
