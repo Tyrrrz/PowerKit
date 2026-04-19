@@ -31,7 +31,7 @@ public class EnumExtensionsTests
         Enum.ParseOrDefault<TestEnum>("Foo").Should().Be(TestEnum.Foo);
         Enum.ParseOrDefault<TestEnum>("foo").Should().Be(default);
         Enum.ParseOrDefault<TestEnum>("foo", true).Should().Be(TestEnum.Foo);
-        Enum.ParseOrDefault<TestEnum>("invalid", TestEnum.Bar).Should().Be(TestEnum.Bar);
-        Enum.ParseOrDefault<TestEnum>(null, TestEnum.Bar).Should().Be(TestEnum.Bar);
+        Enum.ParseOrDefault("invalid", TestEnum.Bar).Should().Be(TestEnum.Bar);
+        Enum.ParseOrDefault(null, TestEnum.Bar).Should().Be(TestEnum.Bar);
     }
 }
