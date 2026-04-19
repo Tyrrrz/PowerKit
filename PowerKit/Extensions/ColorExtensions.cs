@@ -27,7 +27,7 @@ internal static class ColorExtensions
         public Color WithAlpha(int alpha) => Color.FromArgb(alpha, color);
 
         /// <summary>
-        /// Returns a new <see cref="Color" /> with a full alpha channel.
+        /// Returns a new <see cref="Color" /> with its alpha component set to 255 (fully opaque).
         /// </summary>
         public Color WithFullAlpha() => color.WithAlpha(255);
     }
