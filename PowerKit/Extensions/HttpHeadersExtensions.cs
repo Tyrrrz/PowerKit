@@ -22,9 +22,10 @@ internal static class HttpHeadersExtensions
 
         /// <summary>
         /// Attempts to get the value of the header with the specified name.
-        /// Returns an empty string if the header is not present.
+        /// Returns null if the header is not present.
         /// </summary>
-        public string TryGetValue(string name) => string.Join(", ", headers.GetValuesOrEmpty(name));
+        public string? TryGetValue(string name) =>
+            headers.TryGetValues(name, out var values) ? string.Join(", ", values) : null;
     }
 }
 #endif

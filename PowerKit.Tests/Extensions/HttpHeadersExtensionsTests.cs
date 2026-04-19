@@ -32,7 +32,7 @@ public class HttpHeadersExtensionsTests
         request.Headers.Add("X-Multi", "bar");
 
         // Act & assert
-        request.Headers.TryGetValue("X-Missing").Should().BeEmpty();
+        request.Headers.TryGetValue("X-Missing").Should().BeNull();
         request.Headers.TryGetValue("X-Custom").Should().Be("value");
         request.Headers.TryGetValue("X-Multi").Should().Be("foo, bar");
     }
