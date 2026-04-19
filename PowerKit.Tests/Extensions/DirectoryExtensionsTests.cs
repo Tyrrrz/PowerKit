@@ -178,6 +178,7 @@ public class DirectoryExtensionsTests
 
         // Assert
         Directory.Exists(Path.Combine(tempDir.Path, "sub", "nested")).Should().BeTrue();
+        File.Exists(filePath).Should().BeFalse();
     }
 
     [Fact]
