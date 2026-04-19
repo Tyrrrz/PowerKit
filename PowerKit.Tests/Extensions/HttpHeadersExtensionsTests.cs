@@ -8,44 +8,20 @@ namespace PowerKit.Tests.Extensions;
 public class HttpHeadersExtensionsTests
 {
     [Fact]
-    public void TryGetValue_Found_Test()
+    public void TryGetValue_Test()
     {
-        // Arrange
         using var request = new HttpRequestMessage();
+
+        // Single value
         request.Headers.Add("X-Custom", "value");
+        request.Headers.TryGetValue("X-Custom").Should().Be("value");
 
-        // Act
-        var result = request.Headers.TryGetValue("X-Custom");
+        // Missing header
+        request.Headers.TryGetValue("X-Missing").Should().BeNull();
 
-        // Assert
-        result.Should().Be("value");
-    }
-
-    [Fact]
-    public void TryGetValue_NotFound_Test()
-    {
-        // Arrange
-        using var request = new HttpRequestMessage();
-
-        // Act
-        var result = request.Headers.TryGetValue("X-Custom");
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Fact]
-    public void TryGetValue_MultipleValues_Test()
-    {
-        // Arrange
-        using var request = new HttpRequestMessage();
-        request.Headers.Add("X-Custom", "foo");
-        request.Headers.Add("X-Custom", "bar");
-
-        // Act
-        var result = request.Headers.TryGetValue("X-Custom");
-
-        // Assert
-        result.Should().Be("foobar");
+        // Multiple values are concatenated
+        request.Headers.Add("X-Multi", "foo");
+        request.Headers.Add("X-Multi", "bar");
+        request.Headers.TryGetValue("X-Multi").Should().Be("foobar");
     }
 }
