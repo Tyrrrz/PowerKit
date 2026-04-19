@@ -30,7 +30,7 @@ internal sealed class ThrottleLock(TimeSpan interval) : IDisposable
 
         try
         {
-            if (_lastTimestamp is long last)
+            if (_lastTimestamp is { } last)
             {
                 var remaining = interval - Stopwatch.GetElapsedTime(last);
                 if (remaining > TimeSpan.Zero)
