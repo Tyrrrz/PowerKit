@@ -10,8 +10,11 @@ public class SpanPoolTests
     [Fact]
     public void Rent_Test()
     {
-        // Arrange / Act
-        using var owner = SpanPool<byte>.Shared.Rent(16);
+        // Arrange
+        var pool = SpanPool<byte>.Shared;
+
+        // Act
+        using var owner = pool.Rent(16);
 
         // Assert
         owner.Span.Length.Should().Be(16);
@@ -21,7 +24,8 @@ public class SpanPoolTests
     public void Rent_Dispose_Test()
     {
         // Arrange
-        var owner = SpanPool<byte>.Shared.Rent(16);
+        var pool = SpanPool<byte>.Shared;
+        var owner = pool.Rent(16);
 
         // Act
         owner.Dispose();
