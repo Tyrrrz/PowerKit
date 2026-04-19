@@ -125,6 +125,17 @@ internal static class DirectoryExtensions
         }
 
         /// <summary>
+        /// Creates the directory for the specified file path, including all intermediate directories.
+        /// Does nothing if the directory already exists or if the path has no directory component.
+        /// </summary>
+        public static void CreateForFile(string filePath)
+        {
+            var dirPath = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrEmpty(dirPath))
+                Directory.CreateDirectory(dirPath);
+        }
+
+        /// <summary>
         /// Deletes the directory and all its contents, then recreates it as an empty directory.
         /// </summary>
         public static void Reset(string path)

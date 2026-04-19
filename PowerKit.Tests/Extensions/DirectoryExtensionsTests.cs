@@ -167,6 +167,34 @@ public class DirectoryExtensionsTests
     }
 
     [Fact]
+    public void CreateForFile_Test()
+    {
+        // Arrange
+        using var tempDir = TempDirectory.Create();
+        var filePath = Path.Combine(tempDir.Path, "file.txt");
+
+        // Act
+        Directory.CreateForFile(filePath);
+
+        // Assert
+        Directory.Exists(tempDir.Path).Should().BeTrue();
+    }
+
+    [Fact]
+    public void CreateForFile_Nested_Test()
+    {
+        // Arrange
+        using var tempDir = TempDirectory.Create();
+        var filePath = Path.Combine(tempDir.Path, "sub", "nested", "file.txt");
+
+        // Act
+        Directory.CreateForFile(filePath);
+
+        // Assert
+        Directory.Exists(Path.Combine(tempDir.Path, "sub", "nested")).Should().BeTrue();
+    }
+
+    [Fact]
     public void Reset_Test()
     {
         // Arrange
