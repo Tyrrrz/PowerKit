@@ -66,4 +66,31 @@ internal static class SingleExtensions
         public static float ParseOrDefault(string? str, float defaultValue = default) =>
             float.ParseOrDefault(str, CultureInfo.CurrentCulture, defaultValue);
     }
+
+    extension(float value)
+    {
+        /// <summary>
+        /// Wraps the value into the half-open range [<paramref name="min" />, <paramref name="max" />),
+        /// cycling it back around when it exceeds the bounds.
+        /// </summary>
+        /// <remarks>
+        /// The returned value is greater than or equal to <paramref name="min" /> and less than
+        /// <paramref name="max" /> for valid ranges. A value equal to <paramref name="max" />
+        /// wraps to <paramref name="min" />.
+        /// When <paramref name="max" /> is less than or equal to <paramref name="min" />, this
+        /// method does not throw; it follows floating-point arithmetic and may return
+        /// <see cref="float.NaN" />.
+        /// </remarks>
+        public float Wrap(float min, float max)
+        {
+            if (max <= min)
+            {
+                throw new ArgumentOutOfRangeException(nameof(max), "max must be greater than min.");
+            }
+
+            var range = max - min;
+            var normalized = ((value - min) % range + range) % range;
+            return min + normalized;
+        }
+    }
 }
