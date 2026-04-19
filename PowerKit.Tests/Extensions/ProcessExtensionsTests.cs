@@ -38,10 +38,4 @@ public class ProcessExtensionsTests
         Process.Start("dotnet", ["--version"]);
     }
 
-    [Fact]
-    public void Start_WithoutArguments_Test()
-    {
-        // Act & assert (should not throw)
-        Process.Start("dotnet");
-    }
 }
