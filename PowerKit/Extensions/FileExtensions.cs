@@ -1,10 +1,10 @@
 #nullable enable
 using System;
-using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using PowerKit;
 
 namespace PowerKit.Extensions;
 
@@ -72,7 +72,7 @@ internal static class FileExtensions
                 return true;
 
             using var stream = File.OpenRead(path);
-            using var buffer = ArrayPool<byte>.Shared.RentOwner(bytes.Length * 2);
+            using var buffer = SpanPool<byte>.Shared.Rent(bytes.Length * 2);
 
             var bytesInBuffer = 0;
             while (true)
