@@ -51,11 +51,11 @@ internal static class StreamExtensions
 
         /// <summary>
         /// Copies the contents of the stream to the destination stream, reporting progress
-        /// as a ratio of bytes read to <paramref name="contentLength" />.
+        /// as a ratio of bytes read to <paramref name="sourceLength" />.
         /// </summary>
         public async ValueTask CopyToAsync(
             Stream destination,
-            long contentLength,
+            long sourceLength,
             IProgress<double>? progress,
             CancellationToken cancellationToken = default
         )
@@ -81,9 +81,9 @@ internal static class StreamExtensions
 
                 totalBytesRead += bytesRead;
 
-                if (progress is not null && contentLength > 0)
+                if (progress is not null && sourceLength > 0)
                 {
-                    progress.Report(1.0 * totalBytesRead / contentLength);
+                    progress.Report(1.0 * totalBytesRead / sourceLength);
                 }
             }
         }
@@ -98,9 +98,9 @@ internal static class StreamExtensions
             CancellationToken cancellationToken = default
         )
         {
-            var contentLength = source.CanSeek ? source.Length : -1;
+            var sourceLength = source.CanSeek ? source.Length : -1;
             await source
-                .CopyToAsync(destination, contentLength, progress, cancellationToken)
+                .CopyToAsync(destination, sourceLength, progress, cancellationToken)
                 .ConfigureAwait(false);
         }
 #endif
