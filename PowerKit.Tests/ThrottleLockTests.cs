@@ -13,17 +13,19 @@ public class ThrottleLockTests
     [Fact]
     public async Task WaitAsync_Test()
     {
-        var interval = TimeSpan.FromMilliseconds(50);
-        using var throttle = new ThrottleLock(interval);
+        // Arrange
+        using var throttle = new ThrottleLock(TimeSpan.FromMilliseconds(50));
+
+        // Act
         var stopwatch = Stopwatch.StartNew();
-
         await throttle.WaitAsync();
         await throttle.WaitAsync();
         await throttle.WaitAsync();
 
+        // Assert
         stopwatch
             .Elapsed.Should()
-            .BeGreaterThanOrEqualTo(interval * 3 - TimeSpan.FromMilliseconds(50));
+            .BeGreaterThanOrEqualTo(2 * TimeSpan.FromMilliseconds(50));
     }
 
     [Fact]
@@ -31,11 +33,9 @@ public class ThrottleLockTests
     {
         // Arrange
         using var throttle = new ThrottleLock(TimeSpan.FromSeconds(10));
-        using var cts = new CancellationTokenSource();
-        cts.Cancel();
 
         // Act & assert
-        var act = async () => await throttle.WaitAsync(cts.Token);
+        var act = async () => await throttle.WaitAsync(new CancellationToken(true));
         await act.Should().ThrowAsync<OperationCanceledException>();
     }
 }
