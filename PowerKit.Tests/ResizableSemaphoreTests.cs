@@ -16,13 +16,13 @@ public class ResizableSemaphoreTests
         using var semaphore = new ResizableSemaphore { MaxCount = 1 };
 
         // Act
-        var access1 = await semaphore.AcquireAsync();
-        var acquireTask = semaphore.AcquireAsync();
+        using var access1 = await semaphore.AcquireAsync();
+        var access2Task = semaphore.AcquireAsync();
 
         // Assert
-        acquireTask.IsCompleted.Should().BeFalse();
+        access2Task.IsCompleted.Should().BeFalse();
         access1.Dispose();
-        using var access2 = await acquireTask;
+        using var access2 = await access2Task;
     }
 
     [Fact]
@@ -38,17 +38,17 @@ public class ResizableSemaphoreTests
     }
 
     [Fact]
-    public async Task MaxCount_Test()
+    public async Task AcquireAsync_Resized_Test()
     {
         // Arrange
         using var semaphore = new ResizableSemaphore { MaxCount = 1 };
         using var _ = await semaphore.AcquireAsync();
 
         // Act
-        var acquireTask = semaphore.AcquireAsync();
+        var accessTask = semaphore.AcquireAsync();
         semaphore.MaxCount = 2;
 
         // Assert
-        using var access = await acquireTask;
+        using var access = await accessTask;
     }
 }
