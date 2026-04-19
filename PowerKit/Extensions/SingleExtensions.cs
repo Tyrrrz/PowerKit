@@ -81,7 +81,16 @@ internal static class SingleExtensions
         /// method does not throw; it follows floating-point arithmetic and may return
         /// <see cref="float.NaN" />.
         /// </remarks>
-        public float Wrap(float min, float max) =>
-            value < min ? max - (min - value) % (max - min) : min + (value - min) % (max - min);
+        public float Wrap(float min, float max)
+        {
+            if (max <= min)
+            {
+                throw new ArgumentOutOfRangeException(nameof(max), "max must be greater than min.");
+            }
+
+            var range = max - min;
+            var normalized = ((value - min) % range + range) % range;
+            return min + normalized;
+        }
     }
 }
