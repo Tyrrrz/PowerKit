@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Security;
 using System.Text;
 
@@ -13,6 +14,34 @@ internal static class StringExtensions
 {
     extension(string str)
     {
+        /// <summary>
+        /// Replaces each character using the replacement produced by the provided selector.
+        /// </summary>
+        public string Replace(Func<char, char> getReplacement) =>
+            string.Create(
+                str.Length,
+                (str, getReplacement),
+                static (chars, source) =>
+                {
+                    foreach (var (i, ch) in source.str.Index())
+                    {
+                        chars[i] = source.getReplacement(ch);
+                    }
+                }
+            );
+
+        /// <summary>
+        /// Replaces each whitespace character using the replacement produced by the provided selector.
+        /// </summary>
+        public string ReplaceWhiteSpace(Func<char, char> getReplacement) =>
+            str.Replace(ch => char.IsWhiteSpace(ch) ? getReplacement(ch) : ch);
+
+        /// <summary>
+        /// Replaces each whitespace character with the specified replacement character.
+        /// </summary>
+        public string ReplaceWhiteSpace(char replacement) =>
+            str.ReplaceWhiteSpace(_ => replacement);
+
         /// <summary>
         /// Returns the string with the characters in reverse order.
         /// </summary>

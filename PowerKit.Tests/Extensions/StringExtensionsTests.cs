@@ -7,6 +7,26 @@ namespace PowerKit.Tests.Extensions;
 public class StringExtensionsTests
 {
     [Fact]
+    public void Replace_Test()
+    {
+        // Act & assert
+        "a1b2c3".Replace(ch => char.IsDigit(ch) ? '*' : ch).Should().Be("a*b*c*");
+        "hello".Replace(ch => ch).Should().Be("hello");
+        "".Replace(ch => ch).Should().Be("");
+    }
+
+    [Fact]
+    public void ReplaceWhiteSpace_Test()
+    {
+        // Act & assert
+        "hello world".ReplaceWhiteSpace('_').Should().Be("hello_world");
+        "hello\tworld\nfoo".ReplaceWhiteSpace('-').Should().Be("hello-world-foo");
+        "hello\u00A0world".ReplaceWhiteSpace(' ').Should().Be("hello world");
+        "helloworld".ReplaceWhiteSpace('_').Should().Be("helloworld");
+        "".ReplaceWhiteSpace('_').Should().Be("");
+    }
+
+    [Fact]
     public void Reverse_Test()
     {
         // Act & assert
