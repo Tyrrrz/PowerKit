@@ -23,9 +23,7 @@ public class ThrottleLockTests
         await throttle.WaitAsync();
 
         // Assert
-        stopwatch
-            .Elapsed.Should()
-            .BeGreaterThanOrEqualTo(2 * TimeSpan.FromMilliseconds(50));
+        stopwatch.Elapsed.Should().BeGreaterThanOrEqualTo(2 * TimeSpan.FromMilliseconds(50));
     }
 
     [Fact]
