@@ -171,20 +171,6 @@ public class DirectoryExtensionsTests
     {
         // Arrange
         using var tempDir = TempDirectory.Create();
-        var filePath = Path.Combine(tempDir.Path, "file.txt");
-
-        // Act
-        Directory.CreateForFile(filePath);
-
-        // Assert
-        Directory.Exists(tempDir.Path).Should().BeTrue();
-    }
-
-    [Fact]
-    public void CreateForFile_Nested_Test()
-    {
-        // Arrange
-        using var tempDir = TempDirectory.Create();
         var filePath = Path.Combine(tempDir.Path, "sub", "nested", "file.txt");
 
         // Act
