@@ -17,7 +17,7 @@ public class HttpHeadersExtensionsTests
         request.Headers.TryGetValue("X-Custom").Should().Be("value");
 
         // Missing header
-        request.Headers.TryGetValue("X-Missing").Should().BeNull();
+        request.Headers.TryGetValue("X-Missing").Should().BeEmpty();
 
         // Multiple values are joined with ", "
         request.Headers.Add("X-Multi", "foo");
@@ -34,7 +34,7 @@ public class HttpHeadersExtensionsTests
         request.Headers.Add("X-Custom", "value");
         request.Headers.TryGetValues("X-Custom").Should().Equal("value");
 
-        // Missing header returns empty list
+        // Missing header returns empty array
         request.Headers.TryGetValues("X-Missing").Should().BeEmpty();
 
         // Multiple values are returned individually
