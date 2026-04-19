@@ -8,13 +8,13 @@ namespace PowerKit.Tests.Extensions;
 public class ColorExtensionsTests
 {
     [Fact]
-    public void ToHex_Test()
+    public void ToHexString_Test()
     {
         // Act & assert
-        Color.FromArgb(255, 0x12, 0x34, 0x56).ToHex().Should().Be("#123456");
-        Color.FromArgb(128, 0xff, 0x00, 0x00).ToHex().Should().Be("#FF0000");
-        Color.FromArgb(255, 0x00, 0x00, 0x00).ToHex().Should().Be("#000000");
-        Color.FromArgb(255, 0xff, 0xff, 0xff).ToHex().Should().Be("#FFFFFF");
+        Color.FromArgb(255, 0x12, 0x34, 0x56).ToHexString().Should().Be("#123456");
+        Color.FromArgb(128, 0xff, 0x00, 0x00).ToHexString().Should().Be("#FF0000");
+        Color.FromArgb(255, 0x00, 0x00, 0x00).ToHexString().Should().Be("#000000");
+        Color.FromArgb(255, 0xff, 0xff, 0xff).ToHexString().Should().Be("#FFFFFF");
     }
 
     [Fact]

@@ -14,7 +14,7 @@ internal static class ColorExtensions
         /// <summary>
         /// Returns the hexadecimal representation of the color (e.g., <c>#RRGGBB</c>).
         /// </summary>
-        public string ToHex() => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        public string ToHexString() => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
 
         /// <summary>
         /// Returns the RGB value of the color as a 32-bit integer (without the alpha channel).
