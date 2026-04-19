@@ -24,4 +24,22 @@ public class HttpHeadersExtensionsTests
         request.Headers.Add("X-Multi", "bar");
         request.Headers.TryGetValue("X-Multi").Should().Be("foobar");
     }
+
+    [Fact]
+    public void TryGetValues_Test()
+    {
+        using var request = new HttpRequestMessage();
+
+        // Single value
+        request.Headers.Add("X-Custom", "value");
+        request.Headers.TryGetValues("X-Custom").Should().Equal("value");
+
+        // Missing header returns empty list
+        request.Headers.TryGetValues("X-Missing").Should().BeEmpty();
+
+        // Multiple values are returned individually
+        request.Headers.Add("X-Multi", "foo");
+        request.Headers.Add("X-Multi", "bar");
+        request.Headers.TryGetValues("X-Multi").Should().Equal("foo", "bar");
+    }
 }
