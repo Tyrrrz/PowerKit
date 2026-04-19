@@ -39,6 +39,7 @@ public class SingleExtensionsTests
         5.0f.Wrap(0.0f, 10.0f).Should().Be(5.0f);
         13.0f.Wrap(0.0f, 10.0f).Should().Be(3.0f);
         (-3.0f).Wrap(0.0f, 10.0f).Should().Be(7.0f);
+        (-10.0f).Wrap(0.0f, 10.0f).Should().Be(0.0f);
         0.0f.Wrap(0.0f, 10.0f).Should().Be(0.0f);
         10.0f.Wrap(0.0f, 10.0f).Should().Be(0.0f);
         23.0f.Wrap(0.0f, 10.0f).Should().Be(3.0f);
