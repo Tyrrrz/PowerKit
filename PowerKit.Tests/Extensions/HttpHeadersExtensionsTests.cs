@@ -19,10 +19,10 @@ public class HttpHeadersExtensionsTests
         // Missing header
         request.Headers.TryGetValue("X-Missing").Should().BeNull();
 
-        // Multiple values are concatenated
+        // Multiple values are joined with ", "
         request.Headers.Add("X-Multi", "foo");
         request.Headers.Add("X-Multi", "bar");
-        request.Headers.TryGetValue("X-Multi").Should().Be("foobar");
+        request.Headers.TryGetValue("X-Multi").Should().Be("foo, bar");
     }
 
     [Fact]
