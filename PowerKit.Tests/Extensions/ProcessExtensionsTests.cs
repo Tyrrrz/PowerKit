@@ -32,10 +32,13 @@ public class ProcessExtensionsTests
     }
 
     [Fact]
-    public void Start_Test()
+    public async Task Start_Test()
     {
-        // Act & assert (should not throw)
-        Process.Start("dotnet", ["--version"]);
-    }
+        // Act
+        using var process = Process.Start("dotnet", ["--version"]);
+        await process.WaitForExitAsync();
 
+        // Assert
+        process.ExitCode.Should().Be(0);
+    }
 }

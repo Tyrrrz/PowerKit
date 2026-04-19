@@ -1,9 +1,7 @@
 #nullable enable
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-#if NET40_OR_GREATER || NETSTANDARD || NET
-using System.Collections.Generic;
-#endif
 
 namespace PowerKit.Extensions;
 
@@ -34,9 +32,9 @@ internal static class ProcessExtensions
         /// <summary>
         /// Starts a new process using the specified file path and optional arguments.
         /// </summary>
-        public static void Start(string path, IReadOnlyList<string>? arguments = null)
+        public static Process Start(string path, IReadOnlyList<string>? arguments = null)
         {
-            using var process = new Process();
+            var process = new Process();
             process.StartInfo = new ProcessStartInfo(path);
 
 #if NET || NETCOREAPP
@@ -45,9 +43,24 @@ internal static class ProcessExtensions
                 foreach (var argument in arguments)
                     process.StartInfo.ArgumentList.Add(argument);
             }
+#else
+            if (arguments is not null)
+            {
+                var sb = new System.Text.StringBuilder();
+                foreach (var argument in arguments)
+                {
+                    if (sb.Length > 0)
+                        sb.Append(' ');
+                    sb.Append('"');
+                    sb.Append(argument.Replace("\\", "\\\\").Replace("\"", "\\\""));
+                    sb.Append('"');
+                }
+                process.StartInfo.Arguments = sb.ToString();
+            }
 #endif
 
             process.Start();
+            return process;
         }
 
         /// <summary>
@@ -62,6 +75,20 @@ internal static class ProcessExtensions
             {
                 foreach (var argument in arguments)
                     startInfo.ArgumentList.Add(argument);
+            }
+#else
+            if (arguments is not null)
+            {
+                var sb = new System.Text.StringBuilder();
+                foreach (var argument in arguments)
+                {
+                    if (sb.Length > 0)
+                        sb.Append(' ');
+                    sb.Append('"');
+                    sb.Append(argument.Replace("\\", "\\\\").Replace("\"", "\\\""));
+                    sb.Append('"');
+                }
+                process.StartInfo.Arguments = sb.ToString();
             }
 #endif
 
