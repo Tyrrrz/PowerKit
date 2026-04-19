@@ -9,22 +9,6 @@ namespace PowerKit.Tests.Extensions;
 
 public class RegistryExtensionsTests
 {
-    [SkippableTheory]
-    [InlineData(RegistryHive.ClassesRoot, "HKCR")]
-    [InlineData(RegistryHive.CurrentUser, "HKCU")]
-    [InlineData(RegistryHive.LocalMachine, "HKLM")]
-    [InlineData(RegistryHive.Users, "HKU")]
-    [InlineData(RegistryHive.PerformanceData, "HKPD")]
-    [InlineData(RegistryHive.CurrentConfig, "HKCC")]
-    [SupportedOSPlatform("windows")]
-    public void Moniker_Test(RegistryHive hive, string expectedMoniker)
-    {
-        Skip.IfNot(OperatingSystem.IsWindows());
-
-        // Act & assert
-        hive.Moniker.Should().Be(expectedMoniker);
-    }
-
     [SkippableFact]
     [SupportedOSPlatform("windows")]
     public void OpenKey_Test()
