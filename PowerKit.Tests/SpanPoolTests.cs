@@ -1,32 +1,31 @@
 using System;
-using System.Buffers;
 using FluentAssertions;
-using PowerKit.Extensions;
+using PowerKit;
 using Xunit;
 
-namespace PowerKit.Tests.Extensions;
+namespace PowerKit.Tests;
 
-public class ArrayPoolExtensionsTests
+public class SpanPoolTests
 {
     [Fact]
-    public void RentOwner_Test()
+    public void Rent_Test()
     {
         // Arrange
-        var pool = ArrayPool<byte>.Shared;
+        var pool = SpanPool<byte>.Shared;
 
         // Act
-        using var owner = pool.RentOwner(16);
+        using var owner = pool.Rent(16);
 
         // Assert
         owner.Span.Length.Should().Be(16);
     }
 
     [Fact]
-    public void RentOwner_Dispose_Test()
+    public void Rent_Dispose_Test()
     {
         // Arrange
-        var pool = ArrayPool<byte>.Shared;
-        var owner = pool.RentOwner(16);
+        var pool = SpanPool<byte>.Shared;
+        var owner = pool.Rent(16);
 
         // Act
         owner.Dispose();
