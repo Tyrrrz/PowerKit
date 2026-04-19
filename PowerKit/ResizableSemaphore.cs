@@ -59,8 +59,7 @@ internal class ResizableSemaphore : IDisposable
     /// </summary>
     public async Task<IDisposable> AcquireAsync(CancellationToken cancellationToken = default)
     {
-        if (_isDisposed)
-            throw new ObjectDisposedException(GetType().Name);
+        ObjectDisposedException.ThrowIf(_isDisposed, this);
 
         var waiter = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 

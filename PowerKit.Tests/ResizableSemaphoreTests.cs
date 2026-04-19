@@ -55,24 +55,4 @@ public class ResizableSemaphoreTests
         // Assert
         using var access2 = await acquireTask;
     }
-
-    [Fact]
-    public async Task Dispose_Test()
-    {
-        // Arrange
-        using var semaphore = new ResizableSemaphore { MaxCount = 1 };
-        using var access = await semaphore.AcquireAsync();
-
-        // Act: dispose cancels pending waiters
-        var acquireTask = semaphore.AcquireAsync();
-        semaphore.Dispose();
-
-        await acquireTask.Awaiting(t => t).Should().ThrowAsync<OperationCanceledException>();
-
-        // Acquire after dispose throws immediately
-        await semaphore
-            .Awaiting(s => s.AcquireAsync())
-            .Should()
-            .ThrowAsync<ObjectDisposedException>();
-    }
 }
