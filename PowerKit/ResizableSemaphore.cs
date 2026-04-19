@@ -59,20 +59,27 @@ internal class ResizableSemaphore : IDisposable
     /// </summary>
     public async Task<IDisposable> AcquireAsync(CancellationToken cancellationToken = default)
     {
-        ObjectDisposedException.ThrowIf(_isDisposed, this);
-
         var waiter = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using var ctsRegistration = _cts.Token.Register(() => waiter.TrySetCanceled(_cts.Token));
-        using var ctRegistration = cancellationToken.Register(() =>
-            waiter.TrySetCanceled(cancellationToken)
-        );
+        CancellationTokenRegistration ctsRegistration = default;
+        CancellationTokenRegistration ctRegistration = default;
 
         using (_lock.EnterScope())
+        {
+            ObjectDisposedException.ThrowIf(_isDisposed, this);
+            ctsRegistration = _cts.Token.Register(() => waiter.TrySetCanceled(_cts.Token));
+            ctRegistration = cancellationToken.Register(() =>
+                waiter.TrySetCanceled(cancellationToken)
+            );
             _waiters.Enqueue(waiter);
-        Refresh();
+        }
 
-        await waiter.Task.ConfigureAwait(false);
+        using (ctsRegistration)
+        using (ctRegistration)
+        {
+            Refresh();
+            await waiter.Task.ConfigureAwait(false);
+        }
 
         return Disposable.Create(Release);
     }
@@ -87,13 +94,15 @@ internal class ResizableSemaphore : IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        if (!_isDisposed)
+        using (_lock.EnterScope())
         {
+            if (_isDisposed)
+                return;
+            _isDisposed = true;
             _cts.Cancel();
-            _cts.Dispose();
         }
 
-        _isDisposed = true;
+        _cts.Dispose();
     }
 }
 #endif
