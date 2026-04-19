@@ -48,7 +48,7 @@ internal class ResizableSemaphore : IDisposable
             {
                 // Don't increment the count if the waiter has already been
                 // completed before (most likely by getting canceled).
-                if (waiter!.TrySetResult())
+                if (waiter?.TrySetResult() == true)
                     _count++;
             }
         }
