@@ -8,26 +8,8 @@ using System.Threading.Tasks;
 
 namespace PowerKit;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-file class ResizableSemaphoreAccess(ResizableSemaphore semaphore) : IDisposable
-{
-    private bool _isDisposed;
-
-    public void Dispose()
-    {
-        if (!_isDisposed)
-        {
-            semaphore.Release();
-        }
-
-        _isDisposed = true;
-    }
-}
-
 /// <summary>
-/// Like a regular semaphore, but the max count can be changed at any point.
+/// Semaphore whose maximum concurrency count can be adjusted at runtime.
 /// </summary>
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
@@ -39,7 +21,6 @@ internal class ResizableSemaphore : IDisposable
     private readonly CancellationTokenSource _cts = new();
 
     private bool _isDisposed;
-    private int _maxCount = int.MaxValue;
     private int _count;
 
     /// <summary>
@@ -48,39 +29,33 @@ internal class ResizableSemaphore : IDisposable
     /// </summary>
     public int MaxCount
     {
-        get
-        {
-            using (_lock.EnterScope())
-            {
-                return _maxCount;
-            }
-        }
+        get => field;
         set
         {
             using (_lock.EnterScope())
-            {
-                _maxCount = value;
-                Refresh();
-            }
+                field = value;
+            Refresh();
         }
-    }
+    } = int.MaxValue;
 
-    // Must be called while holding the lock.
     private void Refresh()
     {
-        // Provide access to pending waiters, as long as max count allows.
-        while (_count < _maxCount && _waiters.TryDequeue(out var waiter))
+        using (_lock.EnterScope())
         {
-            // Don't increment the count if the waiter has already been
-            // completed before (most likely by getting canceled).
-            if (waiter!.TrySetResult())
-                _count++;
+            // Provide access to pending waiters, as long as max count allows.
+            while (_count < MaxCount && _waiters.TryDequeue(out var waiter))
+            {
+                // Don't increment the count if the waiter has already been
+                // completed before (most likely by getting canceled).
+                if (waiter!.TrySetResult())
+                    _count++;
+            }
         }
     }
 
     /// <summary>
-    /// Acquires access to the semaphore, waiting asynchronously if the max count has been reached.
-    /// Dispose the returned handle to release access.
+    /// Acquires access to the semaphore, waiting asynchronously if the maximum concurrency count
+    /// has been reached. Dispose the returned handle to release access.
     /// </summary>
     public async Task<IDisposable> AcquireAsync(CancellationToken cancellationToken = default)
     {
@@ -95,23 +70,19 @@ internal class ResizableSemaphore : IDisposable
         );
 
         using (_lock.EnterScope())
-        {
             _waiters.Enqueue(waiter);
-            Refresh();
-        }
+        Refresh();
 
         await waiter.Task.ConfigureAwait(false);
 
-        return new ResizableSemaphoreAccess(this);
+        return Disposable.Create(Release);
     }
 
     internal void Release()
     {
         using (_lock.EnterScope())
-        {
             _count--;
-            Refresh();
-        }
+        Refresh();
     }
 
     /// <inheritdoc />

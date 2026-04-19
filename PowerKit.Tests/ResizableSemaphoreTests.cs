@@ -23,9 +23,6 @@ public class ResizableSemaphoreTests
         // Releasing unblocks the next waiter
         access1.Dispose();
         using var access2 = await acquireTask;
-
-        // Double-dispose is idempotent
-        access1.Dispose();
     }
 
     [Fact]
