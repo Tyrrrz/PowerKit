@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PowerKit;
 
 /// <summary>
-/// Semaphore whose maximum concurrency count can be adjusted at runtime.
+/// Semaphore whose maximum concurrency count can be adjusted at run time.
 /// </summary>
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
@@ -34,6 +34,7 @@ internal class ResizableSemaphore : IDisposable
         {
             using (_lock.EnterScope())
                 field = value;
+
             Refresh();
         }
     } = int.MaxValue;
@@ -42,7 +43,7 @@ internal class ResizableSemaphore : IDisposable
     {
         using (_lock.EnterScope())
         {
-            // Provide access to pending waiters, as long as max count allows.
+            // Provide access to pending waiters, as long as max count allows
             while (_count < MaxCount && _waiters.TryDequeue(out var waiter))
             {
                 // Don't increment the count if the waiter has already been
@@ -53,6 +54,14 @@ internal class ResizableSemaphore : IDisposable
         }
     }
 
+    private void Release()
+    {
+        using (_lock.EnterScope())
+            _count--;
+
+        Refresh();
+    }
+
     /// <summary>
     /// Acquires access to the semaphore, waiting asynchronously if the maximum concurrency count
     /// has been reached. Dispose the returned handle to release access.
@@ -61,34 +70,20 @@ internal class ResizableSemaphore : IDisposable
     {
         var waiter = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        CancellationTokenRegistration ctsRegistration = default;
-        CancellationTokenRegistration ctRegistration = default;
-
+        using (_cts.Token.Register(() => waiter.TrySetCanceled(_cts.Token)))
+        using (cancellationToken.Register(() =>
+                waiter.TrySetCanceled(cancellationToken)
+            ))
         using (_lock.EnterScope())
         {
             ObjectDisposedException.ThrowIf(_isDisposed, this);
-            ctsRegistration = _cts.Token.Register(() => waiter.TrySetCanceled(_cts.Token));
-            ctRegistration = cancellationToken.Register(() =>
-                waiter.TrySetCanceled(cancellationToken)
-            );
             _waiters.Enqueue(waiter);
         }
 
-        using (ctsRegistration)
-        using (ctRegistration)
-        {
-            Refresh();
-            await waiter.Task.ConfigureAwait(false);
-        }
+        Refresh();
+        await waiter.Task.ConfigureAwait(false);
 
         return Disposable.Create(Release);
-    }
-
-    internal void Release()
-    {
-        using (_lock.EnterScope())
-            _count--;
-        Refresh();
     }
 
     /// <inheritdoc />
@@ -98,6 +93,7 @@ internal class ResizableSemaphore : IDisposable
         {
             if (_isDisposed)
                 return;
+
             _isDisposed = true;
             _cts.Cancel();
         }
