@@ -8,6 +8,15 @@ namespace PowerKit.Tests.Extensions;
 public class DoubleExtensionsTests
 {
     [Fact]
+    public void Wrap_Test()
+    {
+        // Act & assert
+        5.0.Wrap(0.0, 10.0).Should().Be(5.0);
+        13.0.Wrap(0.0, 10.0).Should().Be(3.0);
+        (-3.0).Wrap(0.0, 10.0).Should().Be(7.0);
+    }
+
+    [Fact]
     public void ParseOrNull_Test()
     {
         // Act & assert

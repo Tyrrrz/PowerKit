@@ -10,6 +10,15 @@ namespace PowerKit.Extensions;
 #endif
 internal static class DoubleExtensions
 {
+    extension(double value)
+    {
+        /// <summary>
+        /// Wraps the value to the specified range, cycling it back around when it exceeds the bounds.
+        /// </summary>
+        public double Wrap(double min, double max) =>
+            value < min ? max - (min - value) % (max - min) : min + (value - min) % (max - min);
+    }
+
     extension(double)
     {
         /// <summary>

@@ -10,6 +10,15 @@ namespace PowerKit.Extensions;
 #endif
 internal static class SingleExtensions
 {
+    extension(float value)
+    {
+        /// <summary>
+        /// Wraps the value to the specified range, cycling it back around when it exceeds the bounds.
+        /// </summary>
+        public float Wrap(float min, float max) =>
+            value < min ? max - (min - value) % (max - min) : min + (value - min) % (max - min);
+    }
+
     extension(float)
     {
         /// <summary>
