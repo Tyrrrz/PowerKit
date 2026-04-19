@@ -28,11 +28,10 @@ internal static class ProcessExtensions
             }
         }
 
-#if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Starts a new process using the specified file path and optional arguments.
         /// </summary>
-        public static Process Start(string path, IReadOnlyList<string>? arguments = null)
+        public static Process Start(string path, IEnumerable<string>? arguments = null)
         {
             var process = new Process();
             process.StartInfo = new ProcessStartInfo(path);
@@ -68,7 +67,7 @@ internal static class ProcessExtensions
         /// </summary>
         public static Process? StartShellExecute(
             string path,
-            IReadOnlyList<string>? arguments = null
+            IEnumerable<string>? arguments = null
         )
         {
             var startInfo = new ProcessStartInfo(path) { UseShellExecute = true };
@@ -97,12 +96,5 @@ internal static class ProcessExtensions
 
             return Process.Start(startInfo);
         }
-#else
-        /// <summary>
-        /// Starts the process associated with the specified file path or URL, using the operating system shell.
-        /// </summary>
-        public static Process? StartShellExecute(string fileName) =>
-            Process.Start(new ProcessStartInfo(fileName) { UseShellExecute = true });
-#endif
     }
 }
