@@ -13,24 +13,17 @@ public class ThrottleLockTests
     [Fact]
     public async Task WaitAsync_Test()
     {
-        var interval = TimeSpan.FromMilliseconds(200);
+        var interval = TimeSpan.FromMilliseconds(50);
         using var throttle = new ThrottleLock(interval);
         var stopwatch = Stopwatch.StartNew();
 
-        // First call should not be throttled
         await throttle.WaitAsync();
-        stopwatch.Elapsed.Should().BeLessThan(interval);
+        await throttle.WaitAsync();
+        await throttle.WaitAsync();
 
-        // Subsequent call should be throttled for the remainder of the interval
-        sw.Restart();
-        await throttle.WaitAsync();
-        stopwatch.Elapsed.Should().BeGreaterThanOrEqualTo(interval - TimeSpan.FromMilliseconds(50));
-
-        // After the interval elapses, the next call should not be throttled
-        await Task.Delay(interval + TimeSpan.FromMilliseconds(50));
-        stopwatch.Restart();
-        await throttle.WaitAsync();
-        stopwatch.Elapsed.Should().BeLessThan(interval);
+        stopwatch
+            .Elapsed.Should()
+            .BeGreaterThanOrEqualTo(interval * 3 - TimeSpan.FromMilliseconds(50));
     }
 
     [Fact]

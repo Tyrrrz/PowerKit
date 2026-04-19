@@ -18,7 +18,7 @@ namespace PowerKit;
 internal sealed class ThrottleLock(TimeSpan interval) : IDisposable
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
-    private long? _lastTimestamp;
+    private long _lastTimestamp = Stopwatch.GetTimestamp();
 
     /// <summary>
     /// Asynchronously waits until the throttle interval has elapsed since the last acquisition,
@@ -30,12 +30,9 @@ internal sealed class ThrottleLock(TimeSpan interval) : IDisposable
 
         try
         {
-            if (_lastTimestamp is { } last)
-            {
-                var remaining = interval - Stopwatch.GetElapsedTime(last);
-                if (remaining > TimeSpan.Zero)
-                    await Task.Delay(remaining, cancellationToken).ConfigureAwait(false);
-            }
+            var remaining = interval - Stopwatch.GetElapsedTime(_lastTimestamp);
+            if (remaining > TimeSpan.Zero)
+                await Task.Delay(remaining, cancellationToken).ConfigureAwait(false);
 
             _lastTimestamp = Stopwatch.GetTimestamp();
         }
