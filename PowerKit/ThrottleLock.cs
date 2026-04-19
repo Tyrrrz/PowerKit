@@ -1,6 +1,7 @@
 #if NET40_OR_GREATER || NETSTANDARD || NET
 #nullable enable
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace PowerKit;
 internal sealed class ThrottleLock(TimeSpan interval) : IDisposable
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
-    private DateTimeOffset _lastRequestInstant = DateTimeOffset.MinValue;
+    private long? _lastTimestamp;
 
     /// <summary>
     /// Asynchronously waits until the throttle interval has elapsed since the last acquisition,
@@ -29,12 +30,14 @@ internal sealed class ThrottleLock(TimeSpan interval) : IDisposable
 
         try
         {
-            var now = DateTimeOffset.Now;
-            var remaining = interval - (now - _lastRequestInstant);
-            if (remaining > TimeSpan.Zero)
-                await Task.Delay(remaining, cancellationToken).ConfigureAwait(false);
+            if (_lastTimestamp is long last)
+            {
+                var remaining = interval - Stopwatch.GetElapsedTime(last);
+                if (remaining > TimeSpan.Zero)
+                    await Task.Delay(remaining, cancellationToken).ConfigureAwait(false);
+            }
 
-            _lastRequestInstant = DateTimeOffset.Now;
+            _lastTimestamp = Stopwatch.GetTimestamp();
         }
         finally
         {
