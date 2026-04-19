@@ -123,6 +123,6 @@ internal static class AssemblyExtensions
             assembly
                 .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                 ?.InformationalVersion
-            ?? assembly.GetName().Version?.ToString();
+            ?? assembly.GetName().Version?.ToSemanticString();
     }
 }
