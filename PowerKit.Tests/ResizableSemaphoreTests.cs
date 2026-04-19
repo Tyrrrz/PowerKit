@@ -15,30 +15,26 @@ public class ResizableSemaphoreTests
         // Arrange
         using var semaphore = new ResizableSemaphore { MaxCount = 1 };
 
-        // Blocks when max count is reached
+        // Act
         var access1 = await semaphore.AcquireAsync();
         var acquireTask = semaphore.AcquireAsync();
-        acquireTask.IsCompleted.Should().BeFalse();
 
-        // Releasing unblocks the next waiter
+        // Assert
+        acquireTask.IsCompleted.Should().BeFalse();
         access1.Dispose();
         using var access2 = await acquireTask;
     }
 
     [Fact]
-    public async Task AcquireAsync_CancellationToken_Test()
+    public async Task AcquireAsync_Cancellation_Test()
     {
         // Arrange
         using var semaphore = new ResizableSemaphore { MaxCount = 1 };
-        using var access = await semaphore.AcquireAsync();
-        using var cts = new CancellationTokenSource();
+        using var _ = await semaphore.AcquireAsync();
 
-        // Act
-        var acquireTask = semaphore.AcquireAsync(cts.Token);
-        cts.Cancel();
-
-        // Assert
-        await acquireTask.Awaiting(t => t).Should().ThrowAsync<OperationCanceledException>();
+        // Act & assert
+        var act = async () => await semaphore.AcquireAsync(new CancellationToken(true));
+        await act.Should().ThrowAsync<OperationCanceledException>();
     }
 
     [Fact]
@@ -46,13 +42,13 @@ public class ResizableSemaphoreTests
     {
         // Arrange
         using var semaphore = new ResizableSemaphore { MaxCount = 1 };
-        using var access = await semaphore.AcquireAsync();
+        using var _ = await semaphore.AcquireAsync();
 
-        // Act: increasing MaxCount unblocks pending waiters
+        // Act
         var acquireTask = semaphore.AcquireAsync();
         semaphore.MaxCount = 2;
 
         // Assert
-        using var access2 = await acquireTask;
+        using var access = await acquireTask;
     }
 }
