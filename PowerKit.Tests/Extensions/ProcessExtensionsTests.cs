@@ -30,4 +30,18 @@ public class ProcessExtensionsTests
         // Act & assert
         Process.IsRunning(processId).Should().BeFalse();
     }
+
+    [Fact]
+    public void Start_Test()
+    {
+        // Act & assert (should not throw)
+        Process.Start("dotnet", ["--version"]);
+    }
+
+    [Fact]
+    public void Start_WithoutArguments_Test()
+    {
+        // Act & assert (should not throw)
+        Process.Start("dotnet");
+    }
 }
