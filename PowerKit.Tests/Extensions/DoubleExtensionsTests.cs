@@ -35,6 +35,7 @@ public class DoubleExtensionsTests
         5.0.Wrap(0.0, 10.0).Should().Be(5.0);
         13.0.Wrap(0.0, 10.0).Should().Be(3.0);
         (-3.0).Wrap(0.0, 10.0).Should().Be(7.0);
+        (-10.0).Wrap(0.0, 10.0).Should().Be(0.0);
         0.0.Wrap(0.0, 10.0).Should().Be(0.0);
         10.0.Wrap(0.0, 10.0).Should().Be(0.0);
         23.0.Wrap(0.0, 10.0).Should().Be(3.0);
