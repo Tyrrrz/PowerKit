@@ -79,7 +79,18 @@ internal static class DoubleExtensions
         /// This method requires <paramref name="max" /> to be greater than <paramref name="min" />.
         /// If <paramref name="max" /> is less than or equal to <paramref name="min" />, the behavior is invalid.
         /// </remarks>
-        public double Wrap(double min, double max) =>
-            value < min ? max - (min - value) % (max - min) : min + (value - min) % (max - min);
+        public double Wrap(double min, double max)
+        {
+            if (max <= min)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(max),
+                    "The maximum value must be greater than the minimum value."
+                );
+            }
+
+            var range = max - min;
+            return min + (((value - min) % range + range) % range);
+        }
     }
 }
