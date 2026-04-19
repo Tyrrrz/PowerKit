@@ -10,13 +10,6 @@ namespace PowerKit.Tests.Extensions;
 public class ProcessExtensionsTests
 {
     [Fact]
-    public void IsRunning_Running_Test()
-    {
-        // Act & assert
-        Process.IsRunning(Environment.ProcessId).Should().BeTrue();
-    }
-
-    [Fact]
     public async Task IsRunning_NotRunning_Test()
     {
         // Arrange
@@ -29,6 +22,7 @@ public class ProcessExtensionsTests
 
         // Act & assert
         Process.IsRunning(processId).Should().BeFalse();
+        Process.IsRunning(Environment.ProcessId).Should().BeTrue();
     }
 
     [Fact]

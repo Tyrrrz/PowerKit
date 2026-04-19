@@ -33,30 +33,13 @@ internal static class ProcessExtensions
         /// </summary>
         public static Process Start(string path, IEnumerable<string>? arguments = null)
         {
-            var process = new Process();
-            process.StartInfo = new ProcessStartInfo(path);
+            var process = new Process { StartInfo = new ProcessStartInfo(path) };
 
-#if NET || NETCOREAPP
             if (arguments is not null)
             {
                 foreach (var argument in arguments)
                     process.StartInfo.ArgumentList.Add(argument);
             }
-#else
-            if (arguments is not null)
-            {
-                var sb = new System.Text.StringBuilder();
-                foreach (var argument in arguments)
-                {
-                    if (sb.Length > 0)
-                        sb.Append(' ');
-                    sb.Append('"');
-                    sb.Append(argument.Replace("\\", "\\\\").Replace("\"", "\\\""));
-                    sb.Append('"');
-                }
-                process.StartInfo.Arguments = sb.ToString();
-            }
-#endif
 
             process.Start();
             return process;
@@ -65,34 +48,15 @@ internal static class ProcessExtensions
         /// <summary>
         /// Starts the process associated with the specified file path or URL, using the operating system shell.
         /// </summary>
-        public static Process? StartShellExecute(
-            string path,
-            IEnumerable<string>? arguments = null
-        )
+        public static Process? StartShellExecute(string path, IEnumerable<string>? arguments = null)
         {
             var startInfo = new ProcessStartInfo(path) { UseShellExecute = true };
 
-#if NET || NETCOREAPP
             if (arguments is not null)
             {
                 foreach (var argument in arguments)
                     startInfo.ArgumentList.Add(argument);
             }
-#else
-            if (arguments is not null)
-            {
-                var sb = new System.Text.StringBuilder();
-                foreach (var argument in arguments)
-                {
-                    if (sb.Length > 0)
-                        sb.Append(' ');
-                    sb.Append('"');
-                    sb.Append(argument.Replace("\\", "\\\\").Replace("\"", "\\\""));
-                    sb.Append('"');
-                }
-                startInfo.Arguments = sb.ToString();
-            }
-#endif
 
             return Process.Start(startInfo);
         }
