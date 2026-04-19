@@ -51,16 +51,8 @@ file sealed class ArrayPoolSpanOwner<T>(ArrayPool<T> pool, T[] buffer, int minim
 #if !POWERKIT_INCLUDE_COVERAGE
 [ExcludeFromCodeCoverage]
 #endif
-internal class SpanPool<T>
+internal class SpanPool<T>(ArrayPool<T> pool)
 {
-    private readonly ArrayPool<T> _pool;
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="SpanPool{T}" /> backed by the specified
-    /// <see cref="ArrayPool{T}" />.
-    /// </summary>
-    public SpanPool(ArrayPool<T> pool) => _pool = pool;
-
     /// <summary>
     /// Gets a shared <see cref="SpanPool{T}" /> instance backed by
     /// <see cref="ArrayPool{T}.Shared" />.
@@ -73,5 +65,5 @@ internal class SpanPool<T>
     /// when disposed.
     /// </summary>
     public ISpanOwner<T> Rent(int minimumLength = 1) =>
-        new ArrayPoolSpanOwner<T>(_pool, _pool.Rent(minimumLength), minimumLength);
+        new ArrayPoolSpanOwner<T>(pool, pool.Rent(minimumLength), minimumLength);
 }
