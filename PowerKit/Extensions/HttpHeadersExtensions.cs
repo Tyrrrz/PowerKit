@@ -18,7 +18,7 @@ internal static class HttpHeadersExtensions
         /// Returns <see langword="null" /> if the header is not present.
         /// </summary>
         public string? TryGetValue(string name) =>
-            headers.TryGetValues(name, out var values) ? string.Concat(values) : null;
+            headers.TryGetValues(name, out var values) ? string.Join(", ", values) : null;
 
         /// <summary>
         /// Attempts to get the values of the header with the specified name.
