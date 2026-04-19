@@ -25,5 +25,10 @@ internal static class ColorExtensions
         /// Returns a new <see cref="Color" /> with the specified alpha value.
         /// </summary>
         public Color WithAlpha(int alpha) => Color.FromArgb(alpha, color);
+
+        /// <summary>
+        /// Returns a new <see cref="Color" /> with its alpha component set to 255 (fully opaque).
+        /// </summary>
+        public Color WithFullAlpha() => color.WithAlpha(255);
     }
 }

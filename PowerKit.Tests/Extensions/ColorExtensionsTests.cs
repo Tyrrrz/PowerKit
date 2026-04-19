@@ -37,4 +37,14 @@ public class ColorExtensionsTests
         Color.FromArgb(255, 0x12, 0x34, 0x56).WithAlpha(128).B.Should().Be(0x56);
         Color.FromArgb(0, 0xff, 0xff, 0xff).WithAlpha(255).A.Should().Be(255);
     }
+
+    [Fact]
+    public void WithFullAlpha_Test()
+    {
+        // Act & assert
+        Color.FromArgb(0, 0x12, 0x34, 0x56).WithFullAlpha().A.Should().Be(255);
+        Color.FromArgb(0, 0x12, 0x34, 0x56).WithFullAlpha().R.Should().Be(0x12);
+        Color.FromArgb(0, 0x12, 0x34, 0x56).WithFullAlpha().G.Should().Be(0x34);
+        Color.FromArgb(0, 0x12, 0x34, 0x56).WithFullAlpha().B.Should().Be(0x56);
+    }
 }
