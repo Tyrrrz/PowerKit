@@ -33,10 +33,7 @@ public class UriExtensionsTests
             .TryGetFileName()
             .Should()
             .Be("my file.txt");
-        new Uri("https://example.com/")
-            .TryGetFileName()
-            .Should()
-            .BeNull();
+        new Uri("https://example.com/").TryGetFileName().Should().BeNull();
         new Uri("https://example.com").TryGetFileName().Should().BeNull();
     }
 }
