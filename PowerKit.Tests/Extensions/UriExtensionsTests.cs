@@ -16,4 +16,39 @@ public class UriExtensionsTests
             .Be("https://example.com");
         new Uri("http://foo.bar.baz").Domain.Should().Be("http://foo.bar.baz");
     }
+
+    [Fact]
+    public void TryGetFileName_WithFileName_Test()
+    {
+        // Act & assert
+        new Uri("https://example.com/files/document.pdf")
+            .TryGetFileName()
+            .Should()
+            .Be("document.pdf");
+        new Uri("https://example.com/files/document.pdf?version=2")
+            .TryGetFileName()
+            .Should()
+            .Be("document.pdf");
+    }
+
+    [Fact]
+    public void TryGetFileName_Encoded_Test()
+    {
+        // Act & assert
+        new Uri("https://example.com/files/my%20file.txt")
+            .TryGetFileName()
+            .Should()
+            .Be("my file.txt");
+    }
+
+    [Fact]
+    public void TryGetFileName_NoFileName_Test()
+    {
+        // Act & assert
+        new Uri("https://example.com/")
+            .TryGetFileName()
+            .Should()
+            .BeNull();
+        new Uri("https://example.com").TryGetFileName().Should().BeNull();
+    }
 }
