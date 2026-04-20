@@ -28,14 +28,8 @@ internal static class BinaryReaderExtensions
         {
             var buffer = new StringBuilder();
 
-            while (true)
+            while (reader.ReadChar() is not '\0' and var ch)
             {
-                var ch = reader.ReadChar();
-                if (ch == '\0')
-                {
-                    break;
-                }
-
                 buffer.Append(ch);
             }
 
