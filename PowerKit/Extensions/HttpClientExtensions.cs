@@ -20,7 +20,7 @@ internal static class HttpClientExtensions
         /// Downloads the content at the specified URI to a local file.
         /// </summary>
         public async Task DownloadAsync(
-            string requestUri,
+            Uri requestUri,
             string filePath,
             IProgress<double>? progress = null,
             CancellationToken cancellationToken = default
@@ -43,10 +43,27 @@ internal static class HttpClientExtensions
         }
 
         /// <summary>
+        /// Downloads the content at the specified URI to a local file.
+        /// </summary>
+        public async Task DownloadAsync(
+            string requestUri,
+            string filePath,
+            IProgress<double>? progress = null,
+            CancellationToken cancellationToken = default
+        ) =>
+            await http.DownloadAsync(
+                    new Uri(requestUri, UriKind.RelativeOrAbsolute),
+                    filePath,
+                    progress,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
+
+        /// <summary>
         /// Sends a HEAD request to the specified URI and returns the response.
         /// </summary>
-        public async ValueTask<HttpResponseMessage> HeadAsync(
-            string requestUri,
+        public async Task<HttpResponseMessage> HeadAsync(
+            Uri requestUri,
             CancellationToken cancellationToken = default
         )
         {
@@ -58,6 +75,16 @@ internal static class HttpClientExtensions
                 )
                 .ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Sends a HEAD request to the specified URI and returns the response.
+        /// </summary>
+        public async Task<HttpResponseMessage> HeadAsync(
+            string requestUri,
+            CancellationToken cancellationToken = default
+        ) =>
+            await http.HeadAsync(new Uri(requestUri, UriKind.RelativeOrAbsolute), cancellationToken)
+                .ConfigureAwait(false);
     }
 }
 #endif
