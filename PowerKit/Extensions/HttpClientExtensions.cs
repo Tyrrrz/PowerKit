@@ -52,11 +52,12 @@ internal static class HttpClientExtensions
             CancellationToken cancellationToken = default
         ) =>
             await http.DownloadAsync(
-                new Uri(requestUri, UriKind.RelativeOrAbsolute),
-                filePath,
-                progress,
-                cancellationToken
-            );
+                    new Uri(requestUri, UriKind.RelativeOrAbsolute),
+                    filePath,
+                    progress,
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
 
         /// <summary>
         /// Sends a HEAD request to the specified URI and returns the response.
@@ -82,10 +83,8 @@ internal static class HttpClientExtensions
             string requestUri,
             CancellationToken cancellationToken = default
         ) =>
-            await http.HeadAsync(
-                new Uri(requestUri, UriKind.RelativeOrAbsolute),
-                cancellationToken
-            );
+            await http.HeadAsync(new Uri(requestUri, UriKind.RelativeOrAbsolute), cancellationToken)
+                .ConfigureAwait(false);
     }
 }
 #endif
