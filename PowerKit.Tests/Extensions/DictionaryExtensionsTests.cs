@@ -10,6 +10,17 @@ namespace PowerKit.Tests.Extensions;
 public class DictionaryExtensionsTests
 {
     [Fact]
+    public void GetValueOrNull_Test()
+    {
+        // Arrange
+        var source = (IDictionary<string, int>)new Dictionary<string, int> { ["one"] = 1 };
+
+        // Act & assert
+        source.GetValueOrNull("one").Should().Be(1);
+        source.GetValueOrNull("two").Should().BeNull();
+    }
+
+    [Fact]
     public void ToDictionary_Test()
     {
         // Arrange
