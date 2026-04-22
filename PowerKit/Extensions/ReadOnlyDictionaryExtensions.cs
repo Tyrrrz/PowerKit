@@ -1,5 +1,5 @@
-#nullable enable
 #if NET40_OR_GREATER || NETSTANDARD || NET
+#nullable enable
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
