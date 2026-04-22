@@ -13,7 +13,7 @@ public class DictionaryExtensionsTests
     public void GetValueOrNull_Test()
     {
         // Arrange
-        IDictionary<string, int> source = new Dictionary<string, int> { ["one"] = 1 };
+        var source = (IDictionary<string, int>)new Dictionary<string, int> { ["one"] = 1 };
 
         // Act & assert
         source.GetValueOrNull("one").Should().Be(1);

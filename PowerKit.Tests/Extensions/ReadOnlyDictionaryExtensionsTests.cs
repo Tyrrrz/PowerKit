@@ -11,7 +11,7 @@ public class ReadOnlyDictionaryExtensionsTests
     public void GetValueOrNull_Test()
     {
         // Arrange
-        IReadOnlyDictionary<string, int> source = new Dictionary<string, int> { ["one"] = 1 };
+        var source = (IReadOnlyDictionary<string, int>)new Dictionary<string, int> { ["one"] = 1 };
 
         // Act & assert
         source.GetValueOrNull("one").Should().Be(1);
