@@ -10,32 +10,6 @@ namespace PowerKit.Tests.Extensions;
 public class DictionaryExtensionsTests
 {
     [Fact]
-    public void GetValueOrNull_ReadOnly_Found_Test()
-    {
-        // Arrange
-        IReadOnlyDictionary<string, int> source = new Dictionary<string, int> { ["one"] = 1 };
-
-        // Act
-        var result = source.GetValueOrNull("one");
-
-        // Assert
-        result.Should().Be(1);
-    }
-
-    [Fact]
-    public void GetValueOrNull_ReadOnly_NotFound_Test()
-    {
-        // Arrange
-        IReadOnlyDictionary<string, int> source = new Dictionary<string, int> { ["one"] = 1 };
-
-        // Act
-        var result = source.GetValueOrNull("two");
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Fact]
     public void GetValueOrNull_Found_Test()
     {
         // Arrange
@@ -53,6 +27,32 @@ public class DictionaryExtensionsTests
     {
         // Arrange
         IDictionary<string, int> source = new Dictionary<string, int> { ["one"] = 1 };
+
+        // Act
+        var result = source.GetValueOrNull("two");
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetValueOrNull_ReadOnly_Found_Test()
+    {
+        // Arrange
+        IReadOnlyDictionary<string, int> source = new Dictionary<string, int> { ["one"] = 1 };
+
+        // Act
+        var result = source.GetValueOrNull("one");
+
+        // Assert
+        result.Should().Be(1);
+    }
+
+    [Fact]
+    public void GetValueOrNull_ReadOnly_NotFound_Test()
+    {
+        // Arrange
+        IReadOnlyDictionary<string, int> source = new Dictionary<string, int> { ["one"] = 1 };
 
         // Act
         var result = source.GetValueOrNull("two");
