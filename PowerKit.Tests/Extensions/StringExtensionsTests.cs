@@ -154,13 +154,13 @@ public class StringExtensionsTests
         "héllo".TruncateBytes(2).Should().Be("h");
         "héllo".TruncateBytes(1).Should().Be("h");
         "héllo".TruncateBytes(0).Should().Be("");
-        "héllo".TruncateBytes(3, Encoding.ASCII).Should().Be("hél");
+        "héllo".TruncateBytes(2, Encoding.ASCII).Should().Be("hé");
 
         "a𝄞b".TruncateBytes(10).Should().Be("a𝄞b");
         "a𝄞b".TruncateBytes(5).Should().Be("a𝄞");
         "a𝄞b".TruncateBytes(4).Should().Be("a");
         "a𝄞b".TruncateBytes(1).Should().Be("a");
         "a𝄞b".TruncateBytes(0).Should().Be("");
-        "a𝄞b".TruncateBytes(1, Encoding.ASCII).Should().Be("a");
+        "a𝄞b".TruncateBytes(3, Encoding.ASCII).Should().Be("a𝄞");
     }
 }
