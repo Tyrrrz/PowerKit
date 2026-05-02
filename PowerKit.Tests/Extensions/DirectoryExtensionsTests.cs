@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Runtime.Versioning;
 using FluentAssertions;
-using PowerKit;
 using PowerKit.Extensions;
 using Xunit;
 

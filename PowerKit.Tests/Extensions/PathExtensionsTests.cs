@@ -1,5 +1,4 @@
 using System.IO;
-using System.Linq;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;

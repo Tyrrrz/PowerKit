@@ -1,6 +1,5 @@
 using System.IO;
 using FluentAssertions;
-using PowerKit;
 using Xunit;
 
 namespace PowerKit.Tests;
