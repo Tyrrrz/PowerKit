@@ -176,7 +176,7 @@ internal static class StringExtensions
         /// Truncates the string so that its encoded byte length does not exceed the specified maximum.
         /// Uses the provided encoding, or UTF-8 if <paramref name="encoding"/> is <c>null</c>.
         /// </summary>
-        public string Truncate(int byteCount, Encoding? encoding = null)
+        public string TruncateBytes(int byteCount, Encoding? encoding = null)
         {
             var enc = encoding ?? Encoding.UTF8;
 

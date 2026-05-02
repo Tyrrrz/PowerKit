@@ -140,31 +140,31 @@ public class StringExtensionsTests
     }
 
     [Fact]
-    public void Truncate_ByByteCount_Test()
+    public void TruncateBytes_Test()
     {
         // ASCII-only (1 byte per char with UTF-8)
-        "hello".Truncate(10, Encoding.UTF8).Should().Be("hello");
-        "hello".Truncate(5, Encoding.UTF8).Should().Be("hello");
-        "hello".Truncate(3, Encoding.UTF8).Should().Be("hel");
-        "hello".Truncate(0, Encoding.UTF8).Should().Be("");
+        "hello".TruncateBytes(10, Encoding.UTF8).Should().Be("hello");
+        "hello".TruncateBytes(5, Encoding.UTF8).Should().Be("hello");
+        "hello".TruncateBytes(3, Encoding.UTF8).Should().Be("hel");
+        "hello".TruncateBytes(0, Encoding.UTF8).Should().Be("");
 
         // Multi-byte characters (é = 2 bytes in UTF-8)
-        "héllo".Truncate(6, Encoding.UTF8).Should().Be("héllo");
-        "héllo".Truncate(5, Encoding.UTF8).Should().Be("héll");
-        "héllo".Truncate(4, Encoding.UTF8).Should().Be("hél");
-        "héllo".Truncate(3, Encoding.UTF8).Should().Be("hé");
-        "héllo".Truncate(2, Encoding.UTF8).Should().Be("h");
-        "héllo".Truncate(1, Encoding.UTF8).Should().Be("h");
+        "héllo".TruncateBytes(6, Encoding.UTF8).Should().Be("héllo");
+        "héllo".TruncateBytes(5, Encoding.UTF8).Should().Be("héll");
+        "héllo".TruncateBytes(4, Encoding.UTF8).Should().Be("hél");
+        "héllo".TruncateBytes(3, Encoding.UTF8).Should().Be("hé");
+        "héllo".TruncateBytes(2, Encoding.UTF8).Should().Be("h");
+        "héllo".TruncateBytes(1, Encoding.UTF8).Should().Be("h");
 
         // Emoji (𝄞 = 4 bytes in UTF-8, encoded as a surrogate pair in C#)
-        "a𝄞b".Truncate(5, Encoding.UTF8).Should().Be("a𝄞");
-        "a𝄞b".Truncate(4, Encoding.UTF8).Should().Be("a");
-        "a𝄞b".Truncate(1, Encoding.UTF8).Should().Be("a");
+        "a𝄞b".TruncateBytes(5, Encoding.UTF8).Should().Be("a𝄞");
+        "a𝄞b".TruncateBytes(4, Encoding.UTF8).Should().Be("a");
+        "a𝄞b".TruncateBytes(1, Encoding.UTF8).Should().Be("a");
 
         // Default encoding is UTF-8
-        "héllo".Truncate(4, null).Should().Be("hél");
+        "héllo".TruncateBytes(4, null).Should().Be("hél");
 
         // Non-UTF-8 encoding
-        "hello".Truncate(3, Encoding.ASCII).Should().Be("hel");
+        "hello".TruncateBytes(3, Encoding.ASCII).Should().Be("hel");
     }
 }
