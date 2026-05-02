@@ -1,3 +1,4 @@
+using System.Text;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
@@ -136,5 +137,34 @@ public class StringExtensionsTests
         "hi".Truncate(10).Should().Be("hi");
         "hello".Truncate(5).Should().Be("hello");
         "hello".Truncate(3).Should().Be("hel");
+    }
+
+    [Fact]
+    public void Truncate_ByByteCount_Test()
+    {
+        // ASCII-only (1 byte per char with UTF-8)
+        "hello".Truncate(10, Encoding.UTF8).Should().Be("hello");
+        "hello".Truncate(5, Encoding.UTF8).Should().Be("hello");
+        "hello".Truncate(3, Encoding.UTF8).Should().Be("hel");
+        "hello".Truncate(0, Encoding.UTF8).Should().Be("");
+
+        // Multi-byte characters (é = 2 bytes in UTF-8)
+        "héllo".Truncate(6, Encoding.UTF8).Should().Be("héllo");
+        "héllo".Truncate(5, Encoding.UTF8).Should().Be("héll");
+        "héllo".Truncate(4, Encoding.UTF8).Should().Be("hél");
+        "héllo".Truncate(3, Encoding.UTF8).Should().Be("hé");
+        "héllo".Truncate(2, Encoding.UTF8).Should().Be("h");
+        "héllo".Truncate(1, Encoding.UTF8).Should().Be("h");
+
+        // Emoji (𝄞 = 4 bytes in UTF-8, encoded as a surrogate pair in C#)
+        "a𝄞b".Truncate(5, Encoding.UTF8).Should().Be("a𝄞");
+        "a𝄞b".Truncate(4, Encoding.UTF8).Should().Be("a");
+        "a𝄞b".Truncate(1, Encoding.UTF8).Should().Be("a");
+
+        // Default encoding is UTF-8
+        "héllo".Truncate(4, null).Should().Be("hél");
+
+        // Non-UTF-8 encoding
+        "hello".Truncate(3, Encoding.ASCII).Should().Be("hel");
     }
 }

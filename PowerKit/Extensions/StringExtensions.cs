@@ -171,5 +171,36 @@ internal static class StringExtensions
         /// Truncates the string to the specified maximum number of characters.
         /// </summary>
         public string Truncate(int charCount) => str.Length > charCount ? str[..charCount] : str;
+
+        /// <summary>
+        /// Truncates the string so that its encoded byte length does not exceed the specified maximum.
+        /// Uses the provided encoding, or UTF-8 if <paramref name="encoding"/> is <c>null</c>.
+        /// </summary>
+        public string Truncate(int byteCount, Encoding? encoding = null)
+        {
+            var enc = encoding ?? Encoding.UTF8;
+            var chars = str.ToCharArray();
+
+            if (enc.GetByteCount(chars, 0, chars.Length) <= byteCount)
+                return str;
+
+            var lo = 0;
+            var hi = chars.Length;
+
+            while (lo < hi)
+            {
+                var mid = lo + (hi - lo + 1) / 2;
+                if (enc.GetByteCount(chars, 0, mid) <= byteCount)
+                    lo = mid;
+                else
+                    hi = mid - 1;
+            }
+
+            // Don't split a surrogate pair
+            while (lo > 0 && char.IsHighSurrogate(chars[lo - 1]))
+                lo--;
+
+            return str[..lo];
+        }
     }
 }
