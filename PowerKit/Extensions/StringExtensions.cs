@@ -178,30 +178,43 @@ internal static class StringExtensions
         /// </summary>
         public string TruncateBytes(int byteCount, Encoding? encoding = null)
         {
-            var enc = encoding ?? Encoding.UTF8;
+            if (byteCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(byteCount));
 
-            if (enc.GetByteCount(str) <= byteCount)
+            var actualEncoding = encoding ?? Encoding.UTF8;
+
+            if (actualEncoding.GetByteCount(str) <= byteCount)
                 return str;
 
             var chars = str.ToCharArray();
-            var lo = 0;
-            var hi = chars.Length;
+            var charLo = 0;
+            var charHi = chars.Length;
 
-            while (lo < hi)
+            while (charLo < charHi)
             {
-                var mid = lo + (hi - lo + 1) / 2;
-                if (enc.GetByteCount(chars, 0, mid) <= byteCount)
-                    lo = mid;
+                var mid = charLo + (charHi - charLo + 1) / 2;
+
+                // Use try/catch so that encodings with EncoderExceptionFallback don't
+                // throw when a probe boundary happens to split a surrogate pair.
+                var fits = false;
+                try
+                {
+                    fits = actualEncoding.GetByteCount(chars, 0, mid) <= byteCount;
+                }
+                catch (EncoderFallbackException) { }
+
+                if (fits)
+                    charLo = mid;
                 else
-                    hi = mid - 1;
+                    charHi = mid - 1;
             }
 
             // If the cut point landed right after a high surrogate (its paired low surrogate
             // was not included), step back to avoid returning a string with an unpaired surrogate.
-            if (lo > 0 && char.IsHighSurrogate(chars[lo - 1]))
-                lo--;
+            if (charLo > 0 && char.IsHighSurrogate(chars[charLo - 1]))
+                charLo--;
 
-            return str[..lo];
+            return str[..charLo];
         }
     }
 }
