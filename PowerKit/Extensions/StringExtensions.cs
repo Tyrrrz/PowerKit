@@ -179,11 +179,11 @@ internal static class StringExtensions
         public string Truncate(int byteCount, Encoding? encoding = null)
         {
             var enc = encoding ?? Encoding.UTF8;
-            var chars = str.ToCharArray();
 
-            if (enc.GetByteCount(chars, 0, chars.Length) <= byteCount)
+            if (enc.GetByteCount(str) <= byteCount)
                 return str;
 
+            var chars = str.ToCharArray();
             var lo = 0;
             var hi = chars.Length;
 
@@ -196,8 +196,9 @@ internal static class StringExtensions
                     hi = mid - 1;
             }
 
-            // Don't split a surrogate pair
-            while (lo > 0 && char.IsHighSurrogate(chars[lo - 1]))
+            // If the cut point landed right after a high surrogate (its paired low surrogate
+            // was not included), step back to avoid returning a string with an unpaired surrogate.
+            if (lo > 0 && char.IsHighSurrogate(chars[lo - 1]))
                 lo--;
 
             return str[..lo];
