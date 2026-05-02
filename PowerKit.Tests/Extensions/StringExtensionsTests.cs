@@ -1,3 +1,4 @@
+using System.Text;
 using FluentAssertions;
 using PowerKit.Extensions;
 using Xunit;
@@ -136,5 +137,30 @@ public class StringExtensionsTests
         "hi".Truncate(10).Should().Be("hi");
         "hello".Truncate(5).Should().Be("hello");
         "hello".Truncate(3).Should().Be("hel");
+    }
+
+    [Fact]
+    public void TruncateBytes_Test()
+    {
+        // Act & assert
+        "hello".TruncateBytes(10).Should().Be("hello");
+        "hello".TruncateBytes(3).Should().Be("hel");
+        "hello".TruncateBytes(0).Should().Be("");
+        "hello".TruncateBytes(3, Encoding.ASCII).Should().Be("hel");
+
+        "héllo".TruncateBytes(10).Should().Be("héllo");
+        "héllo".TruncateBytes(4).Should().Be("hél");
+        "héllo".TruncateBytes(3).Should().Be("hé");
+        "héllo".TruncateBytes(2).Should().Be("h");
+        "héllo".TruncateBytes(1).Should().Be("h");
+        "héllo".TruncateBytes(0).Should().Be("");
+        "héllo".TruncateBytes(2, Encoding.ASCII).Should().Be("hé");
+
+        "a𝄞b".TruncateBytes(10).Should().Be("a𝄞b");
+        "a𝄞b".TruncateBytes(5).Should().Be("a𝄞");
+        "a𝄞b".TruncateBytes(4).Should().Be("a");
+        "a𝄞b".TruncateBytes(1).Should().Be("a");
+        "a𝄞b".TruncateBytes(0).Should().Be("");
+        "a𝄞b".TruncateBytes(3, Encoding.ASCII).Should().Be("a𝄞");
     }
 }

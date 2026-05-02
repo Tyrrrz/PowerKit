@@ -171,5 +171,50 @@ internal static class StringExtensions
         /// Truncates the string to the specified maximum number of characters.
         /// </summary>
         public string Truncate(int charCount) => str.Length > charCount ? str[..charCount] : str;
+
+        /// <summary>
+        /// Truncates the string so that its encoded byte length does not exceed the specified maximum.
+        /// Uses the provided encoding, or UTF-8 if <paramref name="encoding"/> is <c>null</c>.
+        /// </summary>
+        public string TruncateBytes(int byteCount, Encoding? encoding = null)
+        {
+            if (byteCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(byteCount));
+
+            var actualEncoding = encoding ?? Encoding.UTF8;
+
+            if (actualEncoding.GetByteCount(str) <= byteCount)
+                return str;
+
+            var chars = str.ToCharArray();
+            var charLo = 0;
+            var charHi = chars.Length;
+
+            while (charLo < charHi)
+            {
+                var mid = charLo + (charHi - charLo + 1) / 2;
+
+                // Use try/catch so that encodings with EncoderExceptionFallback don't
+                // throw when a probe boundary happens to split a surrogate pair.
+                var fits = false;
+                try
+                {
+                    fits = actualEncoding.GetByteCount(chars, 0, mid) <= byteCount;
+                }
+                catch (EncoderFallbackException) { }
+
+                if (fits)
+                    charLo = mid;
+                else
+                    charHi = mid - 1;
+            }
+
+            // If the cut point landed right after a high surrogate (its paired low surrogate
+            // was not included), step back to avoid returning a string with an unpaired surrogate.
+            if (charLo > 0 && char.IsHighSurrogate(chars[charLo - 1]))
+                charLo--;
+
+            return str[..charLo];
+        }
     }
 }
