@@ -1,18 +1,16 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class AsyncEnumerableExtensions
+/// <summary>
+/// Extensions for <see cref="IAsyncEnumerable{T}" />.
+/// </summary>
+public static class AsyncEnumerableExtensions
 {
     extension<T>(IAsyncEnumerable<T> source)
     {

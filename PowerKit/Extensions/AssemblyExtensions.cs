@@ -1,5 +1,3 @@
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Resources;
@@ -9,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class AssemblyExtensions
+/// <summary>
+/// Extensions for <see cref="Assembly" />.
+/// </summary>
+public static class AssemblyExtensions
 {
     extension(Assembly assembly)
     {

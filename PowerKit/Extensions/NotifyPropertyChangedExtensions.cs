@@ -1,18 +1,16 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class NotifyPropertyChangedExtensions
+/// <summary>
+/// Extensions for <see cref="INotifyPropertyChanged" />.
+/// </summary>
+public static class NotifyPropertyChangedExtensions
 {
     extension<TOwner>(TOwner owner)
         where TOwner : INotifyPropertyChanged

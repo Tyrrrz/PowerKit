@@ -1,6 +1,4 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit;
 
@@ -8,10 +6,7 @@ namespace PowerKit;
 /// Provides a lightweight <see cref="IProgress{T}" /> implementation that delegates
 /// progress reporting to an action.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal sealed class DelegateProgress<T>(Action<T> report) : IProgress<T>
+public class DelegateProgress<T>(Action<T> report) : IProgress<T>
 {
     /// <inheritdoc />
     public void Report(T value) => report(value);

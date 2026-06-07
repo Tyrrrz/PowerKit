@@ -1,7 +1,5 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace PowerKit;
@@ -9,10 +7,7 @@ namespace PowerKit;
 /// <summary>
 /// An observer that synchronizes access to the underlying observer.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal class SynchronizedObserver<T>(IObserver<T> observer) : IObserver<T>
+public class SynchronizedObserver<T>(IObserver<T> observer) : IObserver<T>
 {
     private readonly Lock _lock = new();
 

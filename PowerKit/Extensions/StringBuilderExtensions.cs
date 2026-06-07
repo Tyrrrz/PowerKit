@@ -1,13 +1,11 @@
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class StringBuilderExtensions
+/// <summary>
+/// Extensions for <see cref="StringBuilder" />.
+/// </summary>
+public static class StringBuilderExtensions
 {
     extension(StringBuilder builder)
     {

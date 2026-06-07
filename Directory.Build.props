@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -23,7 +25,7 @@
   <PropertyGroup>
     <Authors>$(Company)</Authors>
     <Description>Collection of utilities and extensions for rapid .NET development</Description>
-    <PackageTags>utils extensions utilities source</PackageTags>
+    <PackageTags>utils extensions utilities</PackageTags>
     <PackageProjectUrl>https://github.com/Tyrrrz/PowerKit</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/Tyrrrz/PowerKit/releases</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

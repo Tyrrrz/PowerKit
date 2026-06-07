@@ -1,14 +1,12 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class ReadOnlyDictionaryExtensions
+/// <summary>
+/// Extensions for <see cref="IReadOnlyDictionary{TKey, TValue}" />.
+/// </summary>
+public static class ReadOnlyDictionaryExtensions
 {
     extension<TKey, TValue>(IReadOnlyDictionary<TKey, TValue> dictionary)
         where TKey : notnull

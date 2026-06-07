@@ -1,6 +1,4 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using PowerKit.Extensions;
 
@@ -9,10 +7,7 @@ namespace PowerKit;
 /// <summary>
 /// Represents a temporary file that is automatically deleted when disposed.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal partial class TempFile(string path) : IDisposable
+public partial class TempFile(string path) : IDisposable
 {
     /// <summary>
     /// Gets the path of the temporary file.
@@ -24,7 +19,7 @@ internal partial class TempFile(string path) : IDisposable
     public void Dispose() => File.Delete(Path);
 }
 
-internal partial class TempFile
+public partial class TempFile
 {
     /// <summary>
     /// Generates a unique path for a temporary file without creating it.

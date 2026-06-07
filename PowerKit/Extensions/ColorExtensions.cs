@@ -1,13 +1,11 @@
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class ColorExtensions
+/// <summary>
+/// Extensions for <see cref="Color" />.
+/// </summary>
+public static class ColorExtensions
 {
     extension(Color color)
     {

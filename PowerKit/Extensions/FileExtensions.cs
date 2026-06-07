@@ -1,16 +1,14 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class FileExtensions
+/// <summary>
+/// Extensions for <see cref="File" />.
+/// </summary>
+public static class FileExtensions
 {
     extension(File)
     {
@@ -61,6 +59,7 @@ internal static class FileExtensions
             }
         }
 
+#if !NETFRAMEWORK || NET45_OR_GREATER
         /// <summary>
         /// Checks whether the file at the specified path contains the given byte sequence.
         /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
@@ -104,6 +103,7 @@ internal static class FileExtensions
         /// </summary>
         public static bool Contains(string path, byte[] bytes) =>
             File.Contains(path, new ReadOnlySpan<byte>(bytes));
+#endif
 
         /// <summary>
         /// Reads all bytes from the specified file starting at the given offset.

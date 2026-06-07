@@ -1,14 +1,12 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class ExceptionExtensions
+/// <summary>
+/// Extensions for <see cref="Exception" />.
+/// </summary>
+public static class ExceptionExtensions
 {
     extension(Exception exception)
     {

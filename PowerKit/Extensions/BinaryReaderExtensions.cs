@@ -1,15 +1,13 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class BinaryReaderExtensions
+/// <summary>
+/// Extensions for <see cref="BinaryReader" />.
+/// </summary>
+public static class BinaryReaderExtensions
 {
     extension(BinaryReader reader)
     {

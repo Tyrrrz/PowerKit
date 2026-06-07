@@ -1,13 +1,11 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class VersionExtensions
+/// <summary>
+/// Extensions for <see cref="Version" />.
+/// </summary>
+public static class VersionExtensions
 {
     extension(Version version)
     {

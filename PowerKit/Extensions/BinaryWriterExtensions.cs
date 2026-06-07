@@ -1,14 +1,12 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class BinaryWriterExtensions
+/// <summary>
+/// Extensions for <see cref="BinaryWriter" />.
+/// </summary>
+public static class BinaryWriterExtensions
 {
     extension(BinaryWriter writer)
     {

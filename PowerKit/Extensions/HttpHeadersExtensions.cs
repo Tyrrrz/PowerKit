@@ -1,15 +1,13 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Headers;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class HttpHeadersExtensions
+/// <summary>
+/// Extensions for <see cref="HttpHeaders" />.
+/// </summary>
+public static class HttpHeadersExtensions
 {
     extension(HttpHeaders headers)
     {

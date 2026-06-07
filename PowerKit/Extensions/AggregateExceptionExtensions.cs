@@ -1,13 +1,12 @@
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class AggregateExceptionExtensions
+/// <summary>
+/// Extensions for <see cref="AggregateException" />.
+/// </summary>
+public static class AggregateExceptionExtensions
 {
     extension(AggregateException exception)
     {
@@ -19,3 +18,4 @@ internal static class AggregateExceptionExtensions
             exception.Flatten().InnerExceptions is [var single] ? single : null;
     }
 }
+#endif

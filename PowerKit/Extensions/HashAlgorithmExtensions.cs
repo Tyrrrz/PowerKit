@@ -1,13 +1,11 @@
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class HashAlgorithmExtensions
+/// <summary>
+/// Extensions for <see cref="HashAlgorithm" />.
+/// </summary>
+public static class HashAlgorithmExtensions
 {
     extension(HashAlgorithm)
     {

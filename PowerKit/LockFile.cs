@@ -1,6 +1,4 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace PowerKit;
@@ -8,16 +6,13 @@ namespace PowerKit;
 /// <summary>
 /// Represents a file-based lock that prevents concurrent access to a shared resource.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal partial class LockFile(FileStream fileStream) : IDisposable
+public partial class LockFile(FileStream fileStream) : IDisposable
 {
     /// <inheritdoc />
     public void Dispose() => fileStream.Dispose();
 }
 
-internal partial class LockFile
+public partial class LockFile
 {
     /// <summary>
     /// Tries to acquire a lock on the specified file path.

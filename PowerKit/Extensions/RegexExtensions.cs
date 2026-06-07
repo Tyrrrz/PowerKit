@@ -1,13 +1,11 @@
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class RegexExtensions
+/// <summary>
+/// Extensions for <see cref="Regex" />.
+/// </summary>
+public static class RegexExtensions
 {
     extension(Regex)
     {

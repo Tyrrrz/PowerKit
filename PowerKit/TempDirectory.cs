@@ -1,6 +1,4 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace PowerKit;
@@ -8,10 +6,7 @@ namespace PowerKit;
 /// <summary>
 /// Represents a temporary directory that is automatically deleted when disposed.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal partial class TempDirectory(string path) : IDisposable
+public partial class TempDirectory(string path) : IDisposable
 {
     /// <summary>
     /// Gets the path of the temporary directory.
@@ -29,7 +24,7 @@ internal partial class TempDirectory(string path) : IDisposable
     }
 }
 
-internal partial class TempDirectory
+public partial class TempDirectory
 {
     /// <summary>
     /// Generates a unique path for a temporary directory without creating it.

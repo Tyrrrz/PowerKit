@@ -1,15 +1,13 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class CollectionExtensions
+/// <summary>
+/// Extensions for <see cref="ICollection{T}" />.
+/// </summary>
+public static class CollectionExtensions
 {
     extension<T>(ICollection<T> source)
     {

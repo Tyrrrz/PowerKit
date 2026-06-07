@@ -1,13 +1,11 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class UriExtensions
+/// <summary>
+/// Extensions for <see cref="Uri" />.
+/// </summary>
+public static class UriExtensions
 {
     extension(Uri uri)
     {

@@ -1,13 +1,11 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class EnvironmentExtensions
+/// <summary>
+/// Extensions for <see cref="Environment" />.
+/// </summary>
+public static class EnvironmentExtensions
 {
     extension(Environment)
     {

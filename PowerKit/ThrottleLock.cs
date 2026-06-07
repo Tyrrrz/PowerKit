@@ -1,8 +1,6 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,10 +10,7 @@ namespace PowerKit;
 /// Represents a lock that enforces a minimum interval between consecutive acquisitions,
 /// ensuring that operations do not proceed faster than the specified rate.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal sealed class ThrottleLock(TimeSpan interval) : IDisposable
+public class ThrottleLock(TimeSpan interval) : IDisposable
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
     private long _lastTimestamp = Stopwatch.GetTimestamp();

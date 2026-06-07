@@ -1,7 +1,6 @@
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
 using System.Buffers;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace PowerKit;
@@ -9,7 +8,7 @@ namespace PowerKit;
 /// <summary>
 /// Represents a rented buffer that is exposed as a <see cref="Span{T}" />.
 /// </summary>
-internal interface ISpanOwner<T> : IDisposable
+public interface ISpanOwner<T> : IDisposable
 {
     /// <summary>
     /// Gets the rented buffer as a span.
@@ -17,9 +16,6 @@ internal interface ISpanOwner<T> : IDisposable
     Span<T> Span { get; }
 }
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 file sealed class ArrayPoolSpanOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength)
     : ISpanOwner<T>
 {
@@ -48,10 +44,7 @@ file sealed class ArrayPoolSpanOwner<T>(ArrayPool<T> pool, T[] buffer, int minim
 /// <summary>
 /// Provides a pool of buffers that are exposed as <see cref="Span{T}" /> instances.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal class SpanPool<T>(ArrayPool<T> pool)
+public class SpanPool<T>(ArrayPool<T> pool)
 {
     /// <summary>
     /// Gets a shared <see cref="SpanPool{T}" /> instance backed by
@@ -67,3 +60,4 @@ internal class SpanPool<T>(ArrayPool<T> pool)
     public ISpanOwner<T> Rent(int minimumLength = 1) =>
         new ArrayPoolSpanOwner<T>(pool, pool.Rent(minimumLength), minimumLength);
 }
+#endif

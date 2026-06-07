@@ -1,15 +1,13 @@
-#nullable enable
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class DictionaryExtensions
+/// <summary>
+/// Extensions for <see cref="IDictionary{TKey, TValue}" /> and <see cref="IDictionary" />.
+/// </summary>
+public static class DictionaryExtensions
 {
     extension<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
         where TKey : notnull

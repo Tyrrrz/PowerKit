@@ -1,14 +1,12 @@
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class XElementExtensions
+/// <summary>
+/// Extensions for <see cref="XElement" />.
+/// </summary>
+public static class XElementExtensions
 {
     extension(XElement element)
     {

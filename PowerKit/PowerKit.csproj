@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- Target frameworks here are only used to verify source compatibility with different API levels -->
-    <TargetFrameworks>netstandard2.0;net35;net10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net35;net6.0;net7.0;net10.0</TargetFrameworks>
     <IsPackable>true</IsPackable>
     <IsTrimmable
       Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))"
@@ -15,29 +14,8 @@
 
   <PropertyGroup>
     <PackageIcon>favicon.png</PackageIcon>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <DevelopmentDependency>true</DevelopmentDependency>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content
-      Include="**/*.cs"
-      Exclude="obj/**/*.cs"
-      Pack="true"
-      PackagePath="contentFiles/cs/any/PowerKit"
-      Visible="false"
-      BuildAction="compile"
-    />
-    <Content
-      Include="**/*.cs"
-      Exclude="obj/**/*.cs"
-      Pack="true"
-      PackagePath="content/PowerKit"
-      Visible="false"
-      BuildAction="compile"
-    />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="../favicon.png" Pack="true" PackagePath="" Visible="false" />
@@ -45,6 +23,14 @@
 
   <ItemGroup>
     <PackageReference Include="CSharpier.MsBuild" PrivateAssets="all" />
+    <PackageReference
+      Include="Microsoft.Bcl.AsyncInterfaces"
+      Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) AND ( '$(TargetFrameworkIdentifier)' != '.NETFramework' OR $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net462')) )"
+    />
     <PackageReference Include="PolyShim" PrivateAssets="all" />
+    <PackageReference
+      Include="System.Memory"
+      Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) AND ( '$(TargetFrameworkIdentifier)' != '.NETFramework' OR $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net462')) )"
+    />
   </ItemGroup>
 </Project>

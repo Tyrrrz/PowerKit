@@ -1,14 +1,12 @@
-#if NETSTANDARD || NET
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System.Windows.Input;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class CommandExtensions
+/// <summary>
+/// Extensions for <see cref="ICommand" />.
+/// </summary>
+public static class CommandExtensions
 {
     extension(ICommand command)
     {

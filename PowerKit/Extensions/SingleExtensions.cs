@@ -1,14 +1,12 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class SingleExtensions
+/// <summary>
+/// Extensions for <see cref="float" />.
+/// </summary>
+public static class SingleExtensions
 {
     extension(float)
     {

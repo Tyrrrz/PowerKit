@@ -1,16 +1,14 @@
-#nullable enable
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class TextReaderExtensions
+/// <summary>
+/// Extensions for <see cref="TextReader" />.
+/// </summary>
+public static class TextReaderExtensions
 {
     extension(TextReader reader)
     {

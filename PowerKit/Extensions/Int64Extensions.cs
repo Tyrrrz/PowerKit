@@ -1,14 +1,12 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class Int64Extensions
+/// <summary>
+/// Extensions for <see cref="long" />.
+/// </summary>
+public static class Int64Extensions
 {
     extension(long)
     {

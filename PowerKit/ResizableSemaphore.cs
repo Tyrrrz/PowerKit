@@ -1,8 +1,6 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,10 +9,7 @@ namespace PowerKit;
 /// <summary>
 /// Semaphore whose maximum concurrency count can be adjusted at run time.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal class ResizableSemaphore : IDisposable
+public class ResizableSemaphore : IDisposable
 {
     private readonly Lock _lock = new();
     private readonly Queue<TaskCompletionSource> _waiters = new();

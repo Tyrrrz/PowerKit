@@ -1,12 +1,9 @@
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
-
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class CharExtensions
+/// <summary>
+/// Extensions for <see cref="char" />.
+/// </summary>
+public static class CharExtensions
 {
     extension(char c)
     {

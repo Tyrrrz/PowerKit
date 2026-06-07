@@ -1,14 +1,12 @@
-#nullable enable
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class EnumerableExtensions
+/// <summary>
+/// Extensions for <see cref="IEnumerable{T}" />.
+/// </summary>
+public static class EnumerableExtensions
 {
     extension<T>(T obj)
     {
@@ -68,7 +66,7 @@ internal static class EnumerableExtensions
             {
                 if (!string.IsNullOrEmpty(item))
                 {
-                    yield return item!;
+                    yield return item;
                 }
             }
         }
@@ -82,7 +80,7 @@ internal static class EnumerableExtensions
             {
                 if (!string.IsNullOrWhiteSpace(item))
                 {
-                    yield return item!;
+                    yield return item;
                 }
             }
         }

@@ -1,17 +1,15 @@
-#nullable enable
 using System;
 using System.Buffers;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class StreamExtensions
+/// <summary>
+/// Extensions for <see cref="Stream" />.
+/// </summary>
+public static class StreamExtensions
 {
     extension(Stream source)
     {

@@ -1,16 +1,14 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security;
 using System.Text;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class StringExtensions
+/// <summary>
+/// Extensions for <see cref="string" />.
+/// </summary>
+public static class StringExtensions
 {
     extension(string str)
     {

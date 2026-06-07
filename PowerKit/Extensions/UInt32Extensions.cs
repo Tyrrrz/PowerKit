@@ -1,14 +1,12 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class UInt32Extensions
+/// <summary>
+/// Extensions for <see cref="uint" />.
+/// </summary>
+public static class UInt32Extensions
 {
     extension(uint)
     {

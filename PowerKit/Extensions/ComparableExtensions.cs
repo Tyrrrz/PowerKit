@@ -1,13 +1,11 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class ComparableExtensions
+/// <summary>
+/// Extensions for <see cref="IComparable{T}" />.
+/// </summary>
+public static class ComparableExtensions
 {
     extension<T>(T value)
         where T : IComparable<T>

@@ -1,7 +1,5 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -9,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class HttpContentExtensions
+/// <summary>
+/// Extensions for <see cref="HttpContent" />.
+/// </summary>
+public static class HttpContentExtensions
 {
     extension(HttpContent content)
     {

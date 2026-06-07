@@ -1,7 +1,5 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
@@ -11,9 +9,7 @@ namespace PowerKit.Extensions;
 // - Stream class on .NET Framework 4.6.1 -> calls Dispose()
 // - Stream class on .NET Core 3.0 -> calls DisposeAsync()
 // - Stream class on .NET Standard 2.0 -> calls DisposeAsync() or Dispose(), depending on the runtime
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
+
 file class AsyncDisposableAdapter(IDisposable target) : IAsyncDisposable
 {
     public async ValueTask DisposeAsync()
@@ -29,10 +25,10 @@ file class AsyncDisposableAdapter(IDisposable target) : IAsyncDisposable
     }
 }
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class AsyncDisposableExtensions
+/// <summary>
+/// Extensions for <see cref="IAsyncDisposable" />.
+/// </summary>
+public static class AsyncDisposableExtensions
 {
     extension(IDisposable disposable)
     {

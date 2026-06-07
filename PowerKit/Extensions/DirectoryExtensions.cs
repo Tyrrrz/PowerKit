@@ -1,16 +1,14 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class DirectoryExtensions
+/// <summary>
+/// Extensions for <see cref="Directory" />.
+/// </summary>
+public static class DirectoryExtensions
 {
     extension(Directory)
     {

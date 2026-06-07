@@ -1,14 +1,12 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class DateTimeOffsetExtensions
+/// <summary>
+/// Extensions for <see cref="DateTimeOffset" />.
+/// </summary>
+public static class DateTimeOffsetExtensions
 {
     extension(DateTimeOffset)
     {

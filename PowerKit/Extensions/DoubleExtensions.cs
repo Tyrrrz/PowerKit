@@ -1,14 +1,12 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class DoubleExtensions
+/// <summary>
+/// Extensions for <see cref="double" />.
+/// </summary>
+public static class DoubleExtensions
 {
     extension(double)
     {

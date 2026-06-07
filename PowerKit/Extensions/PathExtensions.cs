@@ -1,15 +1,10 @@
-#nullable enable
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 file static class PathEx
 {
     // Characters that are invalid in file names across all major filesystems
@@ -69,10 +64,10 @@ file static class PathEx
         .ToArray();
 }
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class PathExtensions
+/// <summary>
+/// Extensions for <see cref="Path" />.
+/// </summary>
+public static class PathExtensions
 {
     extension(Path)
     {

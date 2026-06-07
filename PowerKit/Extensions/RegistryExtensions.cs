@@ -1,5 +1,4 @@
-#if NETFRAMEWORK || NET5_0_OR_GREATER
-#nullable enable
+#if !NETSTANDARD
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Versioning;
@@ -7,10 +6,10 @@ using Microsoft.Win32;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class RegistryExtensions
+/// <summary>
+/// Extensions for <see cref="RegistryHive" /> and <see cref="RegistryKey" />.
+/// </summary>
+public static class RegistryExtensions
 {
     extension(RegistryHive hive)
     {

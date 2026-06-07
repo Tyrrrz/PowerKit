@@ -1,6 +1,4 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +11,10 @@ namespace PowerKit;
 /// <see cref="HttpMessageHandler" />. Used to extend an externally provided <see cref="HttpClient" />
 /// with additional behavior.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal class ClientDelegatingHandler(HttpClient http, bool disposeClient = false)
+public class ClientDelegatingHandler(HttpClient http, bool disposeClient = false)
     : HttpMessageHandler
 {
+    /// <inheritdoc />
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
         CancellationToken cancellationToken
@@ -36,6 +32,7 @@ internal class ClientDelegatingHandler(HttpClient http, bool disposeClient = fal
             .ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     protected override void Dispose(bool disposing)
     {
         if (disposing && disposeClient)

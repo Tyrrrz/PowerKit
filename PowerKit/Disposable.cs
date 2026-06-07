@@ -1,13 +1,8 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 file class DelegateDisposable(Action dispose) : IDisposable
 {
     public void Dispose() => dispose();
@@ -16,10 +11,7 @@ file class DelegateDisposable(Action dispose) : IDisposable
 /// <summary>
 /// Provides utility methods for creating and composing <see cref="IDisposable" /> instances.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class Disposable
+public static class Disposable
 {
     /// <summary>
     /// Gets a disposable that performs no action when disposed.

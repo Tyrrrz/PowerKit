@@ -1,29 +1,17 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit;
 
-/// <summary>
-/// Represents an observable sequence of values.
-/// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
 file class Observable<T>(Func<IObserver<T>, IDisposable> subscribe) : IObservable<T>
 {
-    /// <inheritdoc />
     public IDisposable Subscribe(IObserver<T> observer) => subscribe(observer);
 }
 
 /// <summary>
 /// Provides utility methods for creating <see cref="IObservable{T}" /> instances.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class Observable
+public static class Observable
 {
     /// <summary>
     /// Creates an observable that invokes the specified subscribe function when subscribed to.

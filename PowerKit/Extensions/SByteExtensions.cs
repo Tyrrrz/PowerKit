@@ -1,14 +1,12 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class SByteExtensions
+/// <summary>
+/// Extensions for <see cref="sbyte" />.
+/// </summary>
+public static class SByteExtensions
 {
     extension(sbyte)
     {

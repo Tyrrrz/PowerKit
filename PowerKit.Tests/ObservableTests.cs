@@ -77,7 +77,7 @@ public class ObservableTests
 
         // Assert
         receivedError.Should().BeOfType<InvalidOperationException>();
-        receivedError!.Message.Should().Be("test error");
+        receivedError.Message.Should().Be("test error");
     }
 
     [Fact]

@@ -1,13 +1,11 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class GuidExtensions
+/// <summary>
+/// Extensions for <see cref="Guid" />.
+/// </summary>
+public static class GuidExtensions
 {
     extension(Guid)
     {

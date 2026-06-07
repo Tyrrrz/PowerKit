@@ -1,6 +1,4 @@
-#if NET40_OR_GREATER || NETSTANDARD || NET
-#nullable enable
-using System.Diagnostics.CodeAnalysis;
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -22,10 +20,10 @@ file class NonDisposableHttpContent(HttpContent content) : HttpContent
     }
 }
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class HttpRequestMessageExtensions
+/// <summary>
+/// Extensions for <see cref="HttpRequestMessage" />.
+/// </summary>
+public static class HttpRequestMessageExtensions
 {
     extension(HttpRequestMessage request)
     {

@@ -1,13 +1,11 @@
-#nullable enable
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class EnumExtensions
+/// <summary>
+/// Extensions for <see cref="Enum" />.
+/// </summary>
+public static class EnumExtensions
 {
     extension(Enum)
     {

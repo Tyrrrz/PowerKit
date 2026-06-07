@@ -1,14 +1,12 @@
-#nullable enable
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PowerKit.Extensions;
 
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal static class ProcessExtensions
+/// <summary>
+/// Extensions for <see cref="Process" />.
+/// </summary>
+public static class ProcessExtensions
 {
     extension(Process)
     {

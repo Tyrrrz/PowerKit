@@ -1,7 +1,6 @@
-#nullable enable
+#if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace PowerKit;
@@ -10,10 +9,7 @@ namespace PowerKit;
 /// Multiplexes multiple <see cref="IProgress{T}" /> reporters into a single output reporter,
 /// combining weighted progress values from multiple sources.
 /// </summary>
-#if !POWERKIT_INCLUDE_COVERAGE
-[ExcludeFromCodeCoverage]
-#endif
-internal class ProgressMuxer(IProgress<double> output)
+public class ProgressMuxer(IProgress<double> output)
 {
     private readonly Lock _lock = new();
     private readonly List<double> _splitWeights = new();
@@ -64,3 +60,4 @@ internal class ProgressMuxer(IProgress<double> output)
         });
     }
 }
+#endif
