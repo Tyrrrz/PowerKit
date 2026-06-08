@@ -19,7 +19,7 @@
     <img src="favicon.png" alt="Icon" />
 </p>
 
-**PowerKit** is a collection of utilities and extensions for rapid .NET development.
+**PowerKit** (formerly [**Tyrrrz.Extensions**](https://nuget.org/packages/Tyrrrz.Extensions)) is a collection of general-purpose utilities and extensions for rapid development with .NET.
 
 ## Terms of use<sup>[[?]](https://github.com/Tyrrrz/.github/blob/prime/docs/why-so-political.md)</sup>
 
