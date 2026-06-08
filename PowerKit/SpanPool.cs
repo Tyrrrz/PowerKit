@@ -16,8 +16,7 @@ public interface ISpanOwner<T> : IDisposable
     Span<T> Span { get; }
 }
 
-file sealed class ArrayPoolSpanOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength)
-    : ISpanOwner<T>
+file class ArrayPoolSpanOwner<T>(ArrayPool<T> pool, T[] buffer, int minimumLength) : ISpanOwner<T>
 {
     private int _disposed;
 

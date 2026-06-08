@@ -2,7 +2,7 @@ using System.Text;
 
 namespace PowerKit.Extensions;
 
-file sealed class NoPreambleEncoding : Encoding
+file class NoPreambleEncoding : Encoding
 {
     // Cloned for isolation — prevents mutations to shared singletons like Encoding.UTF8.
     private readonly Encoding _inner;
