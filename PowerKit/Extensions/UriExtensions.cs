@@ -10,7 +10,7 @@ public static class UriExtensions
     extension(Uri uri)
     {
         /// <summary>
-        /// Gets the scheme and host components of the URI (e.g. "https://example.com").
+        /// Gets the scheme and host components of the URI (e.g., "https://example.com").
         /// </summary>
         public string Domain => uri.Scheme + Uri.SchemeDelimiter + uri.Host;
 
