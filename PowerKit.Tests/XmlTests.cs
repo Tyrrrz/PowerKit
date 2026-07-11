@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using Xunit;
 
@@ -80,7 +81,10 @@ public class XmlTests
     {
         // Arrange
         // U+0001 is invalid in XML 1.0 and should be removed
-        var result = Xml.Escape("foo\u0001bar");
+        var input = "foo\u0001bar";
+
+        // Act
+        var result = Xml.Escape(input);
 
         // Assert
         result.Should().Be("foobar");
@@ -117,5 +121,15 @@ public class XmlTests
 
         // Assert
         result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Escape_Null_Test()
+    {
+        // Act
+        var act = () => Xml.Escape(null!);
+
+        // Assert
+        act.Should().ThrowExactly<ArgumentNullException>();
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 namespace PowerKit;
@@ -22,6 +23,7 @@ public static class Xml
     /// </summary>
     public static string Escape(string str)
     {
+        ArgumentNullException.ThrowIfNull(str);
         StringBuilder? builder = null;
 
         var i = 0;
