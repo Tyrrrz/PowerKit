@@ -7,157 +7,22 @@ namespace PowerKit.Tests;
 public class XmlTests
 {
     [Fact]
-    public void Escape_NoSpecialChars_Test()
+    public void Escape_Test()
     {
-        // Act
-        var result = Xml.Escape("hello world");
-
-        // Assert
-        result.Should().Be("hello world");
-    }
-
-    [Fact]
-    public void Escape_Ampersand_Test()
-    {
-        // Act
-        var result = Xml.Escape("foo & bar");
-
-        // Assert
-        result.Should().Be("foo &amp; bar");
-    }
-
-    [Fact]
-    public void Escape_LessThan_Test()
-    {
-        // Act
-        var result = Xml.Escape("1 < 2");
-
-        // Assert
-        result.Should().Be("1 &lt; 2");
-    }
-
-    [Fact]
-    public void Escape_GreaterThan_Test()
-    {
-        // Act
-        var result = Xml.Escape("2 > 1");
-
-        // Assert
-        result.Should().Be("2 &gt; 1");
-    }
-
-    [Fact]
-    public void Escape_DoubleQuote_Test()
-    {
-        // Act
-        var result = Xml.Escape("say \"hello\"");
-
-        // Assert
-        result.Should().Be("say &quot;hello&quot;");
-    }
-
-    [Fact]
-    public void Escape_SingleQuote_Test()
-    {
-        // Act
-        var result = Xml.Escape("it's");
-
-        // Assert
-        result.Should().Be("it&apos;s");
-    }
-
-    [Fact]
-    public void Escape_AllSpecialChars_Test()
-    {
-        // Act
-        var result = Xml.Escape("& < > \" '");
-
-        // Assert
-        result.Should().Be("&amp; &lt; &gt; &quot; &apos;");
-    }
-
-    [Fact]
-    public void Escape_InvalidControlChar_Test()
-    {
-        // Arrange
-        // U+0001 is invalid in XML 1.0 and should be removed
-        var input = "foo\u0001bar";
-
-        // Act
-        var result = Xml.Escape(input);
-
-        // Assert
-        result.Should().Be("foobar");
-    }
-
-    [Fact]
-    public void Escape_ValidWhitespace_Test()
-    {
-        // Tab, newline, and carriage return are valid XML characters
-        var result = Xml.Escape("foo\t\n\rbar");
-
-        // Assert
-        result.Should().Be("foo\t\n\rbar");
-    }
-
-    [Fact]
-    public void Escape_SurrogatePair_Test()
-    {
-        // Supplementary character U+1F600 (😀), encoded as a surrogate pair in .NET
-        var input = "\U0001F600";
-
-        // Act
-        var result = Xml.Escape(input);
-
-        // Assert
-        result.Should().Be(input);
-    }
-
-    [Fact]
-    public void Escape_IsolatedHighSurrogate_Test()
-    {
-        // Arrange
-        // An isolated high surrogate (no paired low surrogate) is invalid in XML and should be removed
-        var input = "foo\uD800bar";
-
-        // Act
-        var result = Xml.Escape(input);
-
-        // Assert
-        result.Should().Be("foobar");
-    }
-
-    [Fact]
-    public void Escape_IsolatedLowSurrogate_Test()
-    {
-        // Arrange
-        // An isolated low surrogate is invalid in XML and should be removed
-        var input = "foo\uDC00bar";
-
-        // Act
-        var result = Xml.Escape(input);
-
-        // Assert
-        result.Should().Be("foobar");
-    }
-
-    [Fact]
-    public void Escape_EmptyString_Test()
-    {
-        // Act
-        var result = Xml.Escape("");
-
-        // Assert
-        result.Should().BeEmpty();
-    }
-
-    [Fact]
-    public void Escape_Null_Test()
-    {
-        // Act
-        var act = () => Xml.Escape(null!);
-
-        // Assert
-        act.Should().ThrowExactly<ArgumentNullException>();
+        // Act & assert
+        Xml.Escape("hello world").Should().Be("hello world");
+        Xml.Escape("foo & bar").Should().Be("foo &amp; bar");
+        Xml.Escape("1 < 2").Should().Be("1 &lt; 2");
+        Xml.Escape("2 > 1").Should().Be("2 &gt; 1");
+        Xml.Escape("say \"hello\"").Should().Be("say &quot;hello&quot;");
+        Xml.Escape("it's").Should().Be("it&apos;s");
+        Xml.Escape("& < > \" '").Should().Be("&amp; &lt; &gt; &quot; &apos;");
+        Xml.Escape("foo\u0001bar").Should().Be("foobar");
+        Xml.Escape("foo\t\n\rbar").Should().Be("foo\t\n\rbar");
+        Xml.Escape("\U0001F600").Should().Be("\U0001F600");
+        Xml.Escape("foo\uD800bar").Should().Be("foobar");
+        Xml.Escape("foo\uDC00bar").Should().Be("foobar");
+        Xml.Escape("").Should().BeEmpty();
+        Assert.Throws<ArgumentNullException>(() => Xml.Escape(null!));
     }
 }
