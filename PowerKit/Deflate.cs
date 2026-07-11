@@ -4,7 +4,6 @@ using System.IO.Compression;
 using System;
 #endif
 
-
 namespace PowerKit;
 
 /// <summary>
@@ -17,7 +16,7 @@ public static class Deflate
     /// </summary>
     public static byte[] Compress(byte[] data)
     {
-        var output = new MemoryStream();
+        using var output = new MemoryStream();
 
         using (var stream = new DeflateStream(output, CompressionMode.Compress, true))
             stream.Write(data, 0, data.Length);
@@ -31,7 +30,7 @@ public static class Deflate
     public static byte[] Decompress(byte[] data)
     {
         using var input = new MemoryStream(data);
-        var output = new MemoryStream();
+        using var output = new MemoryStream();
 
         using (var stream = new DeflateStream(input, CompressionMode.Decompress, true))
         {
