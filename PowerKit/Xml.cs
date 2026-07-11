@@ -23,8 +23,7 @@ public static class Xml
     /// </summary>
     public static string Escape(string str)
     {
-        ArgumentNullException.ThrowIfNull(str);
-        StringBuilder? builder = null;
+        var builder = default(StringBuilder);
 
         var i = 0;
         while (i < str.Length)
@@ -33,15 +32,25 @@ public static class Xml
 
             string? replacement;
             if (ch == '&')
+            {
                 replacement = "&amp;";
+            }
             else if (ch == '<')
+            {
                 replacement = "&lt;";
+            }
             else if (ch == '>')
+            {
                 replacement = "&gt;";
+            }
             else if (ch == '"')
+            {
                 replacement = "&quot;";
+            }
             else if (ch == '\'')
+            {
                 replacement = "&apos;";
+            }
             else if (
                 char.IsHighSurrogate(ch)
                 && i + 1 < str.Length
@@ -56,7 +65,9 @@ public static class Xml
                 continue;
             }
             else if (IsValidXmlChar(ch))
+            {
                 replacement = null;
+            }
             else
             {
                 // Truly invalid XML character — skip it.
