@@ -47,7 +47,21 @@ public static class Deflate
     /// <summary>
     /// Compresses the specified data using the Deflate algorithm.
     /// </summary>
-    public static byte[] Compress(ReadOnlySpan<byte> data) => Compress(data.ToArray());
+    public static byte[] Compress(ReadOnlySpan<byte> data)
+    {
+        using var output = new MemoryStream();
+
+        using (var stream = new DeflateStream(output, CompressionMode.Compress, true))
+        {
+#if NET6_0_OR_GREATER
+            stream.Write(data);
+#else
+            stream.Write(data.ToArray(), 0, data.Length);
+#endif
+        }
+
+        return output.ToArray();
+    }
 
     /// <summary>
     /// Decompresses the specified data using the Deflate algorithm.
