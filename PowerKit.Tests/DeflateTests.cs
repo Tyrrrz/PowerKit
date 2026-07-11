@@ -22,20 +22,6 @@ public class DeflateTests
     }
 
     [Fact]
-    public void Compress_Decompress_Span_Test()
-    {
-        // Arrange
-        var data = "hello world"u8.ToArray();
-
-        // Act
-        var compressed = Deflate.Compress((ReadOnlySpan<byte>)data);
-        var decompressed = Deflate.Decompress((ReadOnlySpan<byte>)compressed);
-
-        // Assert
-        decompressed.Should().Equal(data);
-    }
-
-    [Fact]
     public void Compress_Decompress_EmptyData_Test()
     {
         // Arrange

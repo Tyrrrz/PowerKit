@@ -11,29 +11,6 @@ public static class Adler32
 {
     private const uint Modulus = 65521;
 
-#if !NETFRAMEWORK || NET45_OR_GREATER
-    /// <summary>
-    /// Computes the Adler-32 checksum of the specified data.
-    /// </summary>
-    public static uint Hash(ReadOnlySpan<byte> data)
-    {
-        uint a = 1,
-            b = 0;
-
-        for (var i = 0; i < data.Length; i++)
-        {
-            a = (a + data[i]) % Modulus;
-            b = (b + a) % Modulus;
-        }
-
-        return (b << 16) | a;
-    }
-
-    /// <summary>
-    /// Computes the Adler-32 checksum of the specified data.
-    /// </summary>
-    public static uint Hash(byte[] data) => Hash((ReadOnlySpan<byte>)data);
-#else
     /// <summary>
     /// Computes the Adler-32 checksum of the specified data.
     /// </summary>
@@ -50,5 +27,11 @@ public static class Adler32
 
         return (b << 16) | a;
     }
+
+#if !NETFRAMEWORK || NET45_OR_GREATER
+    /// <summary>
+    /// Computes the Adler-32 checksum of the specified data.
+    /// </summary>
+    public static uint Hash(ReadOnlySpan<byte> data) => Hash(data.ToArray());
 #endif
 }

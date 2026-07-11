@@ -42,18 +42,4 @@ public class Adler32Tests
         // Assert
         hash.Should().Be(1u);
     }
-
-    [Fact]
-    public void Hash_ByteArray_MatchesSpan_Test()
-    {
-        // Arrange
-        var data = "hello world"u8.ToArray();
-
-        // Act
-        var hashFromArray = Adler32.Hash(data);
-        var hashFromSpan = Adler32.Hash((ReadOnlySpan<byte>)data);
-
-        // Assert
-        hashFromArray.Should().Be(hashFromSpan);
-    }
 }

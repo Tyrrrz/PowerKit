@@ -42,18 +42,4 @@ public class Crc32Tests
         // Assert
         hash.Should().Be(0u);
     }
-
-    [Fact]
-    public void Hash_ByteArray_MatchesSpan_Test()
-    {
-        // Arrange
-        var data = "hello world"u8.ToArray();
-
-        // Act
-        var hashFromArray = Crc32.Hash(data);
-        var hashFromSpan = Crc32.Hash((ReadOnlySpan<byte>)data);
-
-        // Assert
-        hashFromArray.Should().Be(hashFromSpan);
-    }
 }

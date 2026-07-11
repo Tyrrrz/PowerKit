@@ -32,25 +32,6 @@ public static class Crc32
         return table;
     }
 
-#if !NETFRAMEWORK || NET45_OR_GREATER
-    /// <summary>
-    /// Computes the CRC-32 checksum of the specified data.
-    /// </summary>
-    public static uint Hash(ReadOnlySpan<byte> data)
-    {
-        var crc = 0xFFFFFFFFu;
-
-        for (var i = 0; i < data.Length; i++)
-            crc = (crc >> 8) ^ Table[(crc ^ data[i]) & 0xFF];
-
-        return crc ^ 0xFFFFFFFFu;
-    }
-
-    /// <summary>
-    /// Computes the CRC-32 checksum of the specified data.
-    /// </summary>
-    public static uint Hash(byte[] data) => Hash((ReadOnlySpan<byte>)data);
-#else
     /// <summary>
     /// Computes the CRC-32 checksum of the specified data.
     /// </summary>
@@ -63,5 +44,11 @@ public static class Crc32
 
         return crc ^ 0xFFFFFFFFu;
     }
+
+#if !NETFRAMEWORK || NET45_OR_GREATER
+    /// <summary>
+    /// Computes the CRC-32 checksum of the specified data.
+    /// </summary>
+    public static uint Hash(ReadOnlySpan<byte> data) => Hash(data.ToArray());
 #endif
 }
