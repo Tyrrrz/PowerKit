@@ -114,6 +114,34 @@ public class XmlTests
     }
 
     [Fact]
+    public void Escape_IsolatedHighSurrogate_Test()
+    {
+        // Arrange
+        // An isolated high surrogate (no paired low surrogate) is invalid in XML and should be removed
+        var input = "foo\uD800bar";
+
+        // Act
+        var result = Xml.Escape(input);
+
+        // Assert
+        result.Should().Be("foobar");
+    }
+
+    [Fact]
+    public void Escape_IsolatedLowSurrogate_Test()
+    {
+        // Arrange
+        // An isolated low surrogate is invalid in XML and should be removed
+        var input = "foo\uDC00bar";
+
+        // Act
+        var result = Xml.Escape(input);
+
+        // Assert
+        result.Should().Be("foobar");
+    }
+
+    [Fact]
     public void Escape_EmptyString_Test()
     {
         // Act
