@@ -23,6 +23,9 @@ public class XmlTests
         Xml.Escape("foo\uD800bar").Should().Be("foobar");
         Xml.Escape("foo\uDC00bar").Should().Be("foobar");
         Xml.Escape("").Should().BeEmpty();
-        Assert.Throws<ArgumentNullException>(() => Xml.Escape(null!));
+        FluentActions
+            .Invoking(() => Xml.Escape(null!))
+            .Should()
+            .ThrowExactly<ArgumentNullException>();
     }
 }
