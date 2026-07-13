@@ -3,6 +3,7 @@ using System.IO;
 using System;
 #endif
 
+
 namespace PowerKit;
 
 /// <summary>
@@ -38,7 +39,11 @@ public static class Adler32
     /// <summary>
     /// Computes the Adler-32 checksum of the specified data.
     /// </summary>
-    public static uint Hash(byte[] data) => Hash(new MemoryStream(data));
+    public static uint Hash(byte[] data)
+    {
+        using var stream = new MemoryStream(data);
+        return Hash(stream);
+    }
 
 #if !NETFRAMEWORK || NET45_OR_GREATER
     /// <summary>
