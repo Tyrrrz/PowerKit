@@ -49,6 +49,12 @@ public static class Crc32
     /// <summary>
     /// Computes the CRC-32 checksum of the specified data.
     /// </summary>
-    public static uint Hash(ReadOnlySpan<byte> data) => Hash(data.ToArray());
+    public static uint Hash(ReadOnlySpan<byte> data)
+    {
+        var crc = 0xFFFFFFFFu;
+        for (var i = 0; i < data.Length; i++)
+            crc = (crc >> 8) ^ Table[(byte)(crc ^ data[i])];
+        return crc ^ 0xFFFFFFFFu;
+    }
 #endif
 }
