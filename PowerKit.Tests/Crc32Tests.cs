@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using FluentAssertions;
 using PowerKit;
 using Xunit;
@@ -7,6 +8,19 @@ namespace PowerKit.Tests;
 
 public class Crc32Tests
 {
+    [Fact]
+    public void Hash_Stream_Test()
+    {
+        // Arrange
+        using var stream = new MemoryStream("123456789"u8.ToArray());
+
+        // Act
+        var hash = Crc32.Hash(stream);
+
+        // Assert
+        hash.Should().Be(0xCBF43926u);
+    }
+
     [Fact]
     public void Hash_ByteArray_Test()
     {

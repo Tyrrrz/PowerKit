@@ -12,15 +12,41 @@ namespace PowerKit;
 public static class Deflate
 {
     /// <summary>
+    /// Compresses data from the source stream and writes it to the destination stream.
+    /// </summary>
+    public static void Compress(Stream source, Stream destination)
+    {
+        using (var deflateStream = new DeflateStream(destination, CompressionMode.Compress, true))
+        {
+            var buffer = new byte[4096];
+            int read;
+            while ((read = source.Read(buffer, 0, buffer.Length)) > 0)
+                deflateStream.Write(buffer, 0, read);
+        }
+    }
+
+    /// <summary>
+    /// Decompresses data from the source stream and writes it to the destination stream.
+    /// </summary>
+    public static void Decompress(Stream source, Stream destination)
+    {
+        using (var deflateStream = new DeflateStream(source, CompressionMode.Decompress, true))
+        {
+            var buffer = new byte[4096];
+            int read;
+            while ((read = deflateStream.Read(buffer, 0, buffer.Length)) > 0)
+                destination.Write(buffer, 0, read);
+        }
+    }
+
+    /// <summary>
     /// Compresses the specified data using the Deflate algorithm.
     /// </summary>
     public static byte[] Compress(byte[] data)
     {
+        using var input = new MemoryStream(data);
         using var output = new MemoryStream();
-
-        using (var stream = new DeflateStream(output, CompressionMode.Compress, true))
-            stream.Write(data, 0, data.Length);
-
+        Compress(input, output);
         return output.ToArray();
     }
 
@@ -31,15 +57,7 @@ public static class Deflate
     {
         using var input = new MemoryStream(data);
         using var output = new MemoryStream();
-
-        using (var stream = new DeflateStream(input, CompressionMode.Decompress, true))
-        {
-            var buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                output.Write(buffer, 0, bytesRead);
-        }
-
+        Decompress(input, output);
         return output.ToArray();
     }
 
@@ -47,21 +65,7 @@ public static class Deflate
     /// <summary>
     /// Compresses the specified data using the Deflate algorithm.
     /// </summary>
-    public static byte[] Compress(ReadOnlySpan<byte> data)
-    {
-        using var output = new MemoryStream();
-
-        using (var stream = new DeflateStream(output, CompressionMode.Compress, true))
-        {
-#if NET6_0_OR_GREATER
-            stream.Write(data);
-#else
-            stream.Write(data.ToArray(), 0, data.Length);
-#endif
-        }
-
-        return output.ToArray();
-    }
+    public static byte[] Compress(ReadOnlySpan<byte> data) => Compress(data.ToArray());
 
     /// <summary>
     /// Decompresses the specified data using the Deflate algorithm.

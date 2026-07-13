@@ -1,3 +1,4 @@
+using System.IO;
 #if !NETFRAMEWORK || NET45_OR_GREATER
 using System;
 #endif
@@ -15,9 +16,9 @@ public static class Crc32
     {
         var table = new uint[256];
 
-        for (uint i = 0; i < 256; i++)
+        for (var i = 0; i < 256; i++)
         {
-            var entry = i;
+            var entry = (uint)i;
             for (var j = 0; j < 8; j++)
             {
                 if ((entry & 1) != 0)
@@ -33,17 +34,28 @@ public static class Crc32
     }
 
     /// <summary>
-    /// Computes the CRC-32 checksum of the specified data.
+    /// Computes the CRC-32 checksum of data read from the specified stream.
     /// </summary>
-    public static uint Hash(byte[] data)
+    public static uint Hash(Stream stream)
     {
         var crc = 0xFFFFFFFFu;
 
-        for (var i = 0; i < data.Length; i++)
-            crc = (crc >> 8) ^ Table[(crc ^ data[i]) & 0xFF];
+        var buffer = new byte[4096];
+        int read;
+
+        while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            for (var i = 0; i < read; i++)
+                crc = (crc >> 8) ^ Table[(byte)(crc ^ buffer[i])];
+        }
 
         return crc ^ 0xFFFFFFFFu;
     }
+
+    /// <summary>
+    /// Computes the CRC-32 checksum of the specified data.
+    /// </summary>
+    public static uint Hash(byte[] data) => Hash(new MemoryStream(data));
 
 #if !NETFRAMEWORK || NET45_OR_GREATER
     /// <summary>

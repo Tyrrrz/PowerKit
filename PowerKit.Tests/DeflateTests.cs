@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using FluentAssertions;
 using PowerKit;
 using Xunit;
@@ -8,6 +9,24 @@ namespace PowerKit.Tests;
 public class DeflateTests
 {
     [Fact]
+    public void Compress_Decompress_Stream_Test()
+    {
+        // Arrange
+        var data = "hello world"u8.ToArray();
+        using var input = new MemoryStream(data);
+        using var compressed = new MemoryStream();
+        using var decompressed = new MemoryStream();
+
+        // Act
+        Deflate.Compress(input, compressed);
+        compressed.Position = 0;
+        Deflate.Decompress(compressed, decompressed);
+
+        // Assert
+        decompressed.ToArray().Should().Equal(data);
+    }
+
+    [Fact]
     public void Compress_Decompress_ByteArray_Test()
     {
         // Arrange
@@ -16,6 +35,20 @@ public class DeflateTests
         // Act
         var compressed = Deflate.Compress(data);
         var decompressed = Deflate.Decompress(compressed);
+
+        // Assert
+        decompressed.Should().Equal(data);
+    }
+
+    [Fact]
+    public void Compress_Decompress_Span_Test()
+    {
+        // Arrange
+        var data = "hello world"u8.ToArray();
+
+        // Act
+        var compressed = Deflate.Compress((ReadOnlySpan<byte>)data);
+        var decompressed = Deflate.Decompress((ReadOnlySpan<byte>)compressed);
 
         // Assert
         decompressed.Should().Equal(data);

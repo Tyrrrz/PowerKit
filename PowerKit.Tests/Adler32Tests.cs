@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using FluentAssertions;
 using PowerKit;
 using Xunit;
@@ -7,6 +8,19 @@ namespace PowerKit.Tests;
 
 public class Adler32Tests
 {
+    [Fact]
+    public void Hash_Stream_Test()
+    {
+        // Arrange
+        using var stream = new MemoryStream("Wikipedia"u8.ToArray());
+
+        // Act
+        var hash = Adler32.Hash(stream);
+
+        // Assert
+        hash.Should().Be(0x11E60398u);
+    }
+
     [Fact]
     public void Hash_ByteArray_Test()
     {
