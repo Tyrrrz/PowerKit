@@ -3,7 +3,6 @@ using System.IO;
 using System;
 #endif
 
-
 namespace PowerKit;
 
 /// <summary>
