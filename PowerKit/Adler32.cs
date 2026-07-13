@@ -32,6 +32,17 @@ public static class Adler32
     /// <summary>
     /// Computes the Adler-32 checksum of the specified data.
     /// </summary>
-    public static uint Hash(ReadOnlySpan<byte> data) => Hash(data.ToArray());
+    public static uint Hash(ReadOnlySpan<byte> data)
+    {
+        uint a = 1, b = 0;
+
+        for (var i = 0; i < data.Length; i++)
+        {
+            a = (a + data[i]) % Modulus;
+            b = (b + a) % Modulus;
+        }
+
+        return (b << 16) | a;
+    }
 #endif
 }
