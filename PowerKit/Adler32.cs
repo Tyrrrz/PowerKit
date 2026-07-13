@@ -34,7 +34,8 @@ public static class Adler32
     /// </summary>
     public static uint Hash(ReadOnlySpan<byte> data)
     {
-        uint a = 1, b = 0;
+        uint a = 1,
+            b = 0;
 
         for (var i = 0; i < data.Length; i++)
         {
