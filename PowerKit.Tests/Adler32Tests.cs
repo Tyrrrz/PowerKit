@@ -51,7 +51,7 @@ public class Adler32Tests
     public void Hash_EmptyData_Test()
     {
         // Act
-        var hash = Adler32.Hash(Array.Empty<byte>());
+        var hash = Adler32.Hash([]);
 
         // Assert
         hash.Should().Be(1u);

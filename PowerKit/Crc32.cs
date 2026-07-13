@@ -40,13 +40,12 @@ public static class Crc32
     {
         var crc = 0xFFFFFFFFu;
 
-        var buffer = new byte[4096];
-        int read;
+        using var buffer = SpanPool<byte>.Shared.Rent(4096);
 
-        while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+        while (stream.Read(buffer.Span) is > 0 and var bytesRead)
         {
-            for (var i = 0; i < read; i++)
-                crc = (crc >> 8) ^ Table[(byte)(crc ^ buffer[i])];
+            for (var i = 0; i < bytesRead; i++)
+                crc = (crc >> 8) ^ Table[(byte)(crc ^ buffer.Span[i])];
         }
 
         return crc ^ 0xFFFFFFFFu;
@@ -68,8 +67,10 @@ public static class Crc32
     public static uint Hash(ReadOnlySpan<byte> data)
     {
         var crc = 0xFFFFFFFFu;
+
         for (var i = 0; i < data.Length; i++)
             crc = (crc >> 8) ^ Table[(byte)(crc ^ data[i])];
+
         return crc ^ 0xFFFFFFFFu;
     }
 #endif

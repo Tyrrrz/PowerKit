@@ -112,11 +112,9 @@ public class StringExtensionsTests
             s2.IsReadOnly().Should().BeTrue();
         }
 
-        using (var s3 = "abc".ToSecureString())
-        {
-            s3.Length.Should().Be(3);
-            s3.IsReadOnly().Should().BeTrue();
-        }
+        using var s3 = "abc".ToSecureString();
+        s3.Length.Should().Be(3);
+        s3.IsReadOnly().Should().BeTrue();
     }
 
     [Fact]

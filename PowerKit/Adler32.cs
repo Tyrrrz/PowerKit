@@ -17,17 +17,16 @@ public static class Adler32
     /// </summary>
     public static uint Hash(Stream stream)
     {
-        uint a = 1,
-            b = 0;
+        var a = 1u;
+        var b = 0u;
 
-        var buffer = new byte[4096];
-        int read;
+        using var buffer = SpanPool<byte>.Shared.Rent(4096);
 
-        while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+        while (stream.Read(buffer.Span) is > 0 and var bytesRead)
         {
-            for (var i = 0; i < read; i++)
+            for (var i = 0; i < bytesRead; i++)
             {
-                a = (a + buffer[i]) % Modulus;
+                a = (a + buffer.Span[i]) % Modulus;
                 b = (b + a) % Modulus;
             }
         }
@@ -50,8 +49,8 @@ public static class Adler32
     /// </summary>
     public static uint Hash(ReadOnlySpan<byte> data)
     {
-        uint a = 1,
-            b = 0;
+        var a = 1u;
+        var b = 0u;
 
         for (var i = 0; i < data.Length; i++)
         {

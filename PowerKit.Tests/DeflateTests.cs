@@ -12,7 +12,7 @@ public class DeflateTests
     public void Compress_Decompress_Stream_Test()
     {
         // Arrange
-        var data = "hello world"u8.ToArray();
+        var data = "Hello world!"u8.ToArray();
         using var input = new MemoryStream(data);
         using var compressed = new MemoryStream();
         using var decompressed = new MemoryStream();
@@ -30,7 +30,7 @@ public class DeflateTests
     public void Compress_Decompress_ByteArray_Test()
     {
         // Arrange
-        var data = "hello world"u8.ToArray();
+        var data = "Hello world!"u8.ToArray();
 
         // Act
         var compressed = Deflate.Compress(data);
@@ -44,7 +44,7 @@ public class DeflateTests
     public void Compress_Decompress_Span_Test()
     {
         // Arrange
-        var data = "hello world"u8.ToArray();
+        var data = "Hello world!"u8.ToArray();
 
         // Act
         var compressed = Deflate.Compress((ReadOnlySpan<byte>)data);

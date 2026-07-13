@@ -51,7 +51,7 @@ public class Crc32Tests
     public void Hash_EmptyData_Test()
     {
         // Act
-        var hash = Crc32.Hash(Array.Empty<byte>());
+        var hash = Crc32.Hash([]);
 
         // Assert
         hash.Should().Be(0u);
