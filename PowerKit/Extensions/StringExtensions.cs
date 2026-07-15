@@ -167,7 +167,7 @@ public static class StringExtensions
 
         /// <summary>
         /// Removes the specified prefix from the beginning of the string, if present.
-        /// If the string does not start with <paramref name="prefix"/>, the original string is returned unchanged.
+        /// If the string does not start with <paramref name="prefix" />, the original string is returned unchanged.
         /// </summary>
         public string TrimPrefix(
             string prefix,
@@ -176,7 +176,7 @@ public static class StringExtensions
 
         /// <summary>
         /// Removes the specified suffix from the end of the string, if present.
-        /// If the string does not end with <paramref name="suffix"/>, the original string is returned unchanged.
+        /// If the string does not end with <paramref name="suffix" />, the original string is returned unchanged.
         /// </summary>
         public string TrimSuffix(
             string suffix,
