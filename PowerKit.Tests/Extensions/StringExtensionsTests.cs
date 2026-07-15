@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using FluentAssertions;
 using PowerKit.Extensions;
@@ -126,6 +127,34 @@ public class StringExtensionsTests
         "Hello".ToSnakeCase().Should().Be("hello");
         "hello".ToSnakeCase().Should().Be("hello");
         "".ToSnakeCase().Should().Be("");
+    }
+
+    [Fact]
+    public void TrimPrefix_Test()
+    {
+        // Act & assert
+        "hello world".TrimPrefix("hello").Should().Be(" world");
+        "hello world".TrimPrefix("world").Should().Be("hello world");
+        "hello world".TrimPrefix("").Should().Be("hello world");
+        "hello".TrimPrefix("hello").Should().Be("");
+        "HELLO world".TrimPrefix("hello", StringComparison.OrdinalIgnoreCase).Should().Be(" world");
+        "HELLO world".TrimPrefix("hello").Should().Be("HELLO world");
+        "".TrimPrefix("hello").Should().Be("");
+        "hello hello".TrimPrefix("hello").Should().Be(" hello");
+    }
+
+    [Fact]
+    public void TrimSuffix_Test()
+    {
+        // Act & assert
+        "hello world".TrimSuffix("world").Should().Be("hello ");
+        "hello world".TrimSuffix("hello").Should().Be("hello world");
+        "hello world".TrimSuffix("").Should().Be("hello world");
+        "hello".TrimSuffix("hello").Should().Be("");
+        "hello WORLD".TrimSuffix("world", StringComparison.OrdinalIgnoreCase).Should().Be("hello ");
+        "hello WORLD".TrimSuffix("world").Should().Be("hello WORLD");
+        "".TrimSuffix("world").Should().Be("");
+        "hello hello".TrimSuffix("hello").Should().Be("hello ");
     }
 
     [Fact]
