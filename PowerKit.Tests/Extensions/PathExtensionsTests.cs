@@ -51,6 +51,7 @@ public class PathExtensionsTests
         Path.AreEqual("/foo/./bar", "/foo/bar").Should().BeTrue();
         Path.AreEqual("/foo/baz/../bar", "/foo/bar").Should().BeTrue();
         Path.AreEqual("/foo/bar", "/foo/baz").Should().BeFalse();
+        Path.AreEqual("/foo/Bar", "/foo/bar").Should().Be(System.OperatingSystem.IsWindows());
     }
 
     [Fact]
