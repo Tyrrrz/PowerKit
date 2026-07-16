@@ -30,6 +30,31 @@ public class PathExtensionsTests
     }
 
     [Fact]
+    public void Normalize_Test()
+    {
+        // Act & assert
+        Path.Normalize("/foo/bar/").Should().Be(Path.GetFullPath("/foo/bar"));
+        Path.Normalize("/foo/./bar").Should().Be(Path.GetFullPath("/foo/bar"));
+        Path.Normalize("/foo/baz/../bar").Should().Be(Path.GetFullPath("/foo/bar"));
+        Path.Normalize("/foo/bar").Should().Be(Path.GetFullPath("/foo/bar"));
+    }
+
+    [Fact]
+    public void AreEqual_Test()
+    {
+        // Act & assert
+        Path.AreEqual(null, null).Should().BeTrue();
+        Path.AreEqual(null, "/foo").Should().BeFalse();
+        Path.AreEqual("/foo", null).Should().BeFalse();
+        Path.AreEqual("/foo/bar", "/foo/bar").Should().BeTrue();
+        Path.AreEqual("/foo/bar", "/foo/bar/").Should().BeTrue();
+        Path.AreEqual("/foo/./bar", "/foo/bar").Should().BeTrue();
+        Path.AreEqual("/foo/baz/../bar", "/foo/bar").Should().BeTrue();
+        Path.AreEqual("/foo/bar", "/foo/baz").Should().BeFalse();
+        Path.AreEqual("/foo/Bar", "/foo/bar").Should().Be(System.OperatingSystem.IsWindows());
+    }
+
+    [Fact]
     public void EscapeFileName_Test()
     {
         // Act & assert
