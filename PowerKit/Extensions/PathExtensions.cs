@@ -91,6 +91,13 @@ public static class PathExtensions
             crossPlatform ? PathEx.CrossPlatformInvalidPathChars : Path.GetInvalidPathChars();
 
         /// <summary>
+        /// Returns a normalized representation of the specified path by resolving
+        /// <c>.</c> and <c>..</c> segments and removing trailing directory separators.
+        /// </summary>
+        public static string Normalize(string path) =>
+            Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+
+        /// <summary>
         /// Compares two paths for equality, normalizing them first and using
         /// the path comparison rules of the current operating system
         /// (case-insensitive on Windows, case-sensitive on other platforms).
@@ -103,14 +110,11 @@ public static class PathExtensions
             if (path1 is null || path2 is null)
                 return false;
 
-            var normalized1 = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path1));
-            var normalized2 = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path2));
-
             var comparison = OperatingSystem.IsWindows()
                 ? StringComparison.OrdinalIgnoreCase
                 : StringComparison.Ordinal;
 
-            return string.Equals(normalized1, normalized2, comparison);
+            return string.Equals(Path.Normalize(path1), Path.Normalize(path2), comparison);
         }
 
         /// <summary>

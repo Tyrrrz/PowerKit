@@ -30,6 +30,16 @@ public class PathExtensionsTests
     }
 
     [Fact]
+    public void Normalize_Test()
+    {
+        // Act & assert
+        Path.Normalize("/foo/bar/").Should().Be(Path.GetFullPath("/foo/bar"));
+        Path.Normalize("/foo/./bar").Should().Be(Path.GetFullPath("/foo/bar"));
+        Path.Normalize("/foo/baz/../bar").Should().Be(Path.GetFullPath("/foo/bar"));
+        Path.Normalize("/foo/bar").Should().Be(Path.GetFullPath("/foo/bar"));
+    }
+
+    [Fact]
     public void AreEqual_Test()
     {
         // Act & assert
