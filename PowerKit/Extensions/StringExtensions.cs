@@ -166,6 +166,24 @@ public static class StringExtensions
         public string ToSnakeCase() => str.SeparateWords('_').ToLowerInvariant();
 
         /// <summary>
+        /// Removes the specified prefix from the beginning of the string, if present.
+        /// If the string does not start with <paramref name="prefix" />, the original string is returned unchanged.
+        /// </summary>
+        public string TrimPrefix(
+            string prefix,
+            StringComparison comparison = StringComparison.Ordinal
+        ) => str.StartsWith(prefix, comparison) ? str[prefix.Length..] : str;
+
+        /// <summary>
+        /// Removes the specified suffix from the end of the string, if present.
+        /// If the string does not end with <paramref name="suffix" />, the original string is returned unchanged.
+        /// </summary>
+        public string TrimSuffix(
+            string suffix,
+            StringComparison comparison = StringComparison.Ordinal
+        ) => str.EndsWith(suffix, comparison) ? str[..^suffix.Length] : str;
+
+        /// <summary>
         /// Truncates the string to the specified maximum number of characters.
         /// </summary>
         public string Truncate(int charCount) => str.Length > charCount ? str[..charCount] : str;
