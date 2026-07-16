@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -88,6 +89,29 @@ public static class PathExtensions
         /// </summary>
         public static char[] GetInvalidPathChars(bool crossPlatform) =>
             crossPlatform ? PathEx.CrossPlatformInvalidPathChars : Path.GetInvalidPathChars();
+
+        /// <summary>
+        /// Compares two paths for equality, normalizing them first and using
+        /// the path comparison rules of the current operating system
+        /// (case-insensitive on Windows, case-sensitive on other platforms).
+        /// </summary>
+        public static bool AreEqual(string? path1, string? path2)
+        {
+            if (path1 is null && path2 is null)
+                return true;
+
+            if (path1 is null || path2 is null)
+                return false;
+
+            var normalized1 = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path1));
+            var normalized2 = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path2));
+
+            var comparison = OperatingSystem.IsWindows()
+                ? StringComparison.OrdinalIgnoreCase
+                : StringComparison.Ordinal;
+
+            return string.Equals(normalized1, normalized2, comparison);
+        }
 
         /// <summary>
         /// Replaces invalid file name characters with underscores and strips trailing dots and whitespace.

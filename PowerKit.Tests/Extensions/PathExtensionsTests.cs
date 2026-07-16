@@ -30,6 +30,20 @@ public class PathExtensionsTests
     }
 
     [Fact]
+    public void AreEqual_Test()
+    {
+        // Act & assert
+        Path.AreEqual(null, null).Should().BeTrue();
+        Path.AreEqual(null, "/foo").Should().BeFalse();
+        Path.AreEqual("/foo", null).Should().BeFalse();
+        Path.AreEqual("/foo/bar", "/foo/bar").Should().BeTrue();
+        Path.AreEqual("/foo/bar", "/foo/bar/").Should().BeTrue();
+        Path.AreEqual("/foo/./bar", "/foo/bar").Should().BeTrue();
+        Path.AreEqual("/foo/baz/../bar", "/foo/bar").Should().BeTrue();
+        Path.AreEqual("/foo/bar", "/foo/baz").Should().BeFalse();
+    }
+
+    [Fact]
     public void EscapeFileName_Test()
     {
         // Act & assert
