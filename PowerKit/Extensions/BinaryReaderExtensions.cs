@@ -15,6 +15,7 @@ public static class BinaryReaderExtensions
         var bytes = reader.ReadBytes(count);
         if (bytes.Length != count)
             throw new EndOfStreamException();
+
         return bytes;
     }
 
