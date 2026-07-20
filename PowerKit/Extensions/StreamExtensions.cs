@@ -13,6 +13,42 @@ public static class StreamExtensions
 {
     extension(Stream source)
     {
+        /// <summary>
+        /// Copies the contents of the stream into a new <see cref="MemoryStream" />.
+        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is.
+        /// </summary>
+        public MemoryStream ToMemoryStream()
+        {
+            if (source is MemoryStream asMemoryStream)
+                return asMemoryStream;
+
+            var memoryStream = new MemoryStream();
+            source.CopyTo(memoryStream);
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
+
+#if NET40_OR_GREATER || NETSTANDARD || NET
+        /// <summary>
+        /// Copies the contents of the stream into a new <see cref="MemoryStream" /> asynchronously.
+        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is.
+        /// </summary>
+        public async Task<MemoryStream> ToMemoryStreamAsync(
+            CancellationToken cancellationToken = default
+        )
+        {
+            if (source is MemoryStream asMemoryStream)
+                return asMemoryStream;
+
+            var memoryStream = new MemoryStream();
+            await source.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
+
+#endif
 #if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Copies the contents of the stream to the destination stream, optionally flushing after each write.

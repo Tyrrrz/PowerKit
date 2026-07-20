@@ -11,6 +11,62 @@ namespace PowerKit.Tests.Extensions;
 public class StreamExtensionsTests
 {
     [Fact]
+    public void ToMemoryStream_RegularStream_Test()
+    {
+        // Arrange
+        var data = new byte[] { 1, 2, 3, 4, 5 };
+        using var source = new MemoryStream(data);
+
+        // Act
+        using var result = source.ToMemoryStream();
+
+        // Assert
+        result.ToArray().Should().Equal(data);
+    }
+
+    [Fact]
+    public void ToMemoryStream_AlreadyMemoryStream_ReturnsSameInstance_Test()
+    {
+        // Arrange
+        var data = new byte[] { 1, 2, 3, 4, 5 };
+        using var source = new MemoryStream(data);
+
+        // Act
+        var result = source.ToMemoryStream();
+
+        // Assert
+        result.Should().BeSameAs(source);
+    }
+
+    [Fact]
+    public async Task ToMemoryStreamAsync_RegularStream_Test()
+    {
+        // Arrange
+        var data = new byte[] { 1, 2, 3, 4, 5 };
+        using var source = new MemoryStream(data);
+
+        // Act
+        using var result = await source.ToMemoryStreamAsync();
+
+        // Assert
+        result.ToArray().Should().Equal(data);
+    }
+
+    [Fact]
+    public async Task ToMemoryStreamAsync_AlreadyMemoryStream_ReturnsSameInstance_Test()
+    {
+        // Arrange
+        var data = new byte[] { 1, 2, 3, 4, 5 };
+        using var source = new MemoryStream(data);
+
+        // Act
+        var result = await source.ToMemoryStreamAsync();
+
+        // Assert
+        result.Should().BeSameAs(source);
+    }
+
+    [Fact]
     public async Task CopyToAsync_AutoFlush_Test()
     {
         // Arrange
