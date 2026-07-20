@@ -16,9 +16,11 @@ public static class StreamExtensions
         /// <summary>
         /// Copies the contents of the stream into a new <see cref="MemoryStream" /> with
         /// <see cref="Stream.Position" /> reset to 0.
+        /// </summary>
+        /// <remarks>
         /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is
         /// without resetting its position.
-        /// </summary>
+        /// </remarks>
         public MemoryStream ToMemoryStream()
         {
             if (source is MemoryStream asMemoryStream)
@@ -35,9 +37,11 @@ public static class StreamExtensions
         /// <summary>
         /// Copies the contents of the stream into a new <see cref="MemoryStream" /> asynchronously
         /// with <see cref="Stream.Position" /> reset to 0.
+        /// </summary>
+        /// <remarks>
         /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is
         /// without resetting its position.
-        /// </summary>
+        /// </remarks>
         public async Task<MemoryStream> ToMemoryStreamAsync(
             CancellationToken cancellationToken = default
         )
@@ -46,7 +50,7 @@ public static class StreamExtensions
                 return asMemoryStream;
 
             var memoryStream = new MemoryStream();
-            await source.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
+            await source.CopyToAsync(memoryStream, 81920, cancellationToken).ConfigureAwait(false);
             memoryStream.Position = 0;
 
             return memoryStream;
