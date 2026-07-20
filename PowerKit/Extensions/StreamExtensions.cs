@@ -25,7 +25,7 @@ file sealed class MemoryBackedStream(Stream source) : Stream
                 var savedPosition = source.Position;
                 source.Seek(0, SeekOrigin.Begin);
                 source.CopyTo(_buffer);
-                _buffer.Position = savedPosition;
+                _buffer.Position = Math.Min(savedPosition, _buffer.Length);
             }
             else
             {
@@ -50,6 +50,8 @@ file sealed class MemoryBackedStream(Stream source) : Stream
         set => EnsureBuffer().Position = value;
     }
 
+    // Flush is a no-op because the buffer is an in-memory MemoryStream, which
+    // never needs flushing. The write-back to the underlying stream happens on Dispose.
     public override void Flush() { }
 
     public override int Read(byte[] buffer, int offset, int count)
@@ -79,10 +81,14 @@ file sealed class MemoryBackedStream(Stream source) : Stream
         {
             _buffer.Position = 0;
 
-            // If the full stream was loaded (readable + seekable), seek back to the
-            // beginning so the write-back replaces the entire original content.
+            // If the full stream was loaded (readable + seekable), truncate the source
+            // to the buffer's length and seek to the beginning so the write-back
+            // completely replaces the original content without leaving trailing data.
             if (source.CanRead && source.CanSeek)
+            {
+                source.SetLength(_buffer.Length);
                 source.Seek(0, SeekOrigin.Begin);
+            }
 
             _buffer.CopyTo(source);
         }
