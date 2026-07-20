@@ -105,6 +105,16 @@ public static class StreamExtensions
     extension(Stream source)
     {
         /// <summary>
+        /// Creates a portal to the specified position in the stream.
+        /// </summary>
+        public StreamPortal CreatePortal(long position) => new(source, position);
+
+        /// <summary>
+        /// Creates a portal to the current position in the stream.
+        /// </summary>
+        public StreamPortal CreatePortal() => source.CreatePortal(source.Position);
+
+        /// <summary>
         /// Returns a <see cref="Stream" /> backed by a <see cref="MemoryStream" />.
         /// </summary>
         /// <remarks>
