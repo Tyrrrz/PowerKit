@@ -11,7 +11,7 @@
     <PackageVersion Include="Gress" Version="2.2.0" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.8" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
-    <PackageVersion Include="PolyShim" Version="2.11.0" />
+    <PackageVersion Include="PolyShim" Version="2.12.2" />
     <PackageVersion Include="Snek" Version="1.0.0" />
     <PackageVersion Include="System.Memory" Version="4.6.3" />
     <PackageVersion Include="xunit" Version="2.9.3" />
