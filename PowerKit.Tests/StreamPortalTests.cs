@@ -37,24 +37,7 @@ public class StreamPortalTests
     }
 
     [Fact]
-    public void Jump_SeeksToPortalPosition_Test()
-    {
-        // Arrange
-        var data = new byte[] { 1, 2, 3, 4, 5 };
-        using var stream = new MemoryStream(data);
-        var portal = stream.CreatePortal(3);
-        stream.Seek(0, SeekOrigin.Begin);
-
-        // Act
-        using (portal.Jump())
-        {
-            // Assert
-            stream.Position.Should().Be(3);
-        }
-    }
-
-    [Fact]
-    public void Jump_RestoresPositionOnDispose_Test()
+    public void Jump_SeeksToPortalPositionAndRestoresOnDispose_Test()
     {
         // Arrange
         var data = new byte[] { 1, 2, 3, 4, 5 };
@@ -64,10 +47,13 @@ public class StreamPortalTests
 
         // Act
         var jump = portal.Jump();
+
+        // Assert - seeks to portal position
         stream.Position.Should().Be(4);
+
         jump.Dispose();
 
-        // Assert
+        // Assert - restores original position on dispose
         stream.Position.Should().Be(1);
     }
 }
