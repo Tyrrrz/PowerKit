@@ -11,7 +11,15 @@ public class StreamPortal(Stream stream, long position)
     /// <summary>
     /// Gets the position this portal points to.
     /// </summary>
-    public long Position { get; } = position;
+    public long Position { get; } =
+        stream.CanSeek
+            ? position >= 0
+                ? position
+                : throw new ArgumentOutOfRangeException(
+                    nameof(position),
+                    "Position must be non-negative."
+                )
+            : throw new ArgumentException("Stream must support seeking.", nameof(stream));
 
     /// <summary>
     /// Seeks the stream to the portal's position and returns a disposable that,
