@@ -13,6 +13,16 @@ public static class StreamExtensions
 {
     extension(Stream source)
     {
+        /// <summary>
+        /// Creates a portal to the specified position in the stream.
+        /// </summary>
+        public StreamPortal CreatePortal(long position) => new(source, position);
+
+        /// <summary>
+        /// Creates a portal to the current position in the stream.
+        /// </summary>
+        public StreamPortal CreatePortal() => source.CreatePortal(source.Position);
+
 #if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Copies the contents of the stream to the destination stream, optionally flushing after each write.
