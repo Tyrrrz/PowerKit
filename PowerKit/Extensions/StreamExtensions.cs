@@ -14,8 +14,10 @@ public static class StreamExtensions
     extension(Stream source)
     {
         /// <summary>
-        /// Copies the contents of the stream into a new <see cref="MemoryStream" />.
-        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is.
+        /// Copies the contents of the stream into a new <see cref="MemoryStream" /> with
+        /// <see cref="Stream.Position" /> reset to 0.
+        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is
+        /// without resetting its position.
         /// </summary>
         public MemoryStream ToMemoryStream()
         {
@@ -31,8 +33,10 @@ public static class StreamExtensions
 
 #if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
-        /// Copies the contents of the stream into a new <see cref="MemoryStream" /> asynchronously.
-        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is.
+        /// Copies the contents of the stream into a new <see cref="MemoryStream" /> asynchronously
+        /// with <see cref="Stream.Position" /> reset to 0.
+        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is
+        /// without resetting its position.
         /// </summary>
         public async Task<MemoryStream> ToMemoryStreamAsync(
             CancellationToken cancellationToken = default

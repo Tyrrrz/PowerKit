@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,17 +11,46 @@ namespace PowerKit.Tests.Extensions;
 
 public class StreamExtensionsTests
 {
+    // A non-MemoryStream wrapper used to exercise the copy path
+    private sealed class NonMemoryStream(Stream inner) : Stream
+    {
+        public override bool CanRead => inner.CanRead;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush() => inner.Flush();
+
+        public override int Read(byte[] buffer, int offset, int count) =>
+            inner.Read(buffer, offset, count);
+
+        public override long Seek(long offset, SeekOrigin origin) =>
+            throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count) =>
+            throw new NotSupportedException();
+    }
+
     [Fact]
     public void ToMemoryStream_RegularStream_Test()
     {
         // Arrange
         var data = new byte[] { 1, 2, 3, 4, 5 };
-        using var source = new MemoryStream(data);
+        using var inner = new MemoryStream(data);
+        using var source = new NonMemoryStream(inner);
 
         // Act
         using var result = source.ToMemoryStream();
 
         // Assert
+        result.Position.Should().Be(0);
         result.ToArray().Should().Equal(data);
     }
 
@@ -43,12 +73,14 @@ public class StreamExtensionsTests
     {
         // Arrange
         var data = new byte[] { 1, 2, 3, 4, 5 };
-        using var source = new MemoryStream(data);
+        using var inner = new MemoryStream(data);
+        using var source = new NonMemoryStream(inner);
 
         // Act
         using var result = await source.ToMemoryStreamAsync();
 
         // Assert
+        result.Position.Should().Be(0);
         result.ToArray().Should().Equal(data);
     }
 
