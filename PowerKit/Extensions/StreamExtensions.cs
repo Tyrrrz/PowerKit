@@ -6,6 +6,91 @@ using System.Threading.Tasks;
 
 namespace PowerKit.Extensions;
 
+file sealed class MemoryBackedStream(Stream source) : Stream
+{
+    private MemoryStream? _buffer;
+
+    private MemoryStream EnsureBuffer()
+    {
+        if (_buffer is not null)
+            return _buffer;
+
+        _buffer = new MemoryStream();
+
+        if (source.CanRead)
+        {
+            if (source.CanSeek)
+            {
+                // Load the entire stream into memory and restore the original position.
+                var savedPosition = source.Position;
+                source.Seek(0, SeekOrigin.Begin);
+                source.CopyTo(_buffer);
+                _buffer.Position = savedPosition;
+            }
+            else
+            {
+                // Non-seekable: load from the current position and start reading at 0.
+                source.CopyTo(_buffer);
+                _buffer.Position = 0;
+            }
+        }
+
+        return _buffer;
+    }
+
+    public override bool CanRead => source.CanRead;
+    public override bool CanSeek => true;
+    public override bool CanWrite => source.CanWrite;
+
+    public override long Length => EnsureBuffer().Length;
+
+    public override long Position
+    {
+        get => EnsureBuffer().Position;
+        set => EnsureBuffer().Position = value;
+    }
+
+    public override void Flush() { }
+
+    public override int Read(byte[] buffer, int offset, int count)
+    {
+        if (!source.CanRead)
+            throw new NotSupportedException("Stream does not support reading.");
+
+        return EnsureBuffer().Read(buffer, offset, count);
+    }
+
+    public override long Seek(long offset, SeekOrigin origin) =>
+        EnsureBuffer().Seek(offset, origin);
+
+    public override void SetLength(long value) => EnsureBuffer().SetLength(value);
+
+    public override void Write(byte[] buffer, int offset, int count)
+    {
+        if (!source.CanWrite)
+            throw new NotSupportedException("Stream does not support writing.");
+
+        EnsureBuffer().Write(buffer, offset, count);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && _buffer is not null && source.CanWrite)
+        {
+            _buffer.Position = 0;
+
+            // If the full stream was loaded (readable + seekable), seek back to the
+            // beginning so the write-back replaces the entire original content.
+            if (source.CanRead && source.CanSeek)
+                source.Seek(0, SeekOrigin.Begin);
+
+            _buffer.CopyTo(source);
+        }
+
+        base.Dispose(disposing);
+    }
+}
+
 /// <summary>
 /// Extensions for <see cref="Stream" />.
 /// </summary>
@@ -14,49 +99,36 @@ public static class StreamExtensions
     extension(Stream source)
     {
         /// <summary>
-        /// Copies the contents of the stream into a new <see cref="MemoryStream" /> with
-        /// <see cref="Stream.Position" /> reset to 0.
+        /// Returns a <see cref="Stream" /> backed by a <see cref="MemoryStream" />.
         /// </summary>
         /// <remarks>
-        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is
-        /// without resetting its position.
+        /// <para>
+        /// The first read or write lazily loads the underlying stream into memory.
+        /// Subsequent reads and writes operate directly against the in-memory buffer,
+        /// making the returned stream always seekable.
+        /// </para>
+        /// <para>
+        /// On readable and seekable streams, the entire content is loaded from the
+        /// beginning and the original position is restored before the operation continues.
+        /// On non-seekable readable streams, content is loaded from the current position.
+        /// </para>
+        /// <para>
+        /// Writes go to the in-memory buffer. When the wrapper is disposed, the buffer
+        /// is written back to the underlying stream. On readable and seekable streams
+        /// the underlying stream is seeked to the beginning before the write-back.
+        /// </para>
+        /// <para>
+        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is.
+        /// </para>
         /// </remarks>
-        public MemoryStream ToMemoryStream()
+        public Stream ToMemoryStream()
         {
-            if (source is MemoryStream asMemoryStream)
-                return asMemoryStream;
+            if (source is MemoryStream)
+                return source;
 
-            var memoryStream = new MemoryStream();
-            source.CopyTo(memoryStream);
-            memoryStream.Position = 0;
-
-            return memoryStream;
+            return new MemoryBackedStream(source);
         }
 
-#if NET40_OR_GREATER || NETSTANDARD || NET
-        /// <summary>
-        /// Copies the contents of the stream into a new <see cref="MemoryStream" /> asynchronously
-        /// with <see cref="Stream.Position" /> reset to 0.
-        /// </summary>
-        /// <remarks>
-        /// If the stream is already a <see cref="MemoryStream" />, it is returned as-is
-        /// without resetting its position.
-        /// </remarks>
-        public async Task<MemoryStream> ToMemoryStreamAsync(
-            CancellationToken cancellationToken = default
-        )
-        {
-            if (source is MemoryStream asMemoryStream)
-                return asMemoryStream;
-
-            var memoryStream = new MemoryStream();
-            await source.CopyToAsync(memoryStream, 81920, cancellationToken).ConfigureAwait(false);
-            memoryStream.Position = 0;
-
-            return memoryStream;
-        }
-
-#endif
 #if NET40_OR_GREATER || NETSTANDARD || NET
         /// <summary>
         /// Copies the contents of the stream to the destination stream, optionally flushing after each write.
