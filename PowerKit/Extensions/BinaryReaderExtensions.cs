@@ -1,4 +1,5 @@
 using System;
+using System.Buffers.Binary;
 using System.IO;
 using System.Text;
 
@@ -65,5 +66,103 @@ public static class BinaryReaderExtensions
                 skipped++;
             }
         }
+
+        /// <summary>
+        /// Reads a 2-byte signed integer from the stream using big-endian byte order.
+        /// </summary>
+        public short ReadInt16BigEndian() =>
+            BinaryPrimitives.ReadInt16BigEndian(reader.ReadBytes(sizeof(short)));
+
+        /// <summary>
+        /// Reads a 2-byte signed integer from the stream using little-endian byte order.
+        /// </summary>
+        public short ReadInt16LittleEndian() =>
+            BinaryPrimitives.ReadInt16LittleEndian(reader.ReadBytes(sizeof(short)));
+
+        /// <summary>
+        /// Reads a 2-byte unsigned integer from the stream using big-endian byte order.
+        /// </summary>
+        public ushort ReadUInt16BigEndian() =>
+            BinaryPrimitives.ReadUInt16BigEndian(reader.ReadBytes(sizeof(ushort)));
+
+        /// <summary>
+        /// Reads a 2-byte unsigned integer from the stream using little-endian byte order.
+        /// </summary>
+        public ushort ReadUInt16LittleEndian() =>
+            BinaryPrimitives.ReadUInt16LittleEndian(reader.ReadBytes(sizeof(ushort)));
+
+        /// <summary>
+        /// Reads a 4-byte signed integer from the stream using big-endian byte order.
+        /// </summary>
+        public int ReadInt32BigEndian() =>
+            BinaryPrimitives.ReadInt32BigEndian(reader.ReadBytes(sizeof(int)));
+
+        /// <summary>
+        /// Reads a 4-byte signed integer from the stream using little-endian byte order.
+        /// </summary>
+        public int ReadInt32LittleEndian() =>
+            BinaryPrimitives.ReadInt32LittleEndian(reader.ReadBytes(sizeof(int)));
+
+        /// <summary>
+        /// Reads a 4-byte unsigned integer from the stream using big-endian byte order.
+        /// </summary>
+        public uint ReadUInt32BigEndian() =>
+            BinaryPrimitives.ReadUInt32BigEndian(reader.ReadBytes(sizeof(uint)));
+
+        /// <summary>
+        /// Reads a 4-byte unsigned integer from the stream using little-endian byte order.
+        /// </summary>
+        public uint ReadUInt32LittleEndian() =>
+            BinaryPrimitives.ReadUInt32LittleEndian(reader.ReadBytes(sizeof(uint)));
+
+        /// <summary>
+        /// Reads an 8-byte signed integer from the stream using big-endian byte order.
+        /// </summary>
+        public long ReadInt64BigEndian() =>
+            BinaryPrimitives.ReadInt64BigEndian(reader.ReadBytes(sizeof(long)));
+
+        /// <summary>
+        /// Reads an 8-byte signed integer from the stream using little-endian byte order.
+        /// </summary>
+        public long ReadInt64LittleEndian() =>
+            BinaryPrimitives.ReadInt64LittleEndian(reader.ReadBytes(sizeof(long)));
+
+        /// <summary>
+        /// Reads an 8-byte unsigned integer from the stream using big-endian byte order.
+        /// </summary>
+        public ulong ReadUInt64BigEndian() =>
+            BinaryPrimitives.ReadUInt64BigEndian(reader.ReadBytes(sizeof(ulong)));
+
+        /// <summary>
+        /// Reads an 8-byte unsigned integer from the stream using little-endian byte order.
+        /// </summary>
+        public ulong ReadUInt64LittleEndian() =>
+            BinaryPrimitives.ReadUInt64LittleEndian(reader.ReadBytes(sizeof(ulong)));
+
+#if NET5_0_OR_GREATER || !FEATURE_MEMORY
+        /// <summary>
+        /// Reads a 4-byte floating-point value from the stream using big-endian byte order.
+        /// </summary>
+        public float ReadSingleBigEndian() =>
+            BinaryPrimitives.ReadSingleBigEndian(reader.ReadBytes(sizeof(float)));
+
+        /// <summary>
+        /// Reads a 4-byte floating-point value from the stream using little-endian byte order.
+        /// </summary>
+        public float ReadSingleLittleEndian() =>
+            BinaryPrimitives.ReadSingleLittleEndian(reader.ReadBytes(sizeof(float)));
+
+        /// <summary>
+        /// Reads an 8-byte floating-point value from the stream using big-endian byte order.
+        /// </summary>
+        public double ReadDoubleBigEndian() =>
+            BinaryPrimitives.ReadDoubleBigEndian(reader.ReadBytes(sizeof(double)));
+
+        /// <summary>
+        /// Reads an 8-byte floating-point value from the stream using little-endian byte order.
+        /// </summary>
+        public double ReadDoubleLittleEndian() =>
+            BinaryPrimitives.ReadDoubleLittleEndian(reader.ReadBytes(sizeof(double)));
+#endif
     }
 }
