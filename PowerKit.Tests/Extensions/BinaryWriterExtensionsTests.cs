@@ -69,224 +69,224 @@ public class BinaryWriterExtensionsTests
     }
 
     [Fact]
-    public void WriteInt16BigEndian_Test()
+    public void WriteBigEndian_Int16_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteInt16BigEndian(0x0102);
+        writer.WriteBigEndian((short)0x0102);
 
         // Assert
         stream.ToArray().Should().Equal(0x01, 0x02);
     }
 
     [Fact]
-    public void WriteInt16LittleEndian_Test()
+    public void WriteLittleEndian_Int16_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteInt16LittleEndian(0x0102);
+        writer.WriteLittleEndian((short)0x0102);
 
         // Assert
         stream.ToArray().Should().Equal(0x02, 0x01);
     }
 
     [Fact]
-    public void WriteUInt16BigEndian_Test()
+    public void WriteBigEndian_UInt16_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteUInt16BigEndian((ushort)0xFFFE);
+        writer.WriteBigEndian((ushort)0xFFFE);
 
         // Assert
         stream.ToArray().Should().Equal(0xFF, 0xFE);
     }
 
     [Fact]
-    public void WriteUInt16LittleEndian_Test()
+    public void WriteLittleEndian_UInt16_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteUInt16LittleEndian((ushort)0xFFFE);
+        writer.WriteLittleEndian((ushort)0xFFFE);
 
         // Assert
         stream.ToArray().Should().Equal(0xFE, 0xFF);
     }
 
     [Fact]
-    public void WriteInt32BigEndian_Test()
+    public void WriteBigEndian_Int32_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteInt32BigEndian(0x01020304);
+        writer.WriteBigEndian(0x01020304);
 
         // Assert
         stream.ToArray().Should().Equal(0x01, 0x02, 0x03, 0x04);
     }
 
     [Fact]
-    public void WriteInt32LittleEndian_Test()
+    public void WriteLittleEndian_Int32_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteInt32LittleEndian(0x01020304);
+        writer.WriteLittleEndian(0x01020304);
 
         // Assert
         stream.ToArray().Should().Equal(0x04, 0x03, 0x02, 0x01);
     }
 
     [Fact]
-    public void WriteUInt32BigEndian_Test()
+    public void WriteBigEndian_UInt32_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteUInt32BigEndian(0xFFFEFDFCu);
+        writer.WriteBigEndian(0xFFFEFDFCu);
 
         // Assert
         stream.ToArray().Should().Equal(0xFF, 0xFE, 0xFD, 0xFC);
     }
 
     [Fact]
-    public void WriteUInt32LittleEndian_Test()
+    public void WriteLittleEndian_UInt32_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteUInt32LittleEndian(0xFFFEFDFCu);
+        writer.WriteLittleEndian(0xFFFEFDFCu);
 
         // Assert
         stream.ToArray().Should().Equal(0xFC, 0xFD, 0xFE, 0xFF);
     }
 
     [Fact]
-    public void WriteInt64BigEndian_Test()
+    public void WriteBigEndian_Int64_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteInt64BigEndian(0x0102030405060708L);
+        writer.WriteBigEndian(0x0102030405060708L);
 
         // Assert
         stream.ToArray().Should().Equal(0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08);
     }
 
     [Fact]
-    public void WriteInt64LittleEndian_Test()
+    public void WriteLittleEndian_Int64_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteInt64LittleEndian(0x0102030405060708L);
+        writer.WriteLittleEndian(0x0102030405060708L);
 
         // Assert
         stream.ToArray().Should().Equal(0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01);
     }
 
     [Fact]
-    public void WriteUInt64BigEndian_Test()
+    public void WriteBigEndian_UInt64_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteUInt64BigEndian(0xFFFEFDFCFBFAF9F8uL);
+        writer.WriteBigEndian(0xFFFEFDFCFBFAF9F8uL);
 
         // Assert
         stream.ToArray().Should().Equal(0xFF, 0xFE, 0xFD, 0xFC, 0xFB, 0xFA, 0xF9, 0xF8);
     }
 
     [Fact]
-    public void WriteUInt64LittleEndian_Test()
+    public void WriteLittleEndian_UInt64_Test()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteUInt64LittleEndian(0xFFFEFDFCFBFAF9F8uL);
+        writer.WriteLittleEndian(0xFFFEFDFCFBFAF9F8uL);
 
         // Assert
         stream.ToArray().Should().Equal(0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF);
     }
 
     [Fact]
-    public void WriteSingleBigEndian_Test()
+    public void WriteBigEndian_Single_Test()
     {
         // Arrange — IEEE 754 big-endian bytes for 1.0f: 0x3F800000
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteSingleBigEndian(1.0f);
+        writer.WriteBigEndian(1.0f);
 
         // Assert
         stream.ToArray().Should().Equal(0x3F, 0x80, 0x00, 0x00);
     }
 
     [Fact]
-    public void WriteSingleLittleEndian_Test()
+    public void WriteLittleEndian_Single_Test()
     {
         // Arrange — IEEE 754 little-endian bytes for 1.0f: 0x3F800000 reversed
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteSingleLittleEndian(1.0f);
+        writer.WriteLittleEndian(1.0f);
 
         // Assert
         stream.ToArray().Should().Equal(0x00, 0x00, 0x80, 0x3F);
     }
 
     [Fact]
-    public void WriteDoubleBigEndian_Test()
+    public void WriteBigEndian_Double_Test()
     {
         // Arrange — IEEE 754 big-endian bytes for 1.0d: 0x3FF0000000000000
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteDoubleBigEndian(1.0d);
+        writer.WriteBigEndian(1.0d);
 
         // Assert
         stream.ToArray().Should().Equal(0x3F, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
     }
 
     [Fact]
-    public void WriteDoubleLittleEndian_Test()
+    public void WriteLittleEndian_Double_Test()
     {
         // Arrange — IEEE 754 little-endian bytes for 1.0d: 0x3FF0000000000000 reversed
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
 
         // Act
-        writer.WriteDoubleLittleEndian(1.0d);
+        writer.WriteLittleEndian(1.0d);
 
         // Assert
         stream.ToArray().Should().Equal(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F);
