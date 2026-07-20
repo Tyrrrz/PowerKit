@@ -147,7 +147,6 @@ public static class BinaryReaderExtensions
         public ulong ReadUInt64LittleEndian() =>
             BinaryPrimitives.ReadUInt64LittleEndian(ReadExactBytes(reader, sizeof(ulong)));
 
-#if NET5_0_OR_GREATER || !FEATURE_MEMORY
         /// <summary>
         /// Reads a 4-byte floating-point value from the stream using big-endian byte order.
         /// </summary>
@@ -171,6 +170,5 @@ public static class BinaryReaderExtensions
         /// </summary>
         public double ReadDoubleLittleEndian() =>
             BinaryPrimitives.ReadDoubleLittleEndian(ReadExactBytes(reader, sizeof(double)));
-#endif
     }
 }

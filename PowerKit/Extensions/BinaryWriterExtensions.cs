@@ -158,7 +158,6 @@ public static class BinaryWriterExtensions
             writer.Write(buffer);
         }
 
-#if NET5_0_OR_GREATER || !FEATURE_MEMORY
         /// <summary>
         /// Writes a 4-byte floating-point value to the stream using big-endian byte order.
         /// </summary>
@@ -198,6 +197,5 @@ public static class BinaryWriterExtensions
             BinaryPrimitives.WriteDoubleLittleEndian(buffer, value);
             writer.Write(buffer);
         }
-#endif
     }
 }
