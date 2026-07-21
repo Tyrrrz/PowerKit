@@ -20,19 +20,10 @@ file sealed class MemoryBackedStream(Stream source) : Stream
         if (source.CanRead)
         {
             if (source.CanSeek)
-            {
-                // Load the entire stream into memory and restore the original position.
-                var savedPosition = source.Position;
                 source.Seek(0, SeekOrigin.Begin);
-                source.CopyTo(_buffer);
-                _buffer.Position = Math.Min(savedPosition, _buffer.Length);
-            }
-            else
-            {
-                // Non-seekable: load from the current position and start reading at 0.
-                source.CopyTo(_buffer);
-                _buffer.Position = 0;
-            }
+
+            source.CopyTo(_buffer);
+            _buffer.Position = 0;
         }
 
         return _buffer;
@@ -50,9 +41,7 @@ file sealed class MemoryBackedStream(Stream source) : Stream
         set => EnsureBuffer().Position = value;
     }
 
-    // Flush is a no-op because the buffer is an in-memory MemoryStream, which
-    // never needs flushing. The write-back to the underlying stream happens on Dispose.
-    public override void Flush() { }
+    public override void Flush() => _buffer?.Flush();
 
     public override int Read(byte[] buffer, int offset, int count)
     {
@@ -125,8 +114,8 @@ public static class StreamExtensions
         /// </para>
         /// <para>
         /// On readable and seekable streams, the entire content is loaded from the
-        /// beginning and the original position is restored before the operation continues.
-        /// On non-seekable readable streams, content is loaded from the current position.
+        /// beginning. On non-seekable readable streams, content is loaded from the
+        /// current position. In both cases the buffer position starts at 0.
         /// </para>
         /// <para>
         /// Writes go to the in-memory buffer. When the wrapper is disposed, the buffer
