@@ -42,6 +42,7 @@ public class TaskExtensionsTests
     {
         // Arrange
         var unobservedRaised = false;
+        
         EventHandler<UnobservedTaskExceptionEventArgs> handler = (_, e) =>
         {
             if (e.Exception.InnerException is InvalidOperationException { Message: "test error" })
@@ -49,12 +50,13 @@ public class TaskExtensionsTests
 
             e.SetObserved();
         };
+        
         TaskScheduler.UnobservedTaskException += handler;
 
         try
         {
-            // Act: create the task in a separate scope so it can be collected
-            CreateFaultedTask();
+            // Act
+            Task.Run(() => throw new InvalidOperationException("test error")).ObserveException();
 
             await Task.Delay(50);
 
@@ -68,11 +70,6 @@ public class TaskExtensionsTests
         finally
         {
             TaskScheduler.UnobservedTaskException -= handler;
-        }
-
-        static void CreateFaultedTask()
-        {
-            Task.Run(() => throw new InvalidOperationException("test error")).ObserveException();
         }
     }
 }
