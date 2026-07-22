@@ -14,9 +14,9 @@ namespace PowerKit;
 /// stream supports seeking.
 /// </para>
 /// <para>
-/// On readable and seekable streams, the entire content is loaded from the beginning. On
-/// non-seekable readable streams, content is loaded from the current position. In both cases
-/// the buffer position starts at 0.
+/// On readable and seekable streams, the entire content is loaded from the beginning and
+/// the buffer position is set to match the source's original position. On non-seekable
+/// readable streams, content is loaded from the current position and the buffer starts at 0.
 /// </para>
 /// <para>
 /// Writes go to the in-memory buffer. When the wrapper is disposed, the buffer is written back
@@ -38,11 +38,13 @@ public sealed class MemoryBackedStream(Stream source) : Stream
 
         if (source.CanRead)
         {
+            var initialPosition = source.CanSeek ? source.Position : 0L;
+
             if (source.CanSeek)
                 source.Seek(0, SeekOrigin.Begin);
 
             source.CopyTo(_buffer);
-            _buffer.Position = 0;
+            _buffer.Position = initialPosition;
         }
 
         return _buffer;

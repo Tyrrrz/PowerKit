@@ -51,6 +51,31 @@ public class MemoryBackedStreamTests
     }
 
     [Fact]
+    public void MemoryBackedStream_ReadableFile_RetainsInitialPosition_Test()
+    {
+        // Arrange
+        var data = new byte[] { 1, 2, 3, 4, 5 };
+        using var tempFile = TempFile.Create();
+        File.WriteAllBytes(tempFile.Path, data);
+        using var source = File.OpenRead(tempFile.Path);
+
+        // Advance the source to position 2 before wrapping
+        source.Seek(2, SeekOrigin.Begin);
+
+        // Act
+        using var result = new MemoryBackedStream(source);
+
+        // Assert — buffer position should match the source's initial position (2),
+        // and the entire content should be accessible via seek
+        result.Position.Should().Be(2);
+        result.Length.Should().Be(data.Length);
+
+        var tail = new byte[3];
+        result.ReadExactly(tail);
+        tail.Should().Equal(new byte[] { 3, 4, 5 });
+    }
+
+    [Fact]
     public void MemoryBackedStream_WritableFile_WriteBackOnDispose_Test()
     {
         // Arrange
