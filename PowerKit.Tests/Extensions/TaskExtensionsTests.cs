@@ -68,20 +68,42 @@ public class TaskExtensionsTests
     }
 
     [Fact]
-    public async Task ObserveException_Task_DoesNotThrowUnobservedException_Test()
+    public async Task ObserveException_Task_DoesNotRaiseUnobservedTaskException_Test()
     {
         // Arrange
-        var task = Task.Run(() => throw new InvalidOperationException("test error"));
-        _ = task.ObserveException();
+        var unobservedRaised = false;
+        EventHandler<UnobservedTaskExceptionEventArgs> handler = (_, e) =>
+        {
+            if (e.Exception.InnerException is InvalidOperationException { Message: "test error" })
+                unobservedRaised = true;
 
-        // Act & assert: waiting for the task to complete should not raise an unobserved exception
-        await Task.Delay(100);
+            e.SetObserved();
+        };
+        TaskScheduler.UnobservedTaskException += handler;
 
-        // Force GC to collect the task and trigger finalizer-based unobserved exception detection
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
+        try
+        {
+            // Act: create the task in a separate scope so it can be collected
+            CreateFaultedTask();
 
-        task.IsFaulted.Should().BeTrue();
+            await Task.Delay(50);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+
+            // Assert
+            unobservedRaised.Should().BeFalse();
+        }
+        finally
+        {
+            TaskScheduler.UnobservedTaskException -= handler;
+        }
+
+        static void CreateFaultedTask()
+        {
+            Task.Run(() => throw new InvalidOperationException("test error")).ObserveException();
+        }
     }
 
     [Fact]
