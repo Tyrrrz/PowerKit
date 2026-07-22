@@ -20,9 +20,9 @@ public static class TaskExtensions
         /// </summary>
         public Task<AggregateException?> ObserveException() =>
             task.ContinueWith(
-                t => t.Exception,
+                static t => t.Exception,
                 default,
-                TaskContinuationOptions.None,
+                TaskContinuationOptions.ExecuteSynchronously,
                 TaskScheduler.Default
             );
     }
