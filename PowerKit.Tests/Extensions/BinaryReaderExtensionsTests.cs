@@ -141,4 +141,244 @@ public class BinaryReaderExtensionsTests
         // Assert
         stream.Position.Should().Be(3);
     }
+
+    [Fact]
+    public void ReadInt16BigEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0x01, 0x02 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadInt16BigEndian();
+
+        // Assert
+        result.Should().Be(0x0102);
+    }
+
+    [Fact]
+    public void ReadInt16LittleEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0x02, 0x01 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadInt16LittleEndian();
+
+        // Assert
+        result.Should().Be(0x0102);
+    }
+
+    [Fact]
+    public void ReadUInt16BigEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0xFF, 0xFE };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadUInt16BigEndian();
+
+        // Assert
+        result.Should().Be((ushort)0xFFFE);
+    }
+
+    [Fact]
+    public void ReadUInt16LittleEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0xFE, 0xFF };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadUInt16LittleEndian();
+
+        // Assert
+        result.Should().Be((ushort)0xFFFE);
+    }
+
+    [Fact]
+    public void ReadInt32BigEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0x01, 0x02, 0x03, 0x04 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadInt32BigEndian();
+
+        // Assert
+        result.Should().Be(0x01020304);
+    }
+
+    [Fact]
+    public void ReadInt32LittleEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0x04, 0x03, 0x02, 0x01 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadInt32LittleEndian();
+
+        // Assert
+        result.Should().Be(0x01020304);
+    }
+
+    [Fact]
+    public void ReadUInt32BigEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0xFF, 0xFE, 0xFD, 0xFC };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadUInt32BigEndian();
+
+        // Assert
+        result.Should().Be(0xFFFEFDFCu);
+    }
+
+    [Fact]
+    public void ReadUInt32LittleEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0xFC, 0xFD, 0xFE, 0xFF };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadUInt32LittleEndian();
+
+        // Assert
+        result.Should().Be(0xFFFEFDFCu);
+    }
+
+    [Fact]
+    public void ReadInt64BigEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadInt64BigEndian();
+
+        // Assert
+        result.Should().Be(0x0102030405060708L);
+    }
+
+    [Fact]
+    public void ReadInt64LittleEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadInt64LittleEndian();
+
+        // Assert
+        result.Should().Be(0x0102030405060708L);
+    }
+
+    [Fact]
+    public void ReadUInt64BigEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0xFF, 0xFE, 0xFD, 0xFC, 0xFB, 0xFA, 0xF9, 0xF8 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadUInt64BigEndian();
+
+        // Assert
+        result.Should().Be(0xFFFEFDFCFBFAF9F8uL);
+    }
+
+    [Fact]
+    public void ReadUInt64LittleEndian_Test()
+    {
+        // Arrange
+        var data = new byte[] { 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadUInt64LittleEndian();
+
+        // Assert
+        result.Should().Be(0xFFFEFDFCFBFAF9F8uL);
+    }
+
+    [Fact]
+    public void ReadSingleBigEndian_Test()
+    {
+        // Arrange — IEEE 754 big-endian bytes for 1.0f: 0x3F800000
+        var data = new byte[] { 0x3F, 0x80, 0x00, 0x00 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadSingleBigEndian();
+
+        // Assert
+        result.Should().Be(1.0f);
+    }
+
+    [Fact]
+    public void ReadSingleLittleEndian_Test()
+    {
+        // Arrange — IEEE 754 little-endian bytes for 1.0f: 0x3F800000 reversed
+        var data = new byte[] { 0x00, 0x00, 0x80, 0x3F };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadSingleLittleEndian();
+
+        // Assert
+        result.Should().Be(1.0f);
+    }
+
+    [Fact]
+    public void ReadDoubleBigEndian_Test()
+    {
+        // Arrange — IEEE 754 big-endian bytes for 1.0d: 0x3FF0000000000000
+        var data = new byte[] { 0x3F, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadDoubleBigEndian();
+
+        // Assert
+        result.Should().Be(1.0d);
+    }
+
+    [Fact]
+    public void ReadDoubleLittleEndian_Test()
+    {
+        // Arrange — IEEE 754 little-endian bytes for 1.0d: 0x3FF0000000000000 reversed
+        var data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F };
+        using var stream = new MemoryStream(data);
+        using var reader = new BinaryReader(stream);
+
+        // Act
+        var result = reader.ReadDoubleLittleEndian();
+
+        // Assert
+        result.Should().Be(1.0d);
+    }
 }
