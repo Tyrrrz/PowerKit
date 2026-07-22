@@ -14,13 +14,15 @@ public static class TaskExtensions
         /// <summary>
         /// Registers a continuation that observes and suppresses the task's exception,
         /// preventing it from surfacing as an unobserved task exception.
+        /// Returns a <see cref="Task{TResult}" /> that resolves to the observed
+        /// <see cref="AggregateException" />, or <see langword="null" /> if the task did not fault.
         /// Intended for use on detached (fire-and-forget) tasks.
         /// </summary>
-        public void ObserveException() =>
+        public Task<AggregateException?> ObserveException() =>
             task.ContinueWith(
-                t => _ = t.Exception,
+                t => t.Exception,
                 default,
-                TaskContinuationOptions.OnlyOnFaulted,
+                TaskContinuationOptions.None,
                 TaskScheduler.Default
             );
     }
@@ -30,13 +32,15 @@ public static class TaskExtensions
         /// <summary>
         /// Registers a continuation that observes and suppresses the task's exception,
         /// preventing it from surfacing as an unobserved task exception.
+        /// Returns a <see cref="Task{TResult}" /> that resolves to the observed
+        /// <see cref="AggregateException" />, or <see langword="null" /> if the task did not fault.
         /// Intended for use on detached (fire-and-forget) tasks.
         /// </summary>
-        public void ObserveException() =>
+        public Task<AggregateException?> ObserveException() =>
             task.ContinueWith(
-                t => _ = t.Exception,
+                t => t.Exception,
                 default,
-                TaskContinuationOptions.OnlyOnFaulted,
+                TaskContinuationOptions.None,
                 TaskScheduler.Default
             );
     }
