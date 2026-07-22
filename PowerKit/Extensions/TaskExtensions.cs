@@ -17,7 +17,12 @@ public static class TaskExtensions
         /// Intended for use on detached (fire-and-forget) tasks.
         /// </summary>
         public void ObserveException() =>
-            task.ContinueWith(t => _ = t.Exception, TaskContinuationOptions.OnlyOnFaulted);
+            task.ContinueWith(
+                t => _ = t.Exception,
+                default,
+                TaskContinuationOptions.OnlyOnFaulted,
+                TaskScheduler.Default
+            );
     }
 
     extension<T>(Task<T> task)
@@ -28,7 +33,12 @@ public static class TaskExtensions
         /// Intended for use on detached (fire-and-forget) tasks.
         /// </summary>
         public void ObserveException() =>
-            task.ContinueWith(t => _ = t.Exception, TaskContinuationOptions.OnlyOnFaulted);
+            task.ContinueWith(
+                t => _ = t.Exception,
+                default,
+                TaskContinuationOptions.OnlyOnFaulted,
+                TaskScheduler.Default
+            );
     }
 }
 #endif
