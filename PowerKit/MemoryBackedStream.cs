@@ -14,15 +14,12 @@ namespace PowerKit;
 /// stream supports seeking.
 /// </para>
 /// <para>
-/// On readable and seekable streams, the entire content is loaded from the beginning and
-/// the buffer position is set to match the source's original position. On non-seekable
-/// readable streams, content is loaded from the current position and the buffer starts at 0.
+/// Content is loaded from the source stream's current position when the buffer is first
+/// initialized. The buffer position always starts at 0.
 /// </para>
 /// <para>
 /// Writes go to the in-memory buffer. When the wrapper is disposed, the buffer is written back
-/// to the underlying stream. On readable and seekable streams the underlying stream is truncated
-/// to the buffer length and seeked to the beginning before the write-back, ensuring the original
-/// content is completely replaced.
+/// to the underlying stream at its current position.
 /// </para>
 /// </remarks>
 public sealed class MemoryBackedStream(Stream source) : Stream
@@ -38,13 +35,8 @@ public sealed class MemoryBackedStream(Stream source) : Stream
 
         if (source.CanRead)
         {
-            var initialPosition = source.CanSeek ? source.Position : 0L;
-
-            if (source.CanSeek)
-                source.Seek(0, SeekOrigin.Begin);
-
             source.CopyTo(_buffer);
-            _buffer.Position = initialPosition;
+            _buffer.Position = 0;
         }
 
         return _buffer;
@@ -103,16 +95,6 @@ public sealed class MemoryBackedStream(Stream source) : Stream
         if (disposing && _buffer is not null && source.CanWrite)
         {
             _buffer.Position = 0;
-
-            // If the full stream was loaded (readable + seekable), truncate the source
-            // to the buffer's length and seek to the beginning so the write-back
-            // completely replaces the original content without leaving trailing data.
-            if (source.CanRead && source.CanSeek)
-            {
-                source.SetLength(_buffer.Length);
-                source.Seek(0, SeekOrigin.Begin);
-            }
-
             _buffer.CopyTo(source);
         }
 
