@@ -4,17 +4,17 @@ namespace PowerKit;
 
 /// <summary>
 /// A <see cref="Stream" /> wrapper that buffers all writes in memory and flushes them to the
-/// underlying stream on <see cref="Dispose" />.
+/// underlying stream on <see cref="Flush" />.
 /// </summary>
 /// <remarks>
 /// <para>
-/// Writes go to an in-memory buffer and do not touch the underlying stream until the wrapper is
-/// disposed. This makes the wrapper always seekable and allows writes to be reordered freely
-/// before the final flush.
+/// Writes go to an in-memory buffer and do not touch the underlying stream until
+/// <see cref="Flush" /> is called. This makes the wrapper always seekable and allows writes to
+/// be reordered freely before the final flush.
 /// </para>
 /// <para>
-/// On disposal, the entire in-memory buffer is written to the underlying stream starting at its
-/// current position.
+/// On <see cref="Flush" />, the entire in-memory buffer is written to the underlying stream
+/// starting at its current position.
 /// </para>
 /// </remarks>
 public sealed class MemoryWriteStream(Stream source) : Stream
@@ -41,7 +41,12 @@ public sealed class MemoryWriteStream(Stream source) : Stream
     }
 
     /// <inheritdoc />
-    public override void Flush() => _buffer.Flush();
+    public override void Flush()
+    {
+        _buffer.Position = 0;
+        _buffer.CopyTo(source);
+        source.Flush();
+    }
 
     /// <inheritdoc />
     public override int Read(byte[] buffer, int offset, int count) =>
@@ -56,17 +61,4 @@ public sealed class MemoryWriteStream(Stream source) : Stream
     /// <inheritdoc />
     public override void Write(byte[] buffer, int offset, int count) =>
         _buffer.Write(buffer, offset, count);
-
-    /// <inheritdoc />
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _buffer.Position = 0;
-            _buffer.CopyTo(source);
-            source.Flush();
-        }
-
-        base.Dispose(disposing);
-    }
 }

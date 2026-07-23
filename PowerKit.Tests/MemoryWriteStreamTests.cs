@@ -7,17 +7,18 @@ namespace PowerKit.Tests;
 public class MemoryWriteStreamTests
 {
     [Fact]
-    public void MemoryWriteStream_WritableFile_WriteBackOnDispose_Test()
+    public void MemoryWriteStream_WritableFile_WriteBackOnFlush_Test()
     {
         // Arrange
         var data = new byte[] { 1, 2, 3, 4, 5 };
         using var tempFile = TempFile.Create();
 
-        // Act — writes go to the in-memory buffer; dispose flushes them to the file
+        // Act — writes go to the in-memory buffer; Flush() writes them to the file
         using (var source = File.OpenWrite(tempFile.Path))
         using (var wrapper = new MemoryWriteStream(source))
         {
             wrapper.Write(data, 0, data.Length);
+            wrapper.Flush();
         }
 
         // Assert
@@ -38,7 +39,8 @@ public class MemoryWriteStreamTests
 
             using var wrapper = new MemoryWriteStream(source);
             wrapper.Write(new byte[] { 10, 20, 30 }, 0, 3);
-            // dispose writes the 3-byte buffer at source's current position (2)
+            // Flush writes the 3-byte buffer at source's current position (2)
+            wrapper.Flush();
         }
 
         // Assert — placeholder bytes at 0..1, then buffer content at 2..4
