@@ -19,7 +19,8 @@ namespace PowerKit;
 /// </para>
 /// <para>
 /// Writes go to the in-memory buffer. When the wrapper is disposed, the buffer is written back
-/// to the underlying stream at its current position.
+/// to the underlying stream at its current position. If the underlying stream is seekable and
+/// contains more data after the write-back range, that trailing data is not removed.
 /// </para>
 /// </remarks>
 public sealed class MemoryBackedStream(Stream source) : Stream
