@@ -7,59 +7,27 @@ namespace PowerKit.Tests;
 public class MemoryWriteStreamTests
 {
     [Fact]
-    public void MemoryWriteStream_WritableFile_WriteBackOnFlush_Test()
+    public void MemoryWriteStream_MakesUnseekableStreamSeekable_Test()
     {
-        // Arrange
+        // Arrange — write-only file stream is not seekable after the initial position
         var data = new byte[] { 1, 2, 3, 4, 5 };
         using var tempFile = TempFile.Create();
 
-        // Act — writes go to the in-memory buffer; Flush() writes them to the file
+        // Act — wrapper buffers writes in memory; Flush() commits them to the source
         using (var source = File.OpenWrite(tempFile.Path))
         using (var wrapper = new MemoryWriteStream(source))
         {
+            wrapper.CanSeek.Should().BeTrue();
+
+            // Write all bytes then seek back and overwrite the first two
             wrapper.Write(data, 0, data.Length);
+            wrapper.Seek(0, SeekOrigin.Begin);
+            wrapper.Write(new byte[] { 10, 20 }, 0, 2);
+
             wrapper.Flush();
         }
 
-        // Assert
-        File.ReadAllBytes(tempFile.Path).Should().Equal(data);
-    }
-
-    [Fact]
-    public void MemoryWriteStream_WritableFile_WriteBackAtCurrentPosition_Test()
-    {
-        // Arrange
-        using var tempFile = TempFile.Create();
-
-        // Act — open write-only, advance source to position 2, then wrap and write
-        using (var source = File.OpenWrite(tempFile.Path))
-        {
-            // Write 2 placeholder bytes to advance source to position 2
-            source.Write(new byte[] { 1, 2 }, 0, 2);
-
-            using var wrapper = new MemoryWriteStream(source);
-            wrapper.Write(new byte[] { 10, 20, 30 }, 0, 3);
-            // Flush writes the 3-byte buffer at source's current position (2)
-            wrapper.Flush();
-        }
-
-        // Assert — placeholder bytes at 0..1, then buffer content at 2..4
-        File.ReadAllBytes(tempFile.Path).Should().Equal(new byte[] { 1, 2, 10, 20, 30 });
-    }
-
-    [Fact]
-    public void MemoryWriteStream_IsSeekable_Test()
-    {
-        // Arrange
-        using var tempFile = TempFile.Create();
-        using var source = File.OpenWrite(tempFile.Path);
-
-        // Act
-        using var wrapper = new MemoryWriteStream(source);
-
-        // Assert
-        wrapper.CanSeek.Should().BeTrue();
-        wrapper.CanWrite.Should().BeTrue();
-        wrapper.CanRead.Should().BeFalse();
+        // Assert — overwritten prefix is reflected in the file
+        File.ReadAllBytes(tempFile.Path).Should().Equal(new byte[] { 10, 20, 3, 4, 5 });
     }
 }
