@@ -15,6 +15,8 @@ namespace PowerKit;
 public class MemoryWriteStream(Stream source) : Stream
 {
     private readonly MemoryStream _buffer = new();
+    private bool _flushed;
+    private bool _disposing;
 
     /// <inheritdoc />
     public override bool CanRead => false;
@@ -38,9 +40,28 @@ public class MemoryWriteStream(Stream source) : Stream
     /// <inheritdoc />
     public override void Flush()
     {
+        if (_flushed)
+        {
+            if (_disposing)
+                return;
+
+            throw new InvalidOperationException(
+                $"{nameof(MemoryWriteStream)} has already been flushed."
+            );
+        }
+
         _buffer.Position = 0;
         _buffer.CopyTo(source);
         source.Flush();
+        _flushed = true;
+    }
+
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing)
+    {
+        _disposing = true;
+        base.Dispose(disposing);
+        _disposing = false;
     }
 
     /// <inheritdoc />

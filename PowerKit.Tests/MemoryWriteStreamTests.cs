@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using FluentAssertions;
 using PowerKit.Tests.Utils;
@@ -28,5 +29,33 @@ public class MemoryWriteStreamTests
         // Assert
         seekable.CanSeek.Should().BeTrue();
         destination.ToArray().Should().Equal(data);
+    }
+
+    [Fact]
+    public void MemoryWriteStream_FlushTwice_Throws()
+    {
+        // Arrange
+        using var destination = new MemoryStream();
+        using var seekable = new MemoryWriteStream(destination);
+
+        seekable.Write([1, 2, 3]);
+        seekable.Flush();
+
+        // Act & Assert
+        seekable.Invoking(s => s.Flush()).Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void MemoryWriteStream_FlushThenDispose_DoesNotThrow()
+    {
+        // Arrange
+        using var destination = new MemoryStream();
+        var seekable = new MemoryWriteStream(destination);
+
+        seekable.Write([1, 2, 3]);
+        seekable.Flush();
+
+        // Act & Assert
+        seekable.Invoking(s => s.Dispose()).Should().NotThrow();
     }
 }
