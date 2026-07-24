@@ -46,6 +46,20 @@ public class MemoryWriteStreamTests
     }
 
     [Fact]
+    public void MemoryWriteStream_WriteAfterFlush_Throws()
+    {
+        // Arrange
+        using var destination = new MemoryStream();
+        using var seekable = new MemoryWriteStream(destination);
+
+        seekable.Write([1, 2, 3]);
+        seekable.Flush();
+
+        // Act & Assert
+        seekable.Invoking(s => s.Write([4, 5, 6])).Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
     public void MemoryWriteStream_FlushThenDispose_DoesNotThrow()
     {
         // Arrange
