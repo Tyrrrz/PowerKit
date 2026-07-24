@@ -75,6 +75,13 @@ public class MemoryWriteStream(Stream source) : Stream
         throw new NotSupportedException();
 
     /// <inheritdoc />
-    public override void Write(byte[] buffer, int offset, int count) =>
+    public override void Write(byte[] buffer, int offset, int count)
+    {
+        if (_isFlushed)
+            throw new InvalidOperationException(
+                $"{nameof(MemoryWriteStream)} has already been flushed."
+            );
+
         _buffer.Write(buffer, offset, count);
+    }
 }
