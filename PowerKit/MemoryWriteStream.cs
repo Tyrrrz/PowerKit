@@ -41,9 +41,11 @@ public class MemoryWriteStream(Stream source) : Stream
         if (_isFlushed)
         {
             if (throwIfAlreadyFlushed)
+            {
                 throw new InvalidOperationException(
-                    $"{nameof(MemoryWriteStream)} has already been flushed."
+                    "This stream has already been flushed and cannot be flushed again."
                 );
+            }
 
             return;
         }
@@ -78,9 +80,11 @@ public class MemoryWriteStream(Stream source) : Stream
     public override void Write(byte[] buffer, int offset, int count)
     {
         if (_isFlushed)
+        {
             throw new InvalidOperationException(
-                $"{nameof(MemoryWriteStream)} has already been flushed."
+                "This stream has already been flushed and cannot be flushed again."
             );
+        }
 
         _buffer.Write(buffer, offset, count);
     }
