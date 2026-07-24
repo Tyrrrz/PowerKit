@@ -1,5 +1,6 @@
 using System.IO;
 using FluentAssertions;
+using PowerKit.Tests.Utils;
 using Xunit;
 
 namespace PowerKit.Tests;
@@ -7,26 +8,25 @@ namespace PowerKit.Tests;
 public class MemoryReadStreamTests
 {
     [Fact]
-    public void MemoryReadStream_MakesUnseekableStreamSeekable_Test()
+    public void MemoryReadStream_Test()
     {
-        // Arrange — wrap a MemoryStream in a non-seekable facade
+        // Arrange
         var data = new byte[] { 1, 2, 3, 4, 5 };
-        using var source = new NonSeekableStream(new MemoryStream(data));
-        source.CanSeek.Should().BeFalse();
+        using var source = new MemoryStream(data);
+        using var nonSeekable = new NonSeekableStream(source);
+        using var seekable = new MemoryReadStream(nonSeekable);
 
         // Act
-        using var result = new MemoryReadStream(source);
-
-        // Assert — wrapper is always seekable and can re-read from the beginning
-        result.CanSeek.Should().BeTrue();
-
         var partial = new byte[2];
-        result.ReadExactly(partial);
+        seekable.ReadExactly(partial);
 
-        result.Seek(0, SeekOrigin.Begin);
+        seekable.Seek(0, SeekOrigin.Begin);
 
         var full = new byte[data.Length];
-        result.ReadExactly(full);
+        seekable.ReadExactly(full);
+
+        // Assert
+        seekable.CanSeek.Should().BeTrue();
         full.Should().Equal(data);
     }
 }
