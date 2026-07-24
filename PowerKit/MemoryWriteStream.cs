@@ -59,6 +59,9 @@ public class MemoryWriteStream(Stream source) : Stream
     /// <inheritdoc />
     protected override void Dispose(bool disposing)
     {
+        // Set and clear _disposing so that the implicit Flush() called by base.Dispose()
+        // is treated as non-manual. The flag must be reset afterwards so that any erroneous
+        // Flush() calls made after disposal still throw rather than silently returning.
         _disposing = true;
         base.Dispose(disposing);
         _disposing = false;
