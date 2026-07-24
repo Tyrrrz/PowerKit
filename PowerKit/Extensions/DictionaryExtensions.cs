@@ -23,7 +23,7 @@ public static class DictionaryExtensions
     extension(IDictionary dictionary)
     {
         /// <summary>
-        /// Converts a non-generic dictionary to a typed <see cref="Dictionary{TKey, TValue}"/> using the specified comparer.
+        /// Converts a non-generic dictionary to a typed <see cref="Dictionary{TKey, TValue}" /> using the specified comparer.
         /// </summary>
         public Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEqualityComparer<TKey> comparer)
             where TKey : notnull =>
@@ -32,7 +32,7 @@ public static class DictionaryExtensions
                 .ToDictionary(entry => (TKey)entry.Key, entry => (TValue)entry.Value!, comparer);
 
         /// <summary>
-        /// Converts a non-generic dictionary to a typed <see cref="Dictionary{TKey, TValue}"/> using the default comparer.
+        /// Converts a non-generic dictionary to a typed <see cref="Dictionary{TKey, TValue}" /> using the default comparer.
         /// </summary>
         public Dictionary<TKey, TValue> ToDictionary<TKey, TValue>()
             where TKey : notnull =>

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace PowerKit;
@@ -7,17 +8,11 @@ namespace PowerKit;
 /// underlying stream on <see cref="Flush" />.
 /// </summary>
 /// <remarks>
-/// <para>
 /// Writes go to an in-memory buffer and do not touch the underlying stream until
 /// <see cref="Flush" /> is called. This makes the wrapper always seekable and allows writes to
 /// be reordered freely before the final flush.
-/// </para>
-/// <para>
-/// On <see cref="Flush" />, the entire in-memory buffer is written to the underlying stream
-/// starting at its current position.
-/// </para>
 /// </remarks>
-public sealed class MemoryWriteStream(Stream source) : Stream
+public class MemoryWriteStream(Stream source) : Stream
 {
     private readonly MemoryStream _buffer = new();
 
@@ -49,14 +44,14 @@ public sealed class MemoryWriteStream(Stream source) : Stream
     }
 
     /// <inheritdoc />
-    public override int Read(byte[] buffer, int offset, int count) =>
-        throw new System.NotSupportedException("Stream does not support reading.");
-
-    /// <inheritdoc />
     public override long Seek(long offset, SeekOrigin origin) => _buffer.Seek(offset, origin);
 
     /// <inheritdoc />
     public override void SetLength(long value) => _buffer.SetLength(value);
+
+    /// <inheritdoc />
+    public override int Read(byte[] buffer, int offset, int count) =>
+        throw new NotSupportedException();
 
     /// <inheritdoc />
     public override void Write(byte[] buffer, int offset, int count) =>

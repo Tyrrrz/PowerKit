@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace PowerKit;
@@ -7,32 +8,13 @@ namespace PowerKit;
 /// making it fully seekable regardless of whether the underlying stream supports seeking.
 /// </summary>
 /// <remarks>
-/// <para>
 /// The underlying stream is read into memory on the first access to
 /// <see cref="Read" />, <see cref="Seek" />, <see cref="Length" />, or <see cref="Position" />.
 /// Subsequent operations work directly against the in-memory buffer.
-/// </para>
-/// <para>
-/// Content is buffered from the source stream's current position when the buffer is first
-/// initialized. The buffer position always starts at 0.
-/// </para>
 /// </remarks>
-public sealed class MemoryReadStream(Stream source) : Stream
+public class MemoryReadStream(Stream source) : Stream
 {
     private MemoryStream? _buffer;
-
-    private MemoryStream EnsureBuffer()
-    {
-        if (_buffer is not null)
-            return _buffer;
-
-        var capacity = source.CanSeek ? (int)(source.Length - source.Position) : 0;
-        _buffer = new MemoryStream(capacity);
-        source.CopyTo(_buffer);
-        _buffer.Position = 0;
-
-        return _buffer;
-    }
 
     /// <inheritdoc />
     public override bool CanRead => true;
@@ -53,22 +35,34 @@ public sealed class MemoryReadStream(Stream source) : Stream
         set => EnsureBuffer().Position = value;
     }
 
-    /// <inheritdoc />
-    public override void Flush() => _buffer?.Flush();
+    private MemoryStream EnsureBuffer()
+    {
+        if (_buffer is not null)
+            return _buffer;
 
-    /// <inheritdoc />
-    public override int Read(byte[] buffer, int offset, int count) =>
-        EnsureBuffer().Read(buffer, offset, count);
+        var capacity = source.CanSeek ? (int)(source.Length - source.Position) : 0;
+        _buffer = new MemoryStream(capacity);
+        source.CopyTo(_buffer);
+        _buffer.Position = 0;
+
+        return _buffer;
+    }
 
     /// <inheritdoc />
     public override long Seek(long offset, SeekOrigin origin) =>
         EnsureBuffer().Seek(offset, origin);
 
     /// <inheritdoc />
-    public override void SetLength(long value) =>
-        throw new System.NotSupportedException("Stream does not support writing.");
+    public override void SetLength(long value) => throw new NotSupportedException();
+
+    /// <inheritdoc />
+    public override int Read(byte[] buffer, int offset, int count) =>
+        EnsureBuffer().Read(buffer, offset, count);
 
     /// <inheritdoc />
     public override void Write(byte[] buffer, int offset, int count) =>
-        throw new System.NotSupportedException("Stream does not support writing.");
+        throw new NotSupportedException();
+
+    /// <inheritdoc />
+    public override void Flush() => _buffer?.Flush();
 }

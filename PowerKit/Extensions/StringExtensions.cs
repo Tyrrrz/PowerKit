@@ -145,7 +145,7 @@ public static class StringExtensions
         public string ToKebabCase() => str.SeparateWords('-').ToLowerInvariant();
 
         /// <summary>
-        /// Converts the string to a <see cref="SecureString"/>.
+        /// Converts the string to a <see cref="SecureString" />.
         /// </summary>
         public SecureString ToSecureString()
         {
@@ -190,7 +190,7 @@ public static class StringExtensions
 
         /// <summary>
         /// Truncates the string so that its encoded byte length does not exceed the specified maximum.
-        /// Uses the provided encoding, or UTF-8 if <paramref name="encoding"/> is <c>null</c>.
+        /// Uses the provided encoding, or UTF-8 if <paramref name="encoding" /> is <c>null</c>.
         /// </summary>
         public string TruncateBytes(int byteCount, Encoding? encoding = null)
         {
