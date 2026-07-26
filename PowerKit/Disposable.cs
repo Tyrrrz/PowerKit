@@ -1,11 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace PowerKit;
 
 file class DelegateDisposable(Action dispose) : IDisposable
 {
-    public void Dispose() => dispose();
+    private int _disposed;
+
+    public void Dispose()
+    {
+        if (Interlocked.Exchange(ref _disposed, 1) == 0)
+            dispose();
+    }
 }
 
 /// <summary>

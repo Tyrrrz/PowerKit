@@ -22,6 +22,22 @@ public class DisposableTests
     }
 
     [Fact]
+    public void Create_Idempotent_Test()
+    {
+        // Arrange
+        var count = 0;
+        var disposable = Disposable.Create(() => count++);
+
+        // Act
+        disposable.Dispose();
+        disposable.Dispose();
+        disposable.Dispose();
+
+        // Assert
+        count.Should().Be(1);
+    }
+
+    [Fact]
     public void Merge_Test()
     {
         // Arrange
