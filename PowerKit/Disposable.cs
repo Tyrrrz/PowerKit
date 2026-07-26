@@ -28,6 +28,9 @@ public static class Disposable
     /// <summary>
     /// Creates a disposable that invokes the specified action when disposed.
     /// </summary>
+    /// <remarks>
+    /// The returned disposable is idempotent and invokes the action at most once.
+    /// </remarks>
     public static IDisposable Create(Action dispose) => new DelegateDisposable(dispose);
 
     /// <summary>
