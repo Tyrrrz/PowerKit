@@ -6,13 +6,9 @@ namespace PowerKit;
 
 file class DelegateDisposable(Action dispose) : IDisposable
 {
-    private int _disposed;
+    private Action? _dispose = dispose;
 
-    public void Dispose()
-    {
-        if (Interlocked.Exchange(ref _disposed, 1) == 0)
-            dispose();
-    }
+    public void Dispose() => Interlocked.Exchange(ref _dispose, null)?.Invoke();
 }
 
 /// <summary>
