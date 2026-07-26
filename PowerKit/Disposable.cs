@@ -8,7 +8,9 @@ file class DelegateDisposable(Action dispose) : IDisposable
 {
     private Action? _dispose = dispose;
 
-    public void Dispose() => Interlocked.Exchange(ref _dispose, null)?.Invoke();
+    public void Dispose() =>
+        // Idempotency
+        Interlocked.Exchange(ref _dispose, null)?.Invoke();
 }
 
 /// <summary>
