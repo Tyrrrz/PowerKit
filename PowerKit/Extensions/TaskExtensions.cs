@@ -18,13 +18,17 @@ public static class TaskExtensions
         /// <see cref="AggregateException" />, or <see langword="null" /> if the task did not fault.
         /// Intended for use on detached (fire-and-forget) tasks.
         /// </summary>
-        public Task<AggregateException?> ObserveException() =>
+        public Task<AggregateException?> Catch() =>
             task.ContinueWith(
                 static t => t.Exception,
                 default,
                 TaskContinuationOptions.ExecuteSynchronously,
                 TaskScheduler.Default
             );
+
+        /// <inheritdoc cref="Catch" />
+        [Obsolete("Use Catch() instead.")]
+        public Task<AggregateException?> ObserveException() => task.Catch();
     }
 }
 #endif
