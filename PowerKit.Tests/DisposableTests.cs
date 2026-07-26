@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using Xunit;
 
@@ -19,6 +20,22 @@ public class DisposableTests
         invoked.Should().BeFalse();
         disposable.Dispose();
         invoked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Create_Idempotent_Test()
+    {
+        // Arrange
+        var count = 0;
+        var disposable = Disposable.Create(() => Interlocked.Increment(ref count));
+
+        // Act
+        disposable.Dispose();
+        disposable.Dispose();
+        disposable.Dispose();
+
+        // Assert
+        count.Should().Be(1);
     }
 
     [Fact]

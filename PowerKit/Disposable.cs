@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace PowerKit;
 
 file class DelegateDisposable(Action dispose) : IDisposable
 {
-    public void Dispose() => dispose();
+    private Action? _dispose = dispose;
+
+    public void Dispose() =>
+        // Idempotency
+        Interlocked.Exchange(ref _dispose, null)?.Invoke();
 }
 
 /// <summary>
@@ -21,6 +26,9 @@ public static class Disposable
     /// <summary>
     /// Creates a disposable that invokes the specified action when disposed.
     /// </summary>
+    /// <remarks>
+    /// The returned disposable is idempotent and invokes the action at most once.
+    /// </remarks>
     public static IDisposable Create(Action dispose) => new DelegateDisposable(dispose);
 
     /// <summary>
