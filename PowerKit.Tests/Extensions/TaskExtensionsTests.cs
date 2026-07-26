@@ -9,13 +9,13 @@ namespace PowerKit.Tests.Extensions;
 public class TaskExtensionsTests
 {
     [Fact]
-    public async Task ObserveException_ReturnsFaultException_Test()
+    public async Task Catch_ReturnsFaultException_Test()
     {
         // Arrange
         var task = Task.Run(() => throw new InvalidOperationException("test error"));
 
         // Act
-        var exception = await task.ObserveException();
+        var exception = await task.Catch();
 
         // Assert
         task.IsFaulted.Should().BeTrue();
@@ -24,13 +24,13 @@ public class TaskExtensionsTests
     }
 
     [Fact]
-    public async Task ObserveException_SuccessfulTask_ReturnsNull_Test()
+    public async Task Catch_SuccessfulTask_ReturnsNull_Test()
     {
         // Arrange
         var task = Task.CompletedTask;
 
         // Act
-        var exception = await task.ObserveException();
+        var exception = await task.Catch();
 
         // Assert
         task.IsCompletedSuccessfully.Should().BeTrue();
@@ -38,7 +38,7 @@ public class TaskExtensionsTests
     }
 
     [Fact]
-    public async Task ObserveException_DoesNotRaiseUnobservedTaskException_Test()
+    public async Task Catch_DoesNotRaiseUnobservedTaskException_Test()
     {
         // Arrange
         var unobservedRaised = false;
@@ -56,8 +56,7 @@ public class TaskExtensionsTests
         try
         {
             // Act
-            _ = Task.Run(() => throw new InvalidOperationException("test error"))
-                .ObserveException();
+            _ = Task.Run(() => throw new InvalidOperationException("test error")).Catch();
 
             await Task.Delay(50);
 
