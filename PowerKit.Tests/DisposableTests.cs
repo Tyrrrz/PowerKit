@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using Xunit;
 
@@ -26,7 +27,7 @@ public class DisposableTests
     {
         // Arrange
         var count = 0;
-        var disposable = Disposable.Create(() => count++);
+        var disposable = Disposable.Create(() => Interlocked.Increment(ref count));
 
         // Act
         disposable.Dispose();
