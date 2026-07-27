@@ -22,7 +22,7 @@ public static class Observable
             var autoDetach = new AutoDetachObserver<T>(observer);
             var disposable = subscribe(autoDetach);
             autoDetach.SetDisposable(disposable);
-            return disposable;
+            return autoDetach;
         });
 
     /// <summary>

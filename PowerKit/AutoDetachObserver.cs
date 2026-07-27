@@ -6,21 +6,22 @@ namespace PowerKit;
 
 /// <summary>
 /// An observer that automatically disposes the upstream source subscription when a terminal
-/// event (<see cref="OnError" /> or <see cref="OnCompleted" />) is received, or when any
-/// observer callback throws.
+/// event (<see cref="OnError" /> or <see cref="OnCompleted" />) is received, when any
+/// observer callback throws, or when the subscription is disposed externally.
+/// All observer methods are no-ops once the subscription has been stopped.
 /// </summary>
-internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>
+internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>, IDisposable
 {
     private readonly Lock _gate = new();
     private IDisposable? _disposable;
-    private bool _disposeOnAssign;
+    private bool _stopped;
 
     internal void SetDisposable(IDisposable disposable)
     {
         bool shouldDispose;
         lock (_gate)
         {
-            shouldDispose = _disposeOnAssign;
+            shouldDispose = _stopped;
             if (!shouldDispose)
                 _disposable = disposable;
         }
@@ -36,7 +37,7 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>
         {
             disposable = _disposable;
             _disposable = null;
-            _disposeOnAssign = true;
+            _stopped = true;
         }
 
         disposable?.Dispose();
@@ -45,6 +46,12 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>
     /// <inheritdoc />
     public void OnNext(T value)
     {
+        lock (_gate)
+        {
+            if (_stopped)
+                return;
+        }
+
         try
         {
             observer.OnNext(value);
@@ -59,6 +66,12 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>
     /// <inheritdoc />
     public void OnError(Exception error)
     {
+        lock (_gate)
+        {
+            if (_stopped)
+                return;
+        }
+
         try
         {
             observer.OnError(error);
@@ -72,6 +85,12 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>
     /// <inheritdoc />
     public void OnCompleted()
     {
+        lock (_gate)
+        {
+            if (_stopped)
+                return;
+        }
+
         try
         {
             observer.OnCompleted();
@@ -81,5 +100,8 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>
             DisposeSource();
         }
     }
+
+    /// <inheritdoc />
+    public void Dispose() => DisposeSource();
 }
 #endif
