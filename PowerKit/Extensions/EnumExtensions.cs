@@ -17,10 +17,7 @@ public static class EnumExtensions
             where TEnum : struct, Enum =>
             Enum.TryParse<TEnum>(str, ignoreCase, out var result) ? result : null;
 
-        /// <summary>
-        /// Parses the string as an enum value of type <typeparamref name="TEnum" />,
-        /// returning <see langword="null" /> if parsing fails.
-        /// </summary>
+        /// <inheritdoc cref="ParseOrNull{TEnum}(string, bool)" />
         public static TEnum? ParseOrNull<TEnum>(string? str)
             where TEnum : struct, Enum => Enum.ParseOrNull<TEnum>(str, false);
 
@@ -35,10 +32,7 @@ public static class EnumExtensions
         )
             where TEnum : struct, Enum => Enum.ParseOrNull<TEnum>(str, ignoreCase) ?? defaultValue;
 
-        /// <summary>
-        /// Parses the string as an enum value of type <typeparamref name="TEnum" />,
-        /// returning <paramref name="defaultValue" /> if parsing fails.
-        /// </summary>
+        /// <inheritdoc cref="ParseOrDefault{TEnum}(string, bool, TEnum)" />
         public static TEnum ParseOrDefault<TEnum>(string? str, TEnum defaultValue = default)
             where TEnum : struct, Enum => Enum.ParseOrDefault(str, false, defaultValue);
     }

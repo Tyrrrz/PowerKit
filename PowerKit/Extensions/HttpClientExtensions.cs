@@ -40,9 +40,7 @@ public static class HttpClientExtensions
                 .ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Downloads the content at the specified URI to a local file.
-        /// </summary>
+        /// <inheritdoc cref="DownloadAsync(HttpClient, Uri, string, IProgress{double}, CancellationToken)" />
         public async Task DownloadAsync(
             string requestUri,
             string filePath,
@@ -74,9 +72,7 @@ public static class HttpClientExtensions
                 .ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Sends a HEAD request to the specified URI and returns the response.
-        /// </summary>
+        /// <inheritdoc cref="HeadAsync(HttpClient, Uri, CancellationToken)" />
         public async Task<HttpResponseMessage> HeadAsync(
             string requestUri,
             CancellationToken cancellationToken = default
