@@ -40,7 +40,7 @@ public static class HttpClientExtensions
                 .ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="DownloadAsync(HttpClient, Uri, string, IProgress{double}, CancellationToken)" />
         public async Task DownloadAsync(
             string requestUri,
             string filePath,
@@ -72,7 +72,7 @@ public static class HttpClientExtensions
                 .ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="HeadAsync(HttpClient, Uri, CancellationToken)" />
         public async Task<HttpResponseMessage> HeadAsync(
             string requestUri,
             CancellationToken cancellationToken = default
