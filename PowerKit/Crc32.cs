@@ -61,9 +61,7 @@ public static class Crc32
     }
 
 #if !NETFRAMEWORK || NET45_OR_GREATER
-    /// <summary>
-    /// Computes the CRC-32 checksum of the specified data.
-    /// </summary>
+    /// <inheritdoc cref="Hash(byte[])" />
     public static uint Hash(ReadOnlySpan<byte> data)
     {
         var crc = 0xFFFFFFFFu;

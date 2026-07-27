@@ -97,10 +97,7 @@ public static class FileExtensions
             return false;
         }
 
-        /// <summary>
-        /// Checks whether the file at the specified path contains the given byte sequence.
-        /// Returns <see langword="true" /> if <paramref name="bytes" /> is empty.
-        /// </summary>
+        /// <inheritdoc cref="Contains(string, ReadOnlySpan{byte})" />
         public static bool Contains(string path, byte[] bytes) =>
             File.Contains(path, new ReadOnlySpan<byte>(bytes));
 #endif

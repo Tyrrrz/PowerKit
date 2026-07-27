@@ -37,9 +37,7 @@ public static class Deflate
     }
 
 #if !NETFRAMEWORK || NET45_OR_GREATER
-    /// <summary>
-    /// Compresses the specified data using the Deflate algorithm.
-    /// </summary>
+    /// <inheritdoc cref="Compress(byte[])" />
     public static byte[] Compress(ReadOnlySpan<byte> data) => Compress(data.ToArray());
 #endif
 
@@ -67,9 +65,7 @@ public static class Deflate
     }
 
 #if !NETFRAMEWORK || NET45_OR_GREATER
-    /// <summary>
-    /// Decompresses the specified data using the Deflate algorithm.
-    /// </summary>
+    /// <inheritdoc cref="Decompress(byte[])" />
     public static byte[] Decompress(ReadOnlySpan<byte> data) => Decompress(data.ToArray());
 #endif
 }
