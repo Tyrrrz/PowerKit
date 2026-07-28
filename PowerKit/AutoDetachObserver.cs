@@ -12,32 +12,31 @@ namespace PowerKit;
 /// </summary>
 internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>, IDisposable
 {
-    private readonly Lock _gate = new();
+    private readonly Lock _lock = new();
     private IDisposable? _disposable;
-    private bool _stopped;
+    private bool _isUnsubscribedOrAbandoned;
 
-    internal void SetDisposable(IDisposable disposable)
+    internal void SetSubscription(IDisposable disposable)
     {
         bool shouldDispose;
-        lock (_gate)
+        lock (_lock)
         {
-            shouldDispose = _stopped;
-            if (!shouldDispose)
-                _disposable = disposable;
+            shouldDispose = _isUnsubscribedOrAbandoned;
+            _disposable = disposable;
         }
 
         if (shouldDispose)
-            disposable.Dispose();
+            DisposeSource();
     }
 
     private void DisposeSource()
     {
         IDisposable? disposable;
-        lock (_gate)
+        lock (_lock)
         {
             disposable = _disposable;
             _disposable = null;
-            _stopped = true;
+            _isUnsubscribedOrAbandoned = true;
         }
 
         disposable?.Dispose();
@@ -46,9 +45,9 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>, IDis
     /// <inheritdoc />
     public void OnNext(T value)
     {
-        lock (_gate)
+        lock (_lock)
         {
-            if (_stopped)
+            if (_isUnsubscribedOrAbandoned)
                 return;
         }
 
@@ -66,9 +65,9 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>, IDis
     /// <inheritdoc />
     public void OnError(Exception error)
     {
-        lock (_gate)
+        lock (_lock)
         {
-            if (_stopped)
+            if (_isUnsubscribedOrAbandoned)
                 return;
         }
 
@@ -85,9 +84,9 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>, IDis
     /// <inheritdoc />
     public void OnCompleted()
     {
-        lock (_gate)
+        lock (_lock)
         {
-            if (_stopped)
+            if (_isUnsubscribedOrAbandoned)
                 return;
         }
 
