@@ -17,7 +17,13 @@ public static class Observable
     /// Creates an observable that invokes the specified subscribe function when subscribed to.
     /// </summary>
     public static IObservable<T> Create<T>(Func<IObserver<T>, IDisposable> subscribe) =>
-        new Observable<T>(subscribe);
+        new Observable<T>(observer =>
+        {
+            var autoDetach = new AutoDetachObserver<T>(observer);
+            var disposable = subscribe(autoDetach);
+            autoDetach.SetSubscription(disposable);
+            return autoDetach;
+        });
 
     /// <summary>
     /// Creates an observable that invokes the specified subscribe function when subscribed to,
