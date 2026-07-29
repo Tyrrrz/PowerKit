@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
@@ -99,11 +98,14 @@ public class ObservableTests
 
         var observable = Observable.Create<int>(observer =>
         {
-            _ = Task.Run(() =>
+            new Thread(() =>
             {
                 for (var i = 1; i <= 5; i++)
                     observer.OnNext(i);
-            });
+            })
+            {
+                IsBackground = true,
+            }.Start();
             return Disposable.Create(() =>
             {
                 disposed = true;
@@ -120,7 +122,7 @@ public class ObservableTests
             })
         );
 
-        disposedEvent.Wait(TimeSpan.FromSeconds(5));
+        disposedEvent.Wait(TimeSpan.FromSeconds(5)).Should().BeTrue();
 
         // Assert
         disposed.Should().BeTrue();
@@ -140,12 +142,15 @@ public class ObservableTests
 
         var observable = Observable.Create<int>(observer =>
         {
-            _ = Task.Run(() =>
+            new Thread(() =>
             {
                 for (var i = 1; i <= 3; i++)
                     observer.OnNext(i);
                 observer.OnCompleted();
-            });
+            })
+            {
+                IsBackground = true,
+            }.Start();
             return Disposable.Create(() =>
             {
                 disposeCount++;
@@ -154,7 +159,7 @@ public class ObservableTests
         });
 
         subscription = observable.Subscribe(Observer.Create<int>(received.Add));
-        disposedEvent.Wait(TimeSpan.FromSeconds(5));
+        disposedEvent.Wait(TimeSpan.FromSeconds(5)).Should().BeTrue();
         subscription.Dispose();
 
         // Assert
@@ -175,12 +180,15 @@ public class ObservableTests
 
         var observable = Observable.Create<int>(observer =>
         {
-            _ = Task.Run(() =>
+            new Thread(() =>
             {
                 for (var i = 1; i <= 5; i++)
                     observer.OnNext(i);
                 observer.OnCompleted();
-            });
+            })
+            {
+                IsBackground = true,
+            }.Start();
             return Disposable.Null;
         });
 
@@ -199,7 +207,7 @@ public class ObservableTests
             )
         );
 
-        disposedEvent.Wait(TimeSpan.FromSeconds(5));
+        disposedEvent.Wait(TimeSpan.FromSeconds(5)).Should().BeTrue();
 
         // Assert
         received.Should().Equal(1, 2, 3);
