@@ -88,84 +88,86 @@ public class ObservableTests
     [Fact]
     public void Observable_Create_Dispose_Test()
     {
-        // Arrange
+        // Arrange: an observable that emits 5 items on demand.
+        // Unsubscribe after receiving 3, then attempt 2 more.
+        var received = new List<int>();
         var disposed = false;
-        var observable = Observable.Create<int>(_ => Disposable.Create(() => disposed = true));
+        IObserver<int>? producer = null;
+        var observable = Observable.Create<int>(observer =>
+        {
+            producer = observer;
+            return Disposable.Create(() => disposed = true);
+        });
+        var subscription = observable.Subscribe(Observer.Create<int>(received.Add));
 
         // Act
-        disposed.Should().BeFalse();
-        var subscription = observable.Subscribe(Observer.Create<int>());
+        for (var i = 1; i <= 3; i++)
+            producer!.OnNext(i);
         subscription.Dispose();
+        producer!.OnNext(4);
+        producer!.OnNext(5);
 
         // Assert
         disposed.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Observable_Create_Dispose_StopsEvents_Test()
-    {
-        // Arrange: capture the observer, subscribe, then dispose the subscription.
-        // Subsequent OnNext calls must be silently ignored (no callback invocations).
-        IObserver<int>? capturedObserver = null;
-        var received = new List<int>();
-        var observable = Observable.Create<int>(observer =>
-        {
-            capturedObserver = observer;
-            return Disposable.Null;
-        });
-        var subscription = observable.Subscribe(Observer.Create<int>(onNext: received.Add));
-
-        // Act
-        subscription.Dispose();
-        capturedObserver!.OnNext(1);
-
-        // Assert
-        received.Should().BeEmpty();
+        received.Should().Equal(1, 2, 3);
     }
 
     [Fact]
     public void Observable_Create_Dispose_AfterOnCompleted_NoDoubleDispose_Test()
     {
-        // Arrange: OnCompleted fires and disposes the source. A subsequent external Dispose
-        // must be a no-op — the source disposable must only run once.
-        IObserver<int>? capturedObserver = null;
+        // Arrange: an observable that emits 5 items on demand.
+        // Produce 3 items, complete the sequence, then attempt an external Dispose.
+        // The source disposable must fire exactly once (OnCompleted triggers it;
+        // the subsequent Dispose must be a no-op).
+        var received = new List<int>();
         var disposeCount = 0;
+        IObserver<int>? producer = null;
         var observable = Observable.Create<int>(observer =>
         {
-            capturedObserver = observer;
+            producer = observer;
             return Disposable.Create(() => disposeCount++);
         });
-        var subscription = observable.Subscribe(Observer.Create<int>());
-        capturedObserver!.OnCompleted();
+        var subscription = observable.Subscribe(Observer.Create<int>(received.Add));
 
         // Act
+        for (var i = 1; i <= 3; i++)
+            producer!.OnNext(i);
+        producer!.OnCompleted();
         subscription.Dispose();
 
         // Assert
+        received.Should().Equal(1, 2, 3);
         disposeCount.Should().Be(1);
     }
 
     [Fact]
-    public void Observable_Create_Dispose_OnCompleted_NoEventAfterDispose_Test()
+    public void Observable_Create_Dispose_NoEventAfterDispose_Test()
     {
-        // Arrange: dispose the subscription first, then fire OnCompleted.
-        // The observer's OnCompleted callback must not be invoked.
-        IObserver<int>? capturedObserver = null;
+        // Arrange: an observable that emits 5 items on demand.
+        // Unsubscribe after 3, then attempt 2 more OnNext and an OnCompleted.
+        // None should be delivered.
+        var received = new List<int>();
         var completedCalled = false;
+        IObserver<int>? producer = null;
         var observable = Observable.Create<int>(observer =>
         {
-            capturedObserver = observer;
+            producer = observer;
             return Disposable.Null;
         });
         var subscription = observable.Subscribe(
-            Observer.Create<int>(onCompleted: () => completedCalled = true)
+            Observer.Create<int>(onNext: received.Add, onCompleted: () => completedCalled = true)
         );
 
         // Act
+        for (var i = 1; i <= 3; i++)
+            producer!.OnNext(i);
         subscription.Dispose();
-        capturedObserver!.OnCompleted();
+        producer!.OnNext(4);
+        producer!.OnNext(5);
+        producer!.OnCompleted();
 
         // Assert
+        received.Should().Equal(1, 2, 3);
         completedCalled.Should().BeFalse();
     }
 
@@ -232,8 +234,10 @@ public class ObservableTests
     [Fact]
     public void Observable_Create_AutoDetach_OnNext_Throw_DisposesSource_Test()
     {
-        // Arrange: the subscribe callback emits events synchronously; the observer throws
-        // on the third item. The source disposable must be disposed once subscribe returns.
+        // Arrange: the subscribe callback emits 5 items synchronously; the observer
+        // collects them and throws on the third. Only 2 items are received and the
+        // source disposable must be disposed once subscribe returns.
+        var received = new List<int>();
         var disposed = false;
         var observable = Observable.Create<int>(observer =>
         {
@@ -257,11 +261,13 @@ public class ObservableTests
             {
                 if (v == 3)
                     throw new InvalidOperationException();
+                received.Add(v);
             })
         );
 
         // Assert
         disposed.Should().BeTrue();
+        received.Should().Equal(1, 2);
     }
 
     [Fact]
