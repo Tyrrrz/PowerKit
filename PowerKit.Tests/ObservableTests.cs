@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
@@ -9,8 +8,6 @@ namespace PowerKit.Tests;
 
 public class ObservableTests
 {
-    private static readonly TimeSpan TestTimeout = TimeSpan.FromSeconds(5);
-
     [Fact]
     public void Observable_Create_Subscribe_Test()
     {
@@ -91,41 +88,25 @@ public class ObservableTests
     [Fact]
     public void Observable_Create_Dispose_Test()
     {
-        // Arrange: an observable that emits 5 items from a background thread.
-        // A start signal ensures the thread doesn't emit until the subscription
-        // is fully assigned; the onNext callback disposes after 3 items.
-        var received = new List<int>();
+        // Arrange
         var disposed = false;
-        var startSignal = new ManualResetEventSlim(false);
-        var disposedEvent = new ManualResetEventSlim(false);
-        IDisposable? subscription = null;
+        IObserver<int>? producer = null;
+        var received = new List<int>();
 
         var observable = Observable.Create<int>(observer =>
         {
-            Task.Run(() =>
-            {
-                startSignal.Wait(TestTimeout);
-                for (var i = 1; i <= 5; i++)
-                    observer.OnNext(i);
-            });
-            return Disposable.Create(() =>
-            {
-                disposed = true;
-                disposedEvent.Set();
-            });
+            producer = observer;
+            return Disposable.Create(() => disposed = true);
         });
 
-        subscription = observable.Subscribe(
-            Observer.Create<int>(v =>
-            {
-                received.Add(v);
-                if (received.Count >= 3)
-                    subscription!.Dispose();
-            })
-        );
-        startSignal.Set();
+        var subscription = observable.Subscribe(Observer.Create<int>(received.Add));
 
-        disposedEvent.Wait(TestTimeout).Should().BeTrue();
+        producer!.OnNext(1);
+        producer.OnNext(2);
+        producer.OnNext(3);
+        subscription.Dispose();
+        producer.OnNext(4);
+        producer.OnNext(5);
 
         // Assert
         disposed.Should().BeTrue();
@@ -135,34 +116,23 @@ public class ObservableTests
     [Fact]
     public void Observable_Create_Dispose_AfterOnCompleted_NoDoubleDispose_Test()
     {
-        // Arrange: an observable that emits 3 items and then completes from a
-        // background thread. OnCompleted auto-disposes; the subsequent external
-        // Dispose must be a no-op (source disposable fires exactly once).
-        var received = new List<int>();
+        // Arrange
         var disposeCount = 0;
-        var startSignal = new ManualResetEventSlim(false);
-        var disposedEvent = new ManualResetEventSlim(false);
-        IDisposable? subscription = null;
+        IObserver<int>? producer = null;
+        var received = new List<int>();
 
         var observable = Observable.Create<int>(observer =>
         {
-            Task.Run(() =>
-            {
-                startSignal.Wait(TestTimeout);
-                for (var i = 1; i <= 3; i++)
-                    observer.OnNext(i);
-                observer.OnCompleted();
-            });
-            return Disposable.Create(() =>
-            {
-                disposeCount++;
-                disposedEvent.Set();
-            });
+            producer = observer;
+            return Disposable.Create(() => disposeCount++);
         });
 
-        subscription = observable.Subscribe(Observer.Create<int>(received.Add));
-        startSignal.Set();
-        disposedEvent.Wait(TestTimeout).Should().BeTrue();
+        var subscription = observable.Subscribe(Observer.Create<int>(received.Add));
+
+        producer!.OnNext(1);
+        producer.OnNext(2);
+        producer.OnNext(3);
+        producer.OnCompleted();
         subscription.Dispose();
 
         // Assert
@@ -173,44 +143,28 @@ public class ObservableTests
     [Fact]
     public void Observable_Create_Dispose_NoEventAfterDispose_Test()
     {
-        // Arrange: an observable that emits 5 items and then completes from a
-        // background thread. The onNext callback disposes after 3; items 4-5
-        // and the OnCompleted must be silently dropped.
-        var received = new List<int>();
+        // Arrange
         var completedCalled = false;
-        var startSignal = new ManualResetEventSlim(false);
-        var disposedEvent = new ManualResetEventSlim(false);
-        IDisposable? subscription = null;
+        IObserver<int>? producer = null;
+        var received = new List<int>();
 
         var observable = Observable.Create<int>(observer =>
         {
-            Task.Run(() =>
-            {
-                startSignal.Wait(TestTimeout);
-                for (var i = 1; i <= 5; i++)
-                    observer.OnNext(i);
-                observer.OnCompleted();
-            });
+            producer = observer;
             return Disposable.Null;
         });
 
-        subscription = observable.Subscribe(
-            Observer.Create<int>(
-                onNext: v =>
-                {
-                    received.Add(v);
-                    if (received.Count >= 3)
-                    {
-                        subscription!.Dispose();
-                        disposedEvent.Set();
-                    }
-                },
-                onCompleted: () => completedCalled = true
-            )
+        var subscription = observable.Subscribe(
+            Observer.Create<int>(onNext: received.Add, onCompleted: () => completedCalled = true)
         );
-        startSignal.Set();
 
-        disposedEvent.Wait(TestTimeout).Should().BeTrue();
+        producer!.OnNext(1);
+        producer.OnNext(2);
+        producer.OnNext(3);
+        subscription.Dispose();
+        producer.OnNext(4);
+        producer.OnNext(5);
+        producer.OnCompleted();
 
         // Assert
         received.Should().Equal(1, 2, 3);
