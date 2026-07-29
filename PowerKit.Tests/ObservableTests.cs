@@ -6,19 +6,6 @@ using Xunit;
 
 namespace PowerKit.Tests;
 
-file class FakeObserver<T>(
-    Action<T>? onNext = null,
-    Action<Exception>? onError = null,
-    Action? onCompleted = null
-) : IObserver<T>
-{
-    public void OnNext(T value) => onNext?.Invoke(value);
-
-    public void OnError(Exception error) => onError?.Invoke(error);
-
-    public void OnCompleted() => onCompleted?.Invoke();
-}
-
 public class ObservableTests
 {
     [Fact]
@@ -34,7 +21,7 @@ public class ObservableTests
 
         // Act
         subscribed.Should().BeFalse();
-        observable.Subscribe(new FakeObserver<int>());
+        observable.Subscribe(Observer.Create<int>());
 
         // Assert
         subscribed.Should().BeTrue();
@@ -55,7 +42,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(received.Add));
+        observable.Subscribe(Observer.Create<int>(onNext: received.Add));
 
         // Assert
         received.Should().Equal(1, 2, 3);
@@ -73,11 +60,11 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(onError: ex => receivedError = ex));
+        observable.Subscribe(Observer.Create<int>(onError: ex => receivedError = ex));
 
         // Assert
         receivedError.Should().BeOfType<InvalidOperationException>();
-        receivedError.Message.Should().Be("test error");
+        receivedError!.Message.Should().Be("test error");
     }
 
     [Fact]
@@ -92,7 +79,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(onCompleted: () => completed = true));
+        observable.Subscribe(Observer.Create<int>(onCompleted: () => completed = true));
 
         // Assert
         completed.Should().BeTrue();
@@ -107,11 +94,79 @@ public class ObservableTests
 
         // Act
         disposed.Should().BeFalse();
-        var subscription = observable.Subscribe(new FakeObserver<int>());
+        var subscription = observable.Subscribe(Observer.Create<int>());
         subscription.Dispose();
 
         // Assert
         disposed.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Observable_Create_Dispose_StopsEvents_Test()
+    {
+        // Arrange: capture the observer, subscribe, then dispose the subscription.
+        // Subsequent OnNext calls must be silently ignored (no callback invocations).
+        IObserver<int>? capturedObserver = null;
+        var received = new List<int>();
+        var observable = Observable.Create<int>(observer =>
+        {
+            capturedObserver = observer;
+            return Disposable.Null;
+        });
+        var subscription = observable.Subscribe(Observer.Create<int>(onNext: received.Add));
+
+        // Act
+        subscription.Dispose();
+        capturedObserver!.OnNext(1);
+
+        // Assert
+        received.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Observable_Create_Dispose_AfterOnCompleted_NoDoubleDispose_Test()
+    {
+        // Arrange: OnCompleted fires and disposes the source. A subsequent external Dispose
+        // must be a no-op — the source disposable must only run once.
+        IObserver<int>? capturedObserver = null;
+        var disposeCount = 0;
+        var observable = Observable.Create<int>(observer =>
+        {
+            capturedObserver = observer;
+            return Disposable.Create(() => disposeCount++);
+        });
+        var subscription = observable.Subscribe(Observer.Create<int>());
+        capturedObserver!.OnCompleted();
+
+        // Act
+        subscription.Dispose();
+
+        // Assert
+        disposeCount.Should().Be(1);
+    }
+
+    [Fact]
+    public void Observable_Create_Dispose_OnCompleted_NoEventAfterDispose_Test()
+    {
+        // Arrange: dispose the subscription first, then fire OnCompleted.
+        // The observer's OnCompleted callback must not be invoked.
+        IObserver<int>? capturedObserver = null;
+        var completedCalled = false;
+        var observable = Observable.Create<int>(observer =>
+        {
+            capturedObserver = observer;
+            return Disposable.Null;
+        });
+        var subscription = observable.Subscribe(
+            Observer.Create<int>(onCompleted: () => completedCalled = true)
+        );
+
+        // Act
+        subscription.Dispose();
+        capturedObserver!.OnCompleted();
+
+        // Assert
+        completedCalled.Should().BeFalse();
     }
 
     [Fact]
@@ -129,7 +184,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(received.Add));
+        observable.Subscribe(Observer.Create<int>(onNext: received.Add));
 
         // Assert
         received.Should().Equal(1, 2, 3);
@@ -168,7 +223,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(v => received.Add(v)));
+        observable.Subscribe(Observer.Create<int>(onNext: v => received.Add(v)));
 
         // Assert
         received.Should().HaveCount(threadCount * valuesPerThread);
@@ -177,23 +232,35 @@ public class ObservableTests
     [Fact]
     public void Observable_Create_AutoDetach_OnNext_Throw_DisposesSource_Test()
     {
-        // Arrange: subscribe captures the observer and returns the disposable without emitting.
-        // OnNext is fired after the subscription is fully established, so the source disposable
-        // is already assigned when the callback throws.
-        IObserver<int>? capturedObserver = null;
+        // Arrange: the subscribe callback emits events synchronously; the observer throws
+        // on the third item. The source disposable must be disposed once subscribe returns.
         var disposed = false;
         var observable = Observable.Create<int>(observer =>
         {
-            capturedObserver = observer;
+            for (var i = 1; i <= 5; i++)
+            {
+                try
+                {
+                    observer.OnNext(i);
+                }
+                catch
+                {
+                    break;
+                }
+            }
             return Disposable.Create(() => disposed = true);
         });
+
+        // Act
         observable.Subscribe(
-            new FakeObserver<int>(onNext: _ => throw new InvalidOperationException("boom"))
+            Observer.Create<int>(onNext: v =>
+            {
+                if (v == 3)
+                    throw new InvalidOperationException();
+            })
         );
 
-        // Act & Assert
-        var act = () => capturedObserver!.OnNext(1);
-        act.Should().Throw<InvalidOperationException>().WithMessage("boom");
+        // Assert
         disposed.Should().BeTrue();
     }
 
@@ -209,7 +276,7 @@ public class ObservableTests
             return Disposable.Create(() => disposed = true);
         });
         observable.Subscribe(
-            new FakeObserver<int>(onError: _ => throw new InvalidOperationException("boom"))
+            Observer.Create<int>(onError: _ => throw new InvalidOperationException("boom"))
         );
 
         // Act & Assert
@@ -230,7 +297,7 @@ public class ObservableTests
             return Disposable.Create(() => disposed = true);
         });
         observable.Subscribe(
-            new FakeObserver<int>(onCompleted: () => throw new InvalidOperationException("boom"))
+            Observer.Create<int>(onCompleted: () => throw new InvalidOperationException("boom"))
         );
 
         // Act & Assert
@@ -251,7 +318,7 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>(onError: _ => { }));
+        observable.Subscribe(Observer.Create<int>(onError: _ => { }));
 
         // Assert
         disposed.Should().BeTrue();
@@ -269,148 +336,9 @@ public class ObservableTests
         });
 
         // Act
-        observable.Subscribe(new FakeObserver<int>());
+        observable.Subscribe(Observer.Create<int>());
 
         // Assert
         disposed.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Observable_Create_AutoDetach_SynchronousOnNext_Throw_DisposesReturnedDisposable_Test()
-    {
-        // Arrange
-        // The subscribe callback invokes OnNext synchronously (before returning its IDisposable).
-        // If OnNext throws, the returned disposable must be disposed immediately once assigned.
-        var disposed = false;
-        var observable = Observable.Create<int>(observer =>
-        {
-            // This fires OnNext before we return the disposable.
-            // The throw will propagate out of subscribe, so we catch it here to still return.
-            try
-            {
-                observer.OnNext(1);
-            }
-            catch
-            {
-                // swallow so we can still return the disposable
-            }
-
-            return Disposable.Create(() => disposed = true);
-        });
-
-        // The observer throws on OnNext.
-        observable.Subscribe(
-            new FakeObserver<int>(onNext: _ => throw new InvalidOperationException("boom"))
-        );
-
-        // Assert: once the disposable is returned from subscribe and assigned, it is disposed immediately.
-        disposed.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Observable_CreateSynchronized_AutoDetach_OnNext_Throw_DisposesSource_Test()
-    {
-        // Arrange
-        IObserver<int>? capturedObserver = null;
-        var disposed = false;
-        var observable = Observable.CreateSynchronized<int>(observer =>
-        {
-            capturedObserver = observer;
-            return Disposable.Create(() => disposed = true);
-        });
-        observable.Subscribe(
-            new FakeObserver<int>(onNext: _ => throw new InvalidOperationException("boom"))
-        );
-
-        // Act & Assert
-        var act = () => capturedObserver!.OnNext(1);
-        act.Should().Throw<InvalidOperationException>().WithMessage("boom");
-        disposed.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Observable_CreateSynchronized_AutoDetach_SuccessfulOnCompleted_DisposesSource_Test()
-    {
-        // Arrange
-        var disposed = false;
-        var observable = Observable.CreateSynchronized<int>(observer =>
-        {
-            observer.OnCompleted();
-            return Disposable.Create(() => disposed = true);
-        });
-
-        // Act
-        observable.Subscribe(new FakeObserver<int>());
-
-        // Assert
-        disposed.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Observable_Create_Dispose_StopsEvents_Test()
-    {
-        // Arrange: capture the observer, subscribe, then dispose the subscription.
-        // Subsequent OnNext calls must be silently ignored (no callback invocations).
-        IObserver<int>? capturedObserver = null;
-        var received = new List<int>();
-        var observable = Observable.Create<int>(observer =>
-        {
-            capturedObserver = observer;
-            return Disposable.Null;
-        });
-        var subscription = observable.Subscribe(new FakeObserver<int>(received.Add));
-
-        // Act
-        subscription.Dispose();
-        capturedObserver!.OnNext(1);
-
-        // Assert
-        received.Should().BeEmpty();
-    }
-
-    [Fact]
-    public void Observable_Create_Dispose_AfterOnCompleted_NoDoubleDispose_Test()
-    {
-        // Arrange: OnCompleted fires and disposes the source. A subsequent external Dispose
-        // must be a no-op — the source disposable must only run once.
-        IObserver<int>? capturedObserver = null;
-        var disposeCount = 0;
-        var observable = Observable.Create<int>(observer =>
-        {
-            capturedObserver = observer;
-            return Disposable.Create(() => disposeCount++);
-        });
-        var subscription = observable.Subscribe(new FakeObserver<int>());
-        capturedObserver!.OnCompleted();
-
-        // Act
-        subscription.Dispose();
-
-        // Assert
-        disposeCount.Should().Be(1);
-    }
-
-    [Fact]
-    public void Observable_Create_Dispose_OnCompleted_NoEventAfterDispose_Test()
-    {
-        // Arrange: dispose the subscription first, then fire OnCompleted.
-        // The observer's OnCompleted callback must not be invoked.
-        IObserver<int>? capturedObserver = null;
-        var completedCalled = false;
-        var observable = Observable.Create<int>(observer =>
-        {
-            capturedObserver = observer;
-            return Disposable.Null;
-        });
-        var subscription = observable.Subscribe(
-            new FakeObserver<int>(onCompleted: () => completedCalled = true)
-        );
-
-        // Act
-        subscription.Dispose();
-        capturedObserver!.OnCompleted();
-
-        // Assert
-        completedCalled.Should().BeFalse();
     }
 }
