@@ -103,7 +103,7 @@ public class ObservableTests
         {
             new Thread(() =>
             {
-                startSignal.Wait();
+                startSignal.Wait(TestTimeout);
                 for (var i = 1; i <= 5; i++)
                     observer.OnNext(i);
             })
@@ -150,7 +150,7 @@ public class ObservableTests
         {
             new Thread(() =>
             {
-                startSignal.Wait();
+                startSignal.Wait(TestTimeout);
                 for (var i = 1; i <= 3; i++)
                     observer.OnNext(i);
                 observer.OnCompleted();
@@ -191,7 +191,7 @@ public class ObservableTests
         {
             new Thread(() =>
             {
-                startSignal.Wait();
+                startSignal.Wait(TestTimeout);
                 for (var i = 1; i <= 5; i++)
                     observer.OnNext(i);
                 observer.OnCompleted();
