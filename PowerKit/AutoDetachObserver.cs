@@ -18,15 +18,21 @@ internal class AutoDetachObserver<T>(IObserver<T> observer) : IObserver<T>, IDis
 
     internal void SetSubscription(IDisposable disposable)
     {
-        bool shouldDispose;
+        IDisposable? toDispose;
         lock (_lock)
         {
-            shouldDispose = _isUnsubscribedOrAbandoned;
-            _disposable = disposable;
+            if (_isUnsubscribedOrAbandoned)
+            {
+                toDispose = disposable;
+            }
+            else
+            {
+                _disposable = disposable;
+                toDispose = null;
+            }
         }
 
-        if (shouldDispose)
-            DisposeSource();
+        toDispose?.Dispose();
     }
 
     private void DisposeSource()
