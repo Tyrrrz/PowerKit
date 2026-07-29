@@ -8,6 +8,8 @@ namespace PowerKit.Tests;
 
 public class ObservableTests
 {
+    private static readonly TimeSpan TestTimeout = TimeSpan.FromSeconds(5);
+
     [Fact]
     public void Observable_Create_Subscribe_Test()
     {
@@ -89,10 +91,11 @@ public class ObservableTests
     public void Observable_Create_Dispose_Test()
     {
         // Arrange: an observable that emits 5 items from a background thread.
-        // The onNext callback disposes after 3; a ManualResetEventSlim in the
-        // source disposable signals when disposal actually fires.
+        // A start signal ensures the thread doesn't emit until the subscription
+        // is fully assigned; the onNext callback disposes after 3 items.
         var received = new List<int>();
         var disposed = false;
+        var startSignal = new ManualResetEventSlim(false);
         var disposedEvent = new ManualResetEventSlim(false);
         IDisposable? subscription = null;
 
@@ -100,6 +103,7 @@ public class ObservableTests
         {
             new Thread(() =>
             {
+                startSignal.Wait();
                 for (var i = 1; i <= 5; i++)
                     observer.OnNext(i);
             })
@@ -121,8 +125,9 @@ public class ObservableTests
                     subscription!.Dispose();
             })
         );
+        startSignal.Set();
 
-        disposedEvent.Wait(TimeSpan.FromSeconds(5)).Should().BeTrue();
+        disposedEvent.Wait(TestTimeout).Should().BeTrue();
 
         // Assert
         disposed.Should().BeTrue();
@@ -137,6 +142,7 @@ public class ObservableTests
         // Dispose must be a no-op (source disposable fires exactly once).
         var received = new List<int>();
         var disposeCount = 0;
+        var startSignal = new ManualResetEventSlim(false);
         var disposedEvent = new ManualResetEventSlim(false);
         IDisposable? subscription = null;
 
@@ -144,6 +150,7 @@ public class ObservableTests
         {
             new Thread(() =>
             {
+                startSignal.Wait();
                 for (var i = 1; i <= 3; i++)
                     observer.OnNext(i);
                 observer.OnCompleted();
@@ -159,7 +166,8 @@ public class ObservableTests
         });
 
         subscription = observable.Subscribe(Observer.Create<int>(received.Add));
-        disposedEvent.Wait(TimeSpan.FromSeconds(5)).Should().BeTrue();
+        startSignal.Set();
+        disposedEvent.Wait(TestTimeout).Should().BeTrue();
         subscription.Dispose();
 
         // Assert
@@ -175,6 +183,7 @@ public class ObservableTests
         // and the OnCompleted must be silently dropped.
         var received = new List<int>();
         var completedCalled = false;
+        var startSignal = new ManualResetEventSlim(false);
         var disposedEvent = new ManualResetEventSlim(false);
         IDisposable? subscription = null;
 
@@ -182,6 +191,7 @@ public class ObservableTests
         {
             new Thread(() =>
             {
+                startSignal.Wait();
                 for (var i = 1; i <= 5; i++)
                     observer.OnNext(i);
                 observer.OnCompleted();
@@ -206,8 +216,9 @@ public class ObservableTests
                 onCompleted: () => completedCalled = true
             )
         );
+        startSignal.Set();
 
-        disposedEvent.Wait(TimeSpan.FromSeconds(5)).Should().BeTrue();
+        disposedEvent.Wait(TestTimeout).Should().BeTrue();
 
         // Assert
         received.Should().Equal(1, 2, 3);
