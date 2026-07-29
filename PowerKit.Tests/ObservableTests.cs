@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
@@ -101,15 +102,12 @@ public class ObservableTests
 
         var observable = Observable.Create<int>(observer =>
         {
-            new Thread(() =>
+            Task.Run(() =>
             {
                 startSignal.Wait(TestTimeout);
                 for (var i = 1; i <= 5; i++)
                     observer.OnNext(i);
-            })
-            {
-                IsBackground = true,
-            }.Start();
+            });
             return Disposable.Create(() =>
             {
                 disposed = true;
@@ -148,16 +146,13 @@ public class ObservableTests
 
         var observable = Observable.Create<int>(observer =>
         {
-            new Thread(() =>
+            Task.Run(() =>
             {
                 startSignal.Wait(TestTimeout);
                 for (var i = 1; i <= 3; i++)
                     observer.OnNext(i);
                 observer.OnCompleted();
-            })
-            {
-                IsBackground = true,
-            }.Start();
+            });
             return Disposable.Create(() =>
             {
                 disposeCount++;
@@ -189,16 +184,13 @@ public class ObservableTests
 
         var observable = Observable.Create<int>(observer =>
         {
-            new Thread(() =>
+            Task.Run(() =>
             {
                 startSignal.Wait(TestTimeout);
                 for (var i = 1; i <= 5; i++)
                     observer.OnNext(i);
                 observer.OnCompleted();
-            })
-            {
-                IsBackground = true,
-            }.Start();
+            });
             return Disposable.Null;
         });
 
