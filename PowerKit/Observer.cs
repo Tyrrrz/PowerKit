@@ -21,6 +21,9 @@ public static class Observer
     /// <summary>
     /// Creates an observer from the specified delegate callbacks.
     /// </summary>
+    /// <remarks>
+    /// Any callback left as <see langword="null" /> is treated as a no-op.
+    /// </remarks>
     public static IObserver<T> Create<T>(
         Action<T>? onNext = null,
         Action<Exception>? onError = null,
