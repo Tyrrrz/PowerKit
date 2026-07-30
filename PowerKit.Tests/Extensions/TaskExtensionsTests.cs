@@ -58,11 +58,12 @@ public class TaskExtensionsTests
         var task = Task.Run(() => throw new InvalidOperationException("test error"));
 
         // Act
-        Func<Task> act = () => task.Select(() =>
-        {
-            invoked = true;
-            return 42;
-        });
+        Func<Task> act = () =>
+            task.Select(() =>
+            {
+                invoked = true;
+                return 42;
+            });
 
         // Assert
         await act.Should().ThrowAsync<InvalidOperationException>();

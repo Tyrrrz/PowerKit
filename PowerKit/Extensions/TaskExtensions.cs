@@ -49,7 +49,7 @@ public static class TaskExtensions
         /// </summary>
         public async Task<TOut> Select<TOut>(Func<T, TOut> transform)
         {
-            var result = await task;
+            var result = await task.ConfigureAwait(false);
             return transform(result);
         }
     }
