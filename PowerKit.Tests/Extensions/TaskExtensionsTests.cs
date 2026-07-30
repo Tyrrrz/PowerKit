@@ -38,6 +38,63 @@ public class TaskExtensionsTests
     }
 
     [Fact]
+    public async Task Select_NonGenericTask_Test()
+    {
+        // Arrange
+        var task = Task.CompletedTask;
+
+        // Act
+        var result = await task.Select(() => 42);
+
+        // Assert
+        result.Should().Be(42);
+    }
+
+    [Fact]
+    public async Task Select_NonGenericTask_TransformReceivesNoInput_Test()
+    {
+        // Arrange
+        var task = Task.Delay(0);
+        var called = false;
+
+        // Act
+        await task.Select(() =>
+        {
+            called = true;
+            return "done";
+        });
+
+        // Assert
+        called.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Select_GenericTask_Test()
+    {
+        // Arrange
+        var task = Task.FromResult(5);
+
+        // Act
+        var result = await task.Select(x => x * 2);
+
+        // Assert
+        result.Should().Be(10);
+    }
+
+    [Fact]
+    public async Task Select_GenericTask_TransformReceivesTaskResult_Test()
+    {
+        // Arrange
+        var task = Task.FromResult("hello");
+
+        // Act
+        var result = await task.Select(s => s.ToUpper());
+
+        // Assert
+        result.Should().Be("HELLO");
+    }
+
+    [Fact]
     public async Task Catch_DoesNotRaiseUnobservedTaskException_Test()
     {
         // Arrange

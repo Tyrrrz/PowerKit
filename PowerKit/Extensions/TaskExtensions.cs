@@ -29,6 +29,29 @@ public static class TaskExtensions
         /// <inheritdoc cref="Catch" />
         [Obsolete("Use Catch() instead.")]
         public Task<AggregateException?> ObserveException() => task.Catch();
+
+        /// <summary>
+        /// Appends a transformation to the task, returning a new task that resolves to the
+        /// result of calling <paramref name="transform" /> after the original task completes.
+        /// </summary>
+        public async Task<T> Select<T>(Func<T> transform)
+        {
+            await task;
+            return transform();
+        }
+    }
+
+    extension<T>(Task<T> task)
+    {
+        /// <summary>
+        /// Appends a transformation to the task, returning a new task that resolves to the
+        /// result of calling <paramref name="transform" /> with the original task's result.
+        /// </summary>
+        public async Task<TOut> Select<TOut>(Func<T, TOut> transform)
+        {
+            var result = await task;
+            return transform(result);
+        }
     }
 }
 #endif
