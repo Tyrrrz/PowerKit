@@ -51,6 +51,25 @@ public class TaskExtensionsTests
     }
 
     [Fact]
+    public async Task Select_NonGenericTask_FaultedTask_PropagatesException_Test()
+    {
+        // Arrange
+        var invoked = false;
+        var task = Task.Run(() => throw new InvalidOperationException("test error"));
+
+        // Act
+        Func<Task> act = () => task.Select(() =>
+        {
+            invoked = true;
+            return 42;
+        });
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
+        invoked.Should().BeFalse();
+    }
+
+    [Fact]
     public async Task Select_GenericTask_Test()
     {
         // Arrange
