@@ -36,7 +36,7 @@ public static class TaskExtensions
         /// </summary>
         public async Task<T> Select<T>(Func<T> transform)
         {
-            await task;
+            await task.ConfigureAwait(false);
             return transform();
         }
     }
