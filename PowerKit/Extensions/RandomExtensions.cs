@@ -18,7 +18,7 @@ public static class RandomExtensions
         /// </param>
         public bool NextBoolean(double trueProbability = 0.5)
         {
-            if (trueProbability is < 0 or > 1)
+            if (double.IsNaN(trueProbability) || trueProbability is < 0 or > 1)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(trueProbability),
