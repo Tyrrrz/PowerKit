@@ -37,6 +37,20 @@ public class ColorExtensionsTests
     }
 
     [Fact]
+    public void FromHsl_Test()
+    {
+        // Act & assert
+        Color.FromHsl(321, 0.71, 0.5).Should().Be(Color.FromArgb(255, 218, 37, 155));
+        Color.FromHsl(0, 0, 0).Should().Be(Color.FromArgb(255, 0, 0, 0));
+        Color.FromHsl(0, 0, 1).Should().Be(Color.FromArgb(255, 255, 255, 255));
+        Color.FromHsl(0, 1, 0.5).Should().Be(Color.FromArgb(255, 255, 0, 0));
+        Color.FromHsl(120, 1, 0.5).Should().Be(Color.FromArgb(255, 0, 255, 0));
+        Color.FromHsl(240, 1, 0.5).Should().Be(Color.FromArgb(255, 0, 0, 255));
+        Color.FromHsl(360, 1, 0.5).Should().Be(Color.FromArgb(255, 255, 0, 0));
+        Color.FromHsl(-240, 1, 0.5).Should().Be(Color.FromArgb(255, 0, 255, 0));
+    }
+
+    [Fact]
     public void ToHexString_Test()
     {
         // Act & assert
