@@ -49,14 +49,6 @@ public static class ColorExtensions
         }
 
         /// <summary>
-        /// Creates a new <see cref="Color" /> from the specified alpha and the RGB components of the specified
-        /// <see cref="Color" />.
-        /// </summary>
-        /// <param name="alpha">Alpha component, in the range 0-255.</param>
-        /// <param name="color">Color whose RGB components are used.</param>
-        public static Color FromAhsv(byte alpha, Color color) => Color.FromArgb(alpha, color);
-
-        /// <summary>
         /// Creates a new <see cref="Color" /> from the specified HSV (hue, saturation, value) components.
         /// </summary>
         /// <param name="hue">Hue, in degrees (0-360).</param>
