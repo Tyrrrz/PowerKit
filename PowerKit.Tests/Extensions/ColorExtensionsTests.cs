@@ -37,6 +37,20 @@ public class ColorExtensionsTests
     }
 
     [Fact]
+    public void FromAhsv_WithColor_Test()
+    {
+        // Act & assert
+        Color
+            .FromAhsv(128, Color.FromArgb(255, 0x12, 0x34, 0x56))
+            .Should()
+            .Be(Color.FromArgb(128, 0x12, 0x34, 0x56));
+        Color
+            .FromAhsv(255, Color.FromArgb(0, 0xff, 0x00, 0x00))
+            .Should()
+            .Be(Color.FromArgb(255, 0xff, 0x00, 0x00));
+    }
+
+    [Fact]
     public void ToHexString_Test()
     {
         // Act & assert
