@@ -8,6 +8,86 @@ namespace PowerKit.Tests.Extensions;
 public class RandomExtensionsTests
 {
     [Fact]
+    public void NextDouble_MinMax_Test()
+    {
+        // Arrange
+        var random = new Random(1234);
+
+        // Act
+        var values = new double[10000];
+        for (var i = 0; i < values.Length; i++)
+        {
+            values[i] = random.NextDouble(1.0, 2.0);
+        }
+
+        // Assert
+        foreach (var value in values)
+        {
+            value.Should().BeInRange(1.0, 2.0);
+        }
+    }
+
+    [Fact]
+    public void NextDouble_Max_Test()
+    {
+        // Arrange
+        var random = new Random(1234);
+
+        // Act
+        var values = new double[10000];
+        for (var i = 0; i < values.Length; i++)
+        {
+            values[i] = random.NextDouble(2.0);
+        }
+
+        // Assert
+        foreach (var value in values)
+        {
+            value.Should().BeInRange(0.0, 2.0);
+        }
+    }
+
+    [Fact]
+    public void NextSingle_MinMax_Test()
+    {
+        // Arrange
+        var random = new Random(1234);
+
+        // Act
+        var values = new float[10000];
+        for (var i = 0; i < values.Length; i++)
+        {
+            values[i] = random.NextSingle(1.0f, 2.0f);
+        }
+
+        // Assert
+        foreach (var value in values)
+        {
+            value.Should().BeInRange(1.0f, 2.0f);
+        }
+    }
+
+    [Fact]
+    public void NextSingle_Max_Test()
+    {
+        // Arrange
+        var random = new Random(1234);
+
+        // Act
+        var values = new float[10000];
+        for (var i = 0; i < values.Length; i++)
+        {
+            values[i] = random.NextSingle(2.0f);
+        }
+
+        // Assert
+        foreach (var value in values)
+        {
+            value.Should().BeInRange(0.0f, 2.0f);
+        }
+    }
+
+    [Fact]
     public void NextBoolean_Test()
     {
         // Arrange
@@ -26,6 +106,48 @@ public class RandomExtensionsTests
         ((double)trueCount / iterations)
             .Should()
             .BeApproximately(0.5, 0.05);
+    }
+
+    [Fact]
+    public void NextBoolean_WithProbability_Test()
+    {
+        // Arrange
+        var random = new Random(1234);
+
+        // Act
+        var trueCount = 0;
+        const int iterations = 10000;
+        for (var i = 0; i < iterations; i++)
+        {
+            if (random.NextBoolean(0.25))
+                trueCount++;
+        }
+
+        // Assert
+        ((double)trueCount / iterations)
+            .Should()
+            .BeApproximately(0.25, 0.05);
+    }
+
+    [Fact]
+    public void NextBoolean_WithProbability_Float_Test()
+    {
+        // Arrange
+        var random = new Random(1234);
+
+        // Act
+        var trueCount = 0;
+        const int iterations = 10000;
+        for (var i = 0; i < iterations; i++)
+        {
+            if (random.NextBoolean(0.25f))
+                trueCount++;
+        }
+
+        // Assert
+        ((double)trueCount / iterations)
+            .Should()
+            .BeApproximately(0.25, 0.05);
     }
 
     [Fact]
