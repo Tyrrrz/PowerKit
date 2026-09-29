@@ -16,8 +16,17 @@ public static class ColorExtensions
         /// <param name="hue">Hue, in degrees (0-360).</param>
         /// <param name="saturation">Saturation, in the range 0-1.</param>
         /// <param name="value">Value (brightness), in the range 0-1.</param>
+        public static Color FromHsv(double hue, double saturation, double value) =>
+            Color.FromAhsv(255, hue, saturation, value);
+
+        /// <summary>
+        /// Creates a new <see cref="Color" /> from the specified alpha and HSV (hue, saturation, value) components.
+        /// </summary>
         /// <param name="alpha">Alpha component, in the range 0-255.</param>
-        public static Color FromHsv(double hue, double saturation, double value, byte alpha = 255)
+        /// <param name="hue">Hue, in degrees (0-360).</param>
+        /// <param name="saturation">Saturation, in the range 0-1.</param>
+        /// <param name="value">Value (brightness), in the range 0-1.</param>
+        public static Color FromAhsv(byte alpha, double hue, double saturation, double value)
         {
             hue %= 360;
             if (hue < 0)
