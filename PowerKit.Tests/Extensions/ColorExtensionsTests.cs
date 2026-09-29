@@ -8,6 +8,21 @@ namespace PowerKit.Tests.Extensions;
 public class ColorExtensionsTests
 {
     [Fact]
+    public void FromHsv_Test()
+    {
+        // Act & assert
+        Color.FromHsv(321, 0.71, 1).Should().Be(Color.FromArgb(255, 255, 74, 192));
+        Color.FromHsv(0, 0, 0).Should().Be(Color.FromArgb(255, 0, 0, 0));
+        Color.FromHsv(0, 0, 1).Should().Be(Color.FromArgb(255, 255, 255, 255));
+        Color.FromHsv(0, 1, 1).Should().Be(Color.FromArgb(255, 255, 0, 0));
+        Color.FromHsv(120, 1, 1).Should().Be(Color.FromArgb(255, 0, 255, 0));
+        Color.FromHsv(240, 1, 1).Should().Be(Color.FromArgb(255, 0, 0, 255));
+        Color.FromHsv(360, 1, 1).Should().Be(Color.FromArgb(255, 255, 0, 0));
+        Color.FromHsv(-240, 1, 1).Should().Be(Color.FromArgb(255, 0, 255, 0));
+        Color.FromHsv(0, 1, 1, 128).Should().Be(Color.FromArgb(128, 255, 0, 0));
+    }
+
+    [Fact]
     public void ToHexString_Test()
     {
         // Act & assert
