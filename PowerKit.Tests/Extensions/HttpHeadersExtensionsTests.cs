@@ -1,5 +1,5 @@
 using System.Net.Http;
-using FluentAssertions;
+using AwesomeAssertions;
 using PowerKit.Extensions;
 using Xunit;
 

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.Versioning;
-using FluentAssertions;
+using AwesomeAssertions;
 using PowerKit.Extensions;
 using Xunit;
 
