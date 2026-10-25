@@ -3,16 +3,6 @@
 [![Version](https://img.shields.io/nuget/v/PowerKit.Json.svg)](https://nuget.org/packages/PowerKit.Json)
 [![Downloads](https://img.shields.io/nuget/dt/PowerKit.Json.svg)](https://nuget.org/packages/PowerKit.Json)
 
-<table>
-    <tr>
-        <td width="99999" align="center">Development of this project is entirely funded by the community. <b><a href="https://tyrrrz.me/donate">Consider donating to support!</a></b></td>
-    </tr>
-</table>
-
-<p align="center">
-    <img src="favicon.png" alt="Icon" />
-</p>
-
 **PowerKit.Json** is an extension package for **PowerKit** that provides a set of helpful utilities for types defined in the [`System.Text.Json`](https://learn.microsoft.com/dotnet/api/system.text.json) namespace.
 
 ## Install
@@ -130,7 +120,7 @@ writer.WriteBoolean("prop", new bool?());
 
 ### Parsing JSON from HTTP
 
-To make it easier to read JSON that comes from HTTP responses, this library also provides a few extension methods for `HttpContent` and `HttpClient`:
+To make it easier to read JSON that comes from HTTP responses, this library also provides a few extension methods for `HttpClient`:
 
 ```csharp
 using PowerKit.Json.Extensions;
@@ -139,6 +129,14 @@ var http = new HttpClient();
 
 // Send a GET request and retrieve JSON directly
 var json = await http.GetJsonAsync("..."); // returns JsonElement
+```
+
+As well as `HttpContent`:
+
+```csharp
+using PowerKit.Json.Extensions;
+
+var http = new HttpClient();
 
 // Read JSON from content
 using var request = new HttpRequestMessage(HttpMethod.Post, "...");

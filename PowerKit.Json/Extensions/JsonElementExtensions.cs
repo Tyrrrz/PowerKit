@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text.Json;
 using PowerKit.Extensions;
-using PowerKit.Json.Extensions;
 
 namespace PowerKit.Json.Extensions;
 
@@ -670,6 +671,25 @@ public static class JsonElementExtensions
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Converts a dictionary to a JSON element.
+        /// </summary>
+        public static JsonElement FromDictionary(
+            IEnumerable<KeyValuePair<string, object?>> dictionary
+        )
+        {
+            using var buffer = new MemoryStream();
+            using (var writer = new Utf8JsonWriter(buffer))
+            {
+                writer.WriteValue(dictionary);
+            }
+
+            buffer.Position = 0;
+            using var document = JsonDocument.Parse(buffer);
+
+            return document.RootElement.Clone();
         }
     }
 }

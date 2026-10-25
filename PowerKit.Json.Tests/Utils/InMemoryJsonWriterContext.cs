@@ -9,7 +9,8 @@ internal class InMemoryJsonWriterContext : IDisposable
 {
     private readonly MemoryStream _buffer = new();
 
-    public InMemoryJsonWriterContext() => Writer = new Utf8JsonWriter(_buffer);
+    public InMemoryJsonWriterContext(JsonWriterOptions? options = null) =>
+        Writer = new Utf8JsonWriter(_buffer, options ?? new JsonWriterOptions { Indented = true });
 
     public Utf8JsonWriter Writer { get; }
 
