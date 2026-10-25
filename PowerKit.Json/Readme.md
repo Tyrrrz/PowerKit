@@ -130,7 +130,7 @@ writer.WriteBoolean("prop", new bool?());
 
 ### Parsing JSON from HTTP
 
-To make it easier to read JSON that comes from HTTP responses, this library also provides a few extension methods for `HttpContent` and `HttpClient`:
+To make it easier to read JSON that comes from HTTP responses, this library also provides a few extension methods for `HttpClient`:
 
 ```csharp
 using PowerKit.Json.Extensions;
@@ -140,6 +140,8 @@ var http = new HttpClient();
 // Send a GET request and retrieve JSON directly
 var json = await http.GetJsonAsync("..."); // returns JsonElement
 ```
+
+As well as `HttpContent`:
 
 ```csharp
 using PowerKit.Json.Extensions;
