@@ -21,6 +21,10 @@
 
 **PowerKit** (formerly [**Tyrrrz.Extensions**](https://nuget.org/packages/Tyrrrz.Extensions)) is a collection of general-purpose utilities and extensions for rapid development with .NET.
 
+**Related packages**:
+
+- 📦 [PowerKit.Json](PowerKit.Json) — provides extensions for `System.Text.Json` types
+
 ## Terms of use<sup>[[?]](https://github.com/Tyrrrz/.github/blob/prime/docs/why-so-political.md)</sup>
 
 By using this project or its source code, for any purpose and in any shape or form, you grant your **implicit agreement** to all the following statements:
