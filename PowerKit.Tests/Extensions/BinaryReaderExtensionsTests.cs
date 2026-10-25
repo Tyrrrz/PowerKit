@@ -16,7 +16,7 @@ public class BinaryReaderExtensionsTests
         using var stream = new MemoryStream(data);
         using var reader = new BinaryReader(stream);
 
-        // Act & Assert
+        // Act & assert
         reader.IsEndOfStream.Should().BeFalse();
         stream.Position = stream.Length;
         reader.IsEndOfStream.Should().BeTrue();
@@ -29,7 +29,7 @@ public class BinaryReaderExtensionsTests
         using var stream = new MemoryStream();
         using var reader = new BinaryReader(stream);
 
-        // Act & Assert
+        // Act & assert
         reader.IsEndOfStream.Should().BeTrue();
     }
 

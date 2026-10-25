@@ -33,11 +33,12 @@ public class ProgressMuxerTests
         var progress = new ProgressCollector<double>();
         var muxer = new ProgressMuxer(progress);
 
-        // Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() => muxer.CreateInput(-1));
-        Assert.Throws<ArgumentOutOfRangeException>(() => muxer.CreateInput(double.NaN));
-        Assert.Throws<ArgumentOutOfRangeException>(() =>
-            muxer.CreateInput(double.PositiveInfinity)
-        );
+        // Act & assert
+        var createNegative = () => muxer.CreateInput(-1);
+        createNegative.Should().Throw<ArgumentOutOfRangeException>();
+        var createNan = () => muxer.CreateInput(double.NaN);
+        createNan.Should().Throw<ArgumentOutOfRangeException>();
+        var createInfinity = () => muxer.CreateInput(double.PositiveInfinity);
+        createInfinity.Should().Throw<ArgumentOutOfRangeException>();
     }
 }

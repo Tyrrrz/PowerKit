@@ -41,7 +41,7 @@ public class MemoryWriteStreamTests
         seekable.Write([1, 2, 3]);
         seekable.Flush();
 
-        // Act & Assert
+        // Act & assert
         seekable.Invoking(s => s.Flush()).Should().Throw<InvalidOperationException>();
     }
 
@@ -55,7 +55,7 @@ public class MemoryWriteStreamTests
         seekable.Write([1, 2, 3]);
         seekable.Flush();
 
-        // Act & Assert
+        // Act & assert
         seekable.Invoking(s => s.Write([4, 5, 6])).Should().Throw<InvalidOperationException>();
     }
 
@@ -69,7 +69,7 @@ public class MemoryWriteStreamTests
         seekable.Write([1, 2, 3]);
         seekable.Flush();
 
-        // Act & Assert
+        // Act & assert
         seekable.Invoking(s => s.Dispose()).Should().NotThrow();
     }
 }

@@ -154,7 +154,7 @@ public class FileExtensionsTests
         using var tempFile = TempFile.Create();
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
-        // Act & Assert
+        // Act & assert
         var bytes = File.ReadAllBytes(tempFile.Path, 10L);
         bytes.Should().BeEmpty();
     }
@@ -208,7 +208,7 @@ public class FileExtensionsTests
         using var tempFile = TempFile.Create();
         File.WriteAllBytes(tempFile.Path, [1, 2, 3, 4, 5]);
 
-        // Act & Assert
+        // Act & assert
         var bytes = await File.ReadAllBytesAsync(tempFile.Path, 10L);
         bytes.Should().BeEmpty();
     }

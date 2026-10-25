@@ -285,7 +285,7 @@ public class ObservableTests
             Observer.Create<int>(onError: _ => throw new InvalidOperationException("boom"))
         );
 
-        // Act & Assert
+        // Act & assert
         var act = () => capturedObserver!.OnError(new Exception("source error"));
         act.Should().Throw<InvalidOperationException>().WithMessage("boom");
         disposed.Should().BeTrue();
@@ -306,7 +306,7 @@ public class ObservableTests
             Observer.Create<int>(onCompleted: () => throw new InvalidOperationException("boom"))
         );
 
-        // Act & Assert
+        // Act & assert
         var act = () => capturedObserver!.OnCompleted();
         act.Should().Throw<InvalidOperationException>().WithMessage("boom");
         disposed.Should().BeTrue();

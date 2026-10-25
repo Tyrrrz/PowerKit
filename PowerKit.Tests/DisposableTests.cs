@@ -72,11 +72,15 @@ public class DisposableTests
         };
 
         // Act
-        var ex = Assert.Throws<AggregateException>(() => Disposable.Merge(disposables).Dispose());
+        var act = () => Disposable.Merge(disposables).Dispose();
 
         // Assert
+        act.Should()
+            .Throw<AggregateException>()
+            .And.InnerExceptions.Should()
+            .ContainSingle()
+            .And.BeOfType<InvalidOperationException>();
+
         disposed.Should().Equal(0, 1, 2);
-        ex.InnerExceptions.Should().ContainSingle();
-        ex.InnerExceptions[0].Should().BeOfType<InvalidOperationException>();
     }
 }
