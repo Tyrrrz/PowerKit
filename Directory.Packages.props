@@ -14,6 +14,7 @@
     <PackageVersion Include="PolyShim" Version="2.13.0" />
     <PackageVersion Include="Snek" Version="1.0.0" />
     <PackageVersion Include="System.Memory" Version="4.6.3" />
+    <PackageVersion Include="System.TExt.Json" Version="10.0.13" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
     <PackageVersion Include="Xunit.SkippableFact" Version="1.5.85" />

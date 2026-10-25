@@ -1,10 +1,10 @@
 using System;
 using AwesomeAssertions;
-using PowerKit.Extensions;
-using PowerKit.Tests.Utils;
+using PowerKit.Json.Extensions;
+using PowerKit.Json.Tests.Utils;
 using Xunit;
 
-namespace PowerKit.Tests.Extensions;
+namespace PowerKit.Json.Tests.Extensions;
 
 public class Utf8JsonWriterExtensionsTests
 {

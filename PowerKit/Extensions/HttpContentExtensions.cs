@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,24 +32,6 @@ public static class HttpContentExtensions
             await source
                 .CopyToAsync(destination, contentLength, progress, cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Reads the HTTP content body and deserializes it as a <see cref="JsonElement"/>.
-        /// </summary>
-        public async Task<JsonElement> ReadAsJsonAsync(
-            CancellationToken cancellationToken = default
-        )
-        {
-            using var stream = await content
-                .ReadAsStreamAsync(cancellationToken)
-                .ConfigureAwait(false);
-
-            using var document = await JsonDocument
-                .ParseAsync(stream, default, cancellationToken)
-                .ConfigureAwait(false);
-
-            return document.RootElement.Clone();
         }
     }
 }

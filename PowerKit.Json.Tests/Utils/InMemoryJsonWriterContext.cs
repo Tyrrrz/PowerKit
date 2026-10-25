@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 
-namespace PowerKit.Tests.Utils;
+namespace PowerKit.Json.Tests.Utils;
 
 internal class InMemoryJsonWriterContext : IDisposable
 {

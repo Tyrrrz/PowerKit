@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using AwesomeAssertions;
-using PowerKit.Extensions;
+using PowerKit.Json.Extensions;
 using Xunit;
 
-namespace PowerKit.Tests.Extensions;
+namespace PowerKit.Json.Tests.Extensions;
 
 public class JsonElementExtensionsTests
 {

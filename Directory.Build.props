@@ -11,7 +11,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <!-- Disable nullability warnings on older frameworks because there is no nullability info for BCL -->
+  <!-- Disable nullability warnings on frameworks where BCL is not annotated -->
   <PropertyGroup Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))">
     <Nullable>annotations</Nullable>
   </PropertyGroup>

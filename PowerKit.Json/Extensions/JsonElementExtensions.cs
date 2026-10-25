@@ -1,8 +1,9 @@
 using System;
 using System.Globalization;
 using System.Text.Json;
+using PowerKit.Json.Extensions;
 
-namespace PowerKit.Extensions;
+namespace PowerKit.Json.Extensions;
 
 /// <summary>
 /// Extensions for <see cref="JsonElement" />.
@@ -40,7 +41,7 @@ public static class JsonElementExtensions
             element.EnumerateObjectOrNull() ?? default;
 
         /// <summary>
-        /// Returns the child element at position <paramref name="index"/> within the array,
+        /// Returns the child element at position <paramref name="index" /> within the array,
         /// or null if the element is not an array, the index is out of range, or the indexed value is null.
         /// </summary>
         public JsonElement? GetByIndexOrNull(int index)
@@ -65,7 +66,7 @@ public static class JsonElementExtensions
         }
 
         /// <summary>
-        /// Returns the child property named <paramref name="propertyName"/>,
+        /// Returns the child property named <paramref name="propertyName" />,
         /// or null if the element is not an object, the property does not exist, or its value is null.
         /// </summary>
         public JsonElement? GetPropertyOrNull(string propertyName)
@@ -87,7 +88,7 @@ public static class JsonElementExtensions
         }
 
         /// <summary>
-        /// Returns the element's value as a <see cref="bool"/>,
+        /// Returns the element's value as a <see cref="bool" />,
         /// or null if the element is not a boolean.
         /// </summary>
         public bool? GetBooleanOrNull() =>
@@ -99,7 +100,7 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="bool"/>, accepting both a native boolean
+        /// Reads the element's value as a <see cref="bool" />, accepting both a native boolean
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public bool? GetBooleanCoercedOrNull() =>
@@ -110,8 +111,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="bool"/>, accepting both a native boolean
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="bool" />, accepting both a native boolean
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public bool GetBooleanCoerced() =>
@@ -121,7 +122,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="byte"/>,
+        /// Returns the element's value as a <see cref="byte" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public byte? GetByteOrNull() =>
@@ -132,7 +133,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="byte"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="byte" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public byte? GetByteCoercedOrNull() =>
@@ -146,8 +147,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="byte"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="byte" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public byte GetByteCoerced() =>
@@ -168,7 +169,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Returns the element's value as a <see cref="DateTimeOffset"/>,
+        /// Returns the element's value as a <see cref="DateTimeOffset" />,
         /// or null if the element is not a string or the value cannot be parsed.
         /// </summary>
         public DateTimeOffset? GetDateTimeOffsetOrNull() =>
@@ -179,7 +180,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Returns the element's value as a <see cref="DateTime"/>,
+        /// Returns the element's value as a <see cref="DateTime" />,
         /// or null if the element is not a string or the value cannot be parsed.
         /// </summary>
         public DateTime? GetDateTimeOrNull() =>
@@ -190,7 +191,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Returns the element's value as a <see cref="decimal"/>,
+        /// Returns the element's value as a <see cref="decimal" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public decimal? GetDecimalOrNull() =>
@@ -201,7 +202,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="decimal"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="decimal" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public decimal? GetDecimalCoercedOrNull() =>
@@ -215,8 +216,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="decimal"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="decimal" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public decimal GetDecimalCoerced() =>
@@ -226,7 +227,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="double"/>,
+        /// Returns the element's value as a <see cref="double" />,
         /// or null if the element is not a number.
         /// </summary>
         public double? GetDoubleOrNull() =>
@@ -237,7 +238,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="double"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="double" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public double? GetDoubleCoercedOrNull() =>
@@ -251,8 +252,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="double"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="double" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public double GetDoubleCoerced() =>
@@ -262,7 +263,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="Guid"/>,
+        /// Returns the element's value as a <see cref="Guid" />,
         /// or null if the element is not a string or the value cannot be parsed.
         /// </summary>
         public Guid? GetGuidOrNull() =>
@@ -273,7 +274,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Returns the element's value as a <see cref="short"/>,
+        /// Returns the element's value as a <see cref="short" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public short? GetInt16OrNull() =>
@@ -284,7 +285,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="short"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="short" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public short? GetInt16CoercedOrNull() =>
@@ -298,8 +299,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="short"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="short" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public short GetInt16Coerced() =>
@@ -309,7 +310,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as an <see cref="int"/>,
+        /// Returns the element's value as an <see cref="int" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public int? GetInt32OrNull() =>
@@ -320,7 +321,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as an <see cref="int"/>, accepting both a native number
+        /// Reads the element's value as an <see cref="int" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public int? GetInt32CoercedOrNull() =>
@@ -334,8 +335,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as an <see cref="int"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as an <see cref="int" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public int GetInt32Coerced() =>
@@ -345,7 +346,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="long"/>,
+        /// Returns the element's value as a <see cref="long" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public long? GetInt64OrNull() =>
@@ -356,7 +357,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="long"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="long" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public long? GetInt64CoercedOrNull() =>
@@ -370,8 +371,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="long"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="long" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public long GetInt64Coerced() =>
@@ -381,7 +382,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as an <see cref="sbyte"/>,
+        /// Returns the element's value as an <see cref="sbyte" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public sbyte? GetSByteOrNull() =>
@@ -392,7 +393,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as an <see cref="sbyte"/>, accepting both a native number
+        /// Reads the element's value as an <see cref="sbyte" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public sbyte? GetSByteCoercedOrNull() =>
@@ -406,8 +407,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as an <see cref="sbyte"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as an <see cref="sbyte" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public sbyte GetSByteCoerced() =>
@@ -417,7 +418,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="float"/>,
+        /// Returns the element's value as a <see cref="float" />,
         /// or null if the element is not a number.
         /// </summary>
         public float? GetSingleOrNull() =>
@@ -428,7 +429,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="float"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="float" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public float? GetSingleCoercedOrNull() =>
@@ -442,8 +443,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="float"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="float" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public float GetSingleCoerced() =>
@@ -453,7 +454,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="ushort"/>,
+        /// Returns the element's value as a <see cref="ushort" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public ushort? GetUInt16OrNull() =>
@@ -464,7 +465,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="ushort"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="ushort" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public ushort? GetUInt16CoercedOrNull() =>
@@ -478,8 +479,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="ushort"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="ushort" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public ushort GetUInt16Coerced() =>
@@ -489,7 +490,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="uint"/>,
+        /// Returns the element's value as a <see cref="uint" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public uint? GetUInt32OrNull() =>
@@ -500,7 +501,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="uint"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="uint" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public uint? GetUInt32CoercedOrNull() =>
@@ -514,8 +515,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="uint"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="uint" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public uint GetUInt32Coerced() =>
@@ -525,7 +526,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="ulong"/>,
+        /// Returns the element's value as a <see cref="ulong" />,
         /// or null if the element is not a number or the value is out of range.
         /// </summary>
         public ulong? GetUInt64OrNull() =>
@@ -536,7 +537,7 @@ public static class JsonElementExtensions
                 : null;
 
         /// <summary>
-        /// Reads the element's value as a <see cref="ulong"/>, accepting both a native number
+        /// Reads the element's value as a <see cref="ulong" />, accepting both a native number
         /// and a string-encoded representation. Returns null if neither form is recognized.
         /// </summary>
         public ulong? GetUInt64CoercedOrNull() =>
@@ -550,8 +551,8 @@ public static class JsonElementExtensions
             };
 
         /// <summary>
-        /// Reads the element's value as a <see cref="ulong"/>, accepting both a native number
-        /// and a string-encoded representation. Throws <see cref="InvalidOperationException"/> if
+        /// Reads the element's value as a <see cref="ulong" />, accepting both a native number
+        /// and a string-encoded representation. Throws <see cref="InvalidOperationException" /> if
         /// neither form is recognized.
         /// </summary>
         public ulong GetUInt64Coerced() =>
@@ -561,7 +562,7 @@ public static class JsonElementExtensions
             );
 
         /// <summary>
-        /// Returns the element's value as a <see cref="string"/>,
+        /// Returns the element's value as a <see cref="string" />,
         /// or null if the element is not a string.
         /// </summary>
         public string? GetStringOrNull() =>
@@ -579,7 +580,7 @@ public static class JsonElementExtensions
 
         /// <summary>
         /// Returns the element's string value, requiring it to be non-empty.
-        /// Throws <see cref="InvalidOperationException"/> if the element is not a string or its value is empty.
+        /// Throws <see cref="InvalidOperationException" /> if the element is not a string or its value is empty.
         /// </summary>
         public string GetNonEmptyString() =>
             element.GetNonEmptyStringOrNull()
@@ -589,7 +590,7 @@ public static class JsonElementExtensions
 
         /// <summary>
         /// Returns the element's string value.
-        /// Throws <see cref="InvalidOperationException"/> if the element is not a string.
+        /// Throws <see cref="InvalidOperationException" /> if the element is not a string.
         /// </summary>
         public string GetNonNullString() =>
             element.GetStringOrNull()
@@ -609,7 +610,7 @@ public static class JsonElementExtensions
 
         /// <summary>
         /// Returns the element's string value, requiring it to be non-whitespace.
-        /// Throws <see cref="InvalidOperationException"/> if the element is not a string or its value is blank.
+        /// Throws <see cref="InvalidOperationException" /> if the element is not a string or its value is blank.
         /// </summary>
         public string GetNonWhiteSpaceString() =>
             element.GetNonWhiteSpaceStringOrNull()

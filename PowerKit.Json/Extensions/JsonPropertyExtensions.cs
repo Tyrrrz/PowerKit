@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace PowerKit.Extensions;
+namespace PowerKit.Json.Extensions;
 
 /// <summary>
 /// Extensions for <see cref="JsonProperty" />.
@@ -10,7 +10,7 @@ public static class JsonPropertyExtensions
     extension(JsonProperty property)
     {
         /// <summary>
-        /// Deconstructs the property into its <paramref name="name"/> and <paramref name="value"/> components.
+        /// Deconstructs the property into its <paramref name="name" /> and <paramref name="value" /> components.
         /// </summary>
         public void Deconstruct(out string name, out JsonElement value)
         {
