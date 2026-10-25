@@ -4,10 +4,12 @@
     <IsPackable>true</IsPackable>
     <IsTrimmable
       Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))"
-      >true</IsTrimmable>
+      >true</IsTrimmable
+    >
     <IsAotCompatible
       Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))"
-      >true</IsAotCompatible>
+      >true</IsAotCompatible
+    >
   </PropertyGroup>
 
   <PropertyGroup>

@@ -4,15 +4,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="TestData/TestResource.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="CSharpier.MsBuild" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="GitHubActionsTestLogger" />
-    <PackageReference Include="Gress" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
