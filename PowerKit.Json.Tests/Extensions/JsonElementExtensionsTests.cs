@@ -332,7 +332,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetBooleanCoerced__Test()
+    public void GetBooleanCoerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -423,7 +423,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByteCoerced__Test()
+    public void GetByteCoerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -514,7 +514,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDecimalCoerced__Test()
+    public void GetDecimalCoerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -592,7 +592,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDoubleCoerced__Test()
+    public void GetDoubleCoerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -670,7 +670,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSingleCoerced__Test()
+    public void GetSingleCoerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -761,7 +761,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt16Coerced__Test()
+    public void GetInt16Coerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -852,7 +852,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt32Coerced__Test()
+    public void GetInt32Coerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -943,7 +943,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt64Coerced__Test()
+    public void GetInt64Coerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1034,7 +1034,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSByteCoerced__Test()
+    public void GetSByteCoerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1125,7 +1125,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt16Coerced__Test()
+    public void GetUInt16Coerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1216,7 +1216,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt32Coerced__Test()
+    public void GetUInt32Coerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1307,7 +1307,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt64Coerced__Test()
+    public void GetUInt64Coerced_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
