@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.Versioning;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.Win32;
 using PowerKit.Extensions;
 using Xunit;

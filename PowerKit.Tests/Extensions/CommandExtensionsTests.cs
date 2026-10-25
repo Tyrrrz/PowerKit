@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Input;
-using FluentAssertions;
+using AwesomeAssertions;
 using PowerKit.Extensions;
 using Xunit;
 
