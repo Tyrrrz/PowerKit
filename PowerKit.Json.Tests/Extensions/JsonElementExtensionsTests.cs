@@ -13,12 +13,14 @@ namespace PowerKit.Json.Tests.Extensions;
 public class JsonElementExtensionsTests
 {
     [Fact]
-    public void GetPropertyOrNull_Positive_Test()
+    public void GetPropertyOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse(
             """
-            {"foo":13}
+            {
+              "foo": 13
+            }
             """
         );
 
@@ -31,12 +33,14 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetPropertyOrNull_Negative_Undefined_Test()
+    public void GetPropertyOrNull_Undefined_Test()
     {
         // Arrange
         var json = JsonElement.Parse(
             """
-            {"foo":13}
+            {
+              "foo": 13
+            }
             """
         );
 
@@ -48,12 +52,14 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetPropertyOrNull_Negative_Null_Test()
+    public void GetPropertyOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse(
             """
-            {"foo":null}
+            {
+              "foo": null
+            }
             """
         );
 
@@ -65,10 +71,18 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetPropertyOrNull_Negative_NotObject_Test()
+    public void GetPropertyOrNull_NotObject_Test()
     {
         // Arrange
-        var json = JsonElement.Parse("[1,2,3]");
+        var json = JsonElement.Parse(
+            """
+            [
+              1,
+              2,
+              3
+            ]
+            """
+        );
 
         // Act
         var child = json.GetPropertyOrNull("foo");
@@ -78,10 +92,18 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByIndexOrNull_Positive_Test()
+    public void GetByIndexOrNull_Test()
     {
         // Arrange
-        var json = JsonElement.Parse("[1,2,3]");
+        var json = JsonElement.Parse(
+            """
+            [
+              1,
+              2,
+              3
+            ]
+            """
+        );
 
         // Act
         var child = json.GetByIndexOrNull(1);
@@ -92,10 +114,18 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByIndexOrNull_Negative_OutOfBounds_Test()
+    public void GetByIndexOrNull_OutOfBounds_Test()
     {
         // Arrange
-        var json = JsonElement.Parse("[1,2,3]");
+        var json = JsonElement.Parse(
+            """
+            [
+              1,
+              2,
+              3
+            ]
+            """
+        );
 
         // Act
         var child = json.GetByIndexOrNull(5);
@@ -105,25 +135,16 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByIndexOrNull_Negative_Null_Test()
-    {
-        // Arrange
-        var json = JsonElement.Parse("[1,null,3]");
-
-        // Act
-        var child = json.GetByIndexOrNull(1);
-
-        // Assert
-        child.Should().BeNull();
-    }
-
-    [Fact]
-    public void GetByIndexOrNull_Negative_NotArray_Test()
+    public void GetByIndexOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse(
             """
-            {"foo":null}
+            [
+              1,
+              null,
+              3
+            ]
             """
         );
 
@@ -135,10 +156,37 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void EnumerateArrayOrEmpty_Positive_Test()
+    public void GetByIndexOrNull_NotArray_Test()
     {
         // Arrange
-        var json = JsonElement.Parse("[1,2,3]");
+        var json = JsonElement.Parse(
+            """
+            {
+              "foo": null
+            }
+            """
+        );
+
+        // Act
+        var child = json.GetByIndexOrNull(1);
+
+        // Assert
+        child.Should().BeNull();
+    }
+
+    [Fact]
+    public void EnumerateArrayOrEmpty_Test()
+    {
+        // Arrange
+        var json = JsonElement.Parse(
+            """
+            [
+              1,
+              2,
+              3
+            ]
+            """
+        );
 
         // Act
         var count = json.EnumerateArrayOrEmpty().Count();
@@ -148,7 +196,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void EnumerateArrayOrEmpty_Negative_NotArray_Test()
+    public void EnumerateArrayOrEmpty__NotArray_Test()
     {
         // Arrange
         var json = JsonElement.Parse(
@@ -165,12 +213,15 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void EnumerateObjectOrEmpty_Positive_Test()
+    public void EnumerateObjectOrEmpty_Test()
     {
         // Arrange
         var json = JsonElement.Parse(
             """
-            {"foo":1,"bar":true}
+            {
+              "foo": 1,
+              "bar": true
+            }
             """
         );
 
@@ -182,10 +233,18 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void EnumerateObjectOrEmpty_Negative_NotObject_Test()
+    public void EnumerateObjectOrEmpty__NotObject_Test()
     {
         // Arrange
-        var json = JsonElement.Parse("[1,2,3]");
+        var json = JsonElement.Parse(
+            """
+            [
+              1,
+              2,
+              3
+            ]
+            """
+        );
 
         // Act
         var count = json.EnumerateObjectOrEmpty().Count();
@@ -221,7 +280,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetBooleanOrNull_Negative_Null_Test()
+    public void GetBooleanOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -234,7 +293,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetBooleanOrNull_Negative_NotBoolean_Test()
+    public void GetBooleanOrNull_NotBoolean_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -273,7 +332,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetBooleanCoerced_Negative_Test()
+    public void GetBooleanCoerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -286,7 +345,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByteOrNull_Positive_Test()
+    public void GetByteOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -299,7 +358,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByteOrNull_Negative_Null_Test()
+    public void GetByteOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -312,7 +371,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByteOrNull_Negative_NotNumber_Test()
+    public void GetByteOrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -325,7 +384,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByteOrNull_Negative_NotConvertible_Test()
+    public void GetByteOrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("3.14");
@@ -364,7 +423,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetByteCoerced_Negative_Test()
+    public void GetByteCoerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -377,7 +436,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDecimalOrNull_Positive_Test()
+    public void GetDecimalOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -390,7 +449,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDecimalOrNull_Negative_Null_Test()
+    public void GetDecimalOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -403,7 +462,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDecimalOrNull_Negative_NotNumber_Test()
+    public void GetDecimalOrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -416,7 +475,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDecimalOrNull_Negative_NotConvertible_Test()
+    public void GetDecimalOrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("99999999999999999999999999999999999");
@@ -455,7 +514,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDecimalCoerced_Negative_Test()
+    public void GetDecimalCoerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -468,7 +527,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDoubleOrNull_Positive_Test()
+    public void GetDoubleOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13.11");
@@ -481,7 +540,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDoubleOrNull_Negative_Null_Test()
+    public void GetDoubleOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -494,7 +553,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDoubleOrNull_Negative_NotNumber_Test()
+    public void GetDoubleOrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -533,7 +592,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDoubleCoerced_Negative_Test()
+    public void GetDoubleCoerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -546,7 +605,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSingleOrNull_Positive_Test()
+    public void GetSingleOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13.11");
@@ -559,7 +618,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSingleOrNull_Negative_Null_Test()
+    public void GetSingleOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -572,7 +631,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSingleOrNull_Negative_NotNumber_Test()
+    public void GetSingleOrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -611,7 +670,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSingleCoerced_Negative_Test()
+    public void GetSingleCoerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -624,7 +683,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt16OrNull_Positive_Test()
+    public void GetInt16OrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -637,7 +696,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt16OrNull_Negative_Null_Test()
+    public void GetInt16OrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -650,7 +709,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt16OrNull_Negative_NotNumber_Test()
+    public void GetInt16OrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -663,7 +722,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt16OrNull_Negative_NotConvertible_Test()
+    public void GetInt16OrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("3.14");
@@ -702,7 +761,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt16Coerced_Negative_Test()
+    public void GetInt16Coerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -715,7 +774,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt32OrNull_Positive_Test()
+    public void GetInt32OrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -728,7 +787,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt32OrNull_Negative_Null_Test()
+    public void GetInt32OrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -741,7 +800,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt32OrNull_Negative_NotNumber_Test()
+    public void GetInt32OrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -754,7 +813,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt32OrNull_Negative_NotConvertible_Test()
+    public void GetInt32OrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("3.14");
@@ -793,7 +852,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt32Coerced_Negative_Test()
+    public void GetInt32Coerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -806,7 +865,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt64OrNull_Positive_Test()
+    public void GetInt64OrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -819,7 +878,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt64OrNull_Negative_Null_Test()
+    public void GetInt64OrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -832,7 +891,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt64OrNull_Negative_NotNumber_Test()
+    public void GetInt64OrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -845,7 +904,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt64OrNull_Negative_NotConvertible_Test()
+    public void GetInt64OrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("3.14");
@@ -884,7 +943,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetInt64Coerced_Negative_Test()
+    public void GetInt64Coerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -897,7 +956,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSByteOrNull_Positive_Test()
+    public void GetSByteOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -910,7 +969,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSByteOrNull_Negative_Null_Test()
+    public void GetSByteOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -923,7 +982,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSByteOrNull_Negative_NotNumber_Test()
+    public void GetSByteOrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -936,7 +995,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSByteOrNull_Negative_NotConvertible_Test()
+    public void GetSByteOrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("3.14");
@@ -975,7 +1034,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetSByteCoerced_Negative_Test()
+    public void GetSByteCoerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -988,7 +1047,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt16OrNull_Positive_Test()
+    public void GetUInt16OrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -1001,7 +1060,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt16OrNull_Negative_Null_Test()
+    public void GetUInt16OrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1014,7 +1073,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt16OrNull_Negative_NotNumber_Test()
+    public void GetUInt16OrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1027,7 +1086,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt16OrNull_Negative_NotConvertible_Test()
+    public void GetUInt16OrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("3.14");
@@ -1066,7 +1125,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt16Coerced_Negative_Test()
+    public void GetUInt16Coerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1079,7 +1138,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt32OrNull_Positive_Test()
+    public void GetUInt32OrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -1092,7 +1151,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt32OrNull_Negative_Null_Test()
+    public void GetUInt32OrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1105,7 +1164,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt32OrNull_Negative_NotNumber_Test()
+    public void GetUInt32OrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1118,7 +1177,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt32OrNull_Negative_NotConvertible_Test()
+    public void GetUInt32OrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("3.14");
@@ -1157,7 +1216,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt32Coerced_Negative_Test()
+    public void GetUInt32Coerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1170,7 +1229,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt64OrNull_Positive_Test()
+    public void GetUInt64OrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("13");
@@ -1183,7 +1242,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt64OrNull_Negative_Null_Test()
+    public void GetUInt64OrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1196,7 +1255,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt64OrNull_Negative_NotNumber_Test()
+    public void GetUInt64OrNull_NotNumber_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1209,7 +1268,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt64OrNull_Negative_NotConvertible_Test()
+    public void GetUInt64OrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("3.14");
@@ -1248,7 +1307,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetUInt64Coerced_Negative_Test()
+    public void GetUInt64Coerced__Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1261,7 +1320,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetStringOrNull_Positive_Test()
+    public void GetStringOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"foo\"");
@@ -1274,7 +1333,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetStringOrNull_Negative_Null_Test()
+    public void GetStringOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1287,7 +1346,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetStringOrNull_Negative_NotString_Test()
+    public void GetStringOrNull_NotString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1300,7 +1359,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonNullString_Positive_Test()
+    public void GetNonNullString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"foo\"");
@@ -1313,7 +1372,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonNullString_Negative_Null_Test()
+    public void GetNonNullString__Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1326,7 +1385,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonNullString_Negative_NotString_Test()
+    public void GetNonNullString__NotString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1339,7 +1398,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonEmptyString_Positive_Test()
+    public void GetNonEmptyString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"foo\"");
@@ -1352,7 +1411,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonEmptyString_Negative_Null_Test()
+    public void GetNonEmptyString__Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1365,7 +1424,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonEmptyString_Negative_NotString_Test()
+    public void GetNonEmptyString__NotString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1378,7 +1437,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonEmptyString_Negative_EmptyString_Test()
+    public void GetNonEmptyString__EmptyString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"\"");
@@ -1391,7 +1450,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonWhiteSpaceString_Positive_Test()
+    public void GetNonWhiteSpaceString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"foo\"");
@@ -1404,7 +1463,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonWhiteSpaceString_Negative_Null_Test()
+    public void GetNonWhiteSpaceString__Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1417,7 +1476,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonWhiteSpaceString_Negative_NotString_Test()
+    public void GetNonWhiteSpaceString__NotString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1430,7 +1489,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonWhiteSpaceString_Negative_EmptyString_Test()
+    public void GetNonWhiteSpaceString__EmptyString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"\"");
@@ -1443,7 +1502,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetNonWhiteSpaceString_Negative_WhiteSpaceString_Test()
+    public void GetNonWhiteSpaceString__WhiteSpaceString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"  \"");
@@ -1456,7 +1515,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetGuidOrNull_Positive_Test()
+    public void GetGuidOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"b2567a71-6966-49b1-8976-ad3f4e397b05\"");
@@ -1469,7 +1528,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetGuidOrNull_Negative_Null_Test()
+    public void GetGuidOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1482,7 +1541,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetGuidOrNull_Negative_NotString_Test()
+    public void GetGuidOrNull_NotString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1495,7 +1554,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetGuidOrNull_Negative_NotConvertible_Test()
+    public void GetGuidOrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"foo\"");
@@ -1508,7 +1567,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDateTimeOrNull_Positive_Test()
+    public void GetDateTimeOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"2014-01-01T23:28:56.782Z\"");
@@ -1529,7 +1588,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDateTimeOrNull_Negative_Null_Test()
+    public void GetDateTimeOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1542,7 +1601,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDateTimeOrNull_Negative_NotString_Test()
+    public void GetDateTimeOrNull_NotString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1555,7 +1614,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDateTimeOrNull_Negative_NotConvertible_Test()
+    public void GetDateTimeOrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"foo\"");
@@ -1568,7 +1627,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDateTimeOffsetOrNull_Positive_Test()
+    public void GetDateTimeOffsetOrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"2014-01-01T23:28:56.782Z\"");
@@ -1583,7 +1642,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDateTimeOffsetOrNull_Negative_Null_Test()
+    public void GetDateTimeOffsetOrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1596,7 +1655,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDateTimeOffsetOrNull_Negative_NotString_Test()
+    public void GetDateTimeOffsetOrNull_NotString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1609,7 +1668,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetDateTimeOffsetOrNull_Negative_NotConvertible_Test()
+    public void GetDateTimeOffsetOrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"foo\"");
@@ -1622,7 +1681,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetBytesFromBase64OrNull_Positive_Test()
+    public void GetBytesFromBase64OrNull_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"Zm9v\"");
@@ -1635,7 +1694,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetBytesFromBase64OrNull_Negative_Null_Test()
+    public void GetBytesFromBase64OrNull_Null_Test()
     {
         // Arrange
         var json = JsonElement.Parse("null");
@@ -1648,7 +1707,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetBytesFromBase64OrNull_Negative_NotString_Test()
+    public void GetBytesFromBase64OrNull_NotString_Test()
     {
         // Arrange
         var json = JsonElement.Parse("true");
@@ -1661,7 +1720,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void GetBytesFromBase64OrNull_Negative_NotConvertible_Test()
+    public void GetBytesFromBase64OrNull_NotConvertible_Test()
     {
         // Arrange
         var json = JsonElement.Parse("\"foo\"");
@@ -1688,7 +1747,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void TryParse_Positive_Test()
+    public void TryParse_Test()
     {
         // Act
         var json = JsonElement.TryParse(
@@ -1703,7 +1762,7 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void TryParse_Negative_Test()
+    public void TryParse_Invalid_Test()
     {
         // Act
         var json = JsonElement.TryParse(

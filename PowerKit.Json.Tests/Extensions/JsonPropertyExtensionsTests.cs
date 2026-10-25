@@ -15,7 +15,9 @@ public class JsonPropertyExtensionsTests
         var jsonProperty = JsonElement
             .Parse(
                 """
-                {"name":"value"}
+                {
+                  "name": "value"
+                }
                 """
             )
             .EnumerateObject()
@@ -26,6 +28,6 @@ public class JsonPropertyExtensionsTests
 
         // Assert
         name.Should().Be("name");
-        value.Should().Be("value");
+        value.GetString().Should().Be("value");
     }
 }

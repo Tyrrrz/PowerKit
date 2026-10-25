@@ -27,7 +27,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":true}
+                {
+                  "foo": true
+                }
                 """
             );
     }
@@ -49,7 +51,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -71,7 +75,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -93,7 +99,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -115,7 +123,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -137,7 +147,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -159,7 +171,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -181,7 +195,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -203,7 +219,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -225,7 +243,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -247,7 +267,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -269,7 +291,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -291,7 +315,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -313,7 +339,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -335,7 +363,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -357,7 +387,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -379,7 +411,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -401,7 +435,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -423,7 +459,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -445,7 +483,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -467,7 +507,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -489,7 +531,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -511,7 +555,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":13}
+                {
+                  "foo": 13
+                }
                 """
             );
     }
@@ -533,7 +579,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -555,7 +603,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":"00000000-0000-0000-0000-000000000000"}
+                {
+                  "foo": "00000000-0000-0000-0000-000000000000"
+                }
                 """
             );
     }
@@ -577,7 +627,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -599,7 +651,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":"1970-01-01T00:00:00Z"}
+                {
+                  "foo": "1970-01-01T00:00:00Z"
+                }
                 """
             );
     }
@@ -621,7 +675,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -643,7 +699,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":"1970-01-01T00:00:00+00:00"}
+                {
+                  "foo": "1970-01-01T00:00:00+00:00"
+                }
                 """
             );
     }
@@ -665,7 +723,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -687,7 +747,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":null}
+                {
+                  "foo": null
+                }
                 """
             );
     }
@@ -709,7 +771,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":42}
+                {
+                  "foo": 42
+                }
                 """
             );
     }
@@ -731,7 +795,9 @@ public class Utf8JsonWriterExtensionsTests
             .Should()
             .Be(
                 """
-                {"foo":"bar"}
+                {
+                  "foo": "bar"
+                }
                 """
             );
     }
@@ -740,88 +806,103 @@ public class Utf8JsonWriterExtensionsTests
     public void Write_Dictionary_Test()
     {
         // Arrange
-        var dictionary = new Dictionary<string, object?>
-        {
-            ["null"] = null,
-            ["boolean"] = true,
-            ["byte"] = (byte)1,
-            ["decimal"] = (decimal)3.14,
-            ["double"] = 3.14,
-            ["short"] = (short)2,
-            ["int"] = -1111,
-            ["long"] = 1000000000000L,
-            ["sbyte"] = (sbyte)9,
-            ["float"] = 1.979f,
-            ["ushort"] = (ushort)91,
-            ["uint"] = (uint)999999999,
-            ["ulong"] = (ulong)888888888888888,
-            ["dateTime"] = new DateTime(2024, 1, 1),
-            ["dateTimeOffset"] = new DateTimeOffset(new DateTime(2024, 1, 1), TimeSpan.Zero),
-            ["guid"] = new Guid("00000000-0000-0000-0000-000000000000"),
-            ["string"] = "Hello world!",
-            ["encodedText"] = JsonEncodedText.Encode("Hello cruel world!"),
-            ["dictionary"] = new Dictionary<string, object?>
-            {
-                ["key"] = "value",
-                ["anotherKey"] = 123,
-                ["nested"] = new Dictionary<string, object?> { ["innerKey"] = "innerValue" },
-            },
-            ["array"] = new object[]
-            {
-                1,
-                "two",
-                3.0,
-                new Dictionary<string, object?>
-                {
-                    ["key"] = "value",
-                    ["innerArray"] = new object[] { 4, 5, 6 },
-                },
-            },
-        };
+        var context = new InMemoryJsonWriterContext();
 
         // Act
-        var json = JsonElement.FromDictionary(dictionary);
+        context.Writer.WriteStartObject();
+        context.Writer.Write(
+            "foo",
+            new Dictionary<string, object?>
+            {
+                ["null"] = null,
+                ["boolean"] = true,
+                ["byte"] = (byte)1,
+                ["decimal"] = (decimal)3.14,
+                ["double"] = 3.14,
+                ["short"] = (short)2,
+                ["int"] = -1111,
+                ["long"] = 1000000000000L,
+                ["sbyte"] = (sbyte)9,
+                ["float"] = 1.979f,
+                ["ushort"] = (ushort)91,
+                ["uint"] = (uint)999999999,
+                ["ulong"] = (ulong)888888888888888,
+                ["dateTime"] = new DateTime(2024, 1, 1),
+                ["dateTimeOffset"] = new DateTimeOffset(new DateTime(2024, 1, 1), TimeSpan.Zero),
+                ["guid"] = new Guid("00000000-0000-0000-0000-000000000000"),
+                ["string"] = "Hello world!",
+                ["encodedText"] = JsonEncodedText.Encode("Hello cruel world!"),
+                ["dictionary"] = new Dictionary<string, object?>
+                {
+                    ["key"] = "value",
+                    ["anotherKey"] = 123,
+                    ["nested"] = new Dictionary<string, object?> { ["innerKey"] = "innerValue" },
+                },
+                ["array"] = new object[]
+                {
+                    1,
+                    "two",
+                    3.1,
+                    new Dictionary<string, object?>
+                    {
+                        ["key"] = "value",
+                        ["innerArray"] = new object[] { 4, 5, 6 },
+                    },
+                },
+            }
+        );
+        context.Writer.WriteEndObject();
 
         // Assert
-        json.GetProperty("null").ValueKind.Should().Be(JsonValueKind.Null);
-        json.GetProperty("boolean").GetBoolean().Should().BeTrue();
-        json.GetProperty("byte").GetByte().Should().Be(1);
-        json.GetProperty("decimal").GetDecimal().Should().Be(3.14m);
-        json.GetProperty("double").GetDouble().Should().Be(3.14);
-        json.GetProperty("short").GetInt16().Should().Be(2);
-        json.GetProperty("int").GetInt32().Should().Be(-1111);
-        json.GetProperty("long").GetInt64().Should().Be(1000000000000L);
-        json.GetProperty("sbyte").GetSByte().Should().Be(9);
-        json.GetProperty("float").GetSingle().Should().Be(1.979f);
-        json.GetProperty("ushort").GetUInt16().Should().Be(91);
-        json.GetProperty("uint").GetUInt32().Should().Be(999999999);
-        json.GetProperty("ulong").GetUInt64().Should().Be(888888888888888);
-        json.GetProperty("dateTime").GetDateTime().Should().Be(new DateTime(2024, 1, 1));
-        json.GetProperty("dateTimeOffset")
-            .GetDateTimeOffset()
-            .Should()
-            .Be(new DateTimeOffset(new DateTime(2024, 1, 1), TimeSpan.Zero));
-        json.GetProperty("guid")
-            .GetGuid()
-            .Should()
-            .Be(new Guid("00000000-0000-0000-0000-000000000000"));
-        json.GetProperty("string").GetString().Should().Be("Hello world!");
-        json.GetProperty("encodedText").GetString().Should().Be("Hello cruel world!");
-        json.GetProperty("dictionary").GetProperty("key").GetString().Should().Be("value");
-        json.GetProperty("dictionary").GetProperty("anotherKey").GetInt32().Should().Be(123);
-        json.GetProperty("dictionary")
-            .GetProperty("nested")
-            .GetProperty("innerKey")
+        context
             .GetString()
             .Should()
-            .Be("innerValue");
-        json.GetProperty("array")[0].GetInt32().Should().Be(1);
-        json.GetProperty("array")[1].GetString().Should().Be("two");
-        json.GetProperty("array")[2].GetDouble().Should().Be(3.0);
-        json.GetProperty("array")[3].GetProperty("key").GetString().Should().Be("value");
-        json.GetProperty("array")[3].GetProperty("innerArray")[0].GetInt32().Should().Be(4);
-        json.GetProperty("array")[3].GetProperty("innerArray")[1].GetInt32().Should().Be(5);
-        json.GetProperty("array")[3].GetProperty("innerArray")[2].GetInt32().Should().Be(6);
+            .Be(
+                """
+                {
+                  "foo": {
+                    "null": null,
+                    "boolean": true,
+                    "byte": 1,
+                    "decimal": 3.14,
+                    "double": 3.14,
+                    "short": 2,
+                    "int": -1111,
+                    "long": 1000000000000,
+                    "sbyte": 9,
+                    "float": 1.979,
+                    "ushort": 91,
+                    "uint": 999999999,
+                    "ulong": 888888888888888,
+                    "dateTime": "2024-01-01T00:00:00",
+                    "dateTimeOffset": "2024-01-01T00:00:00+00:00",
+                    "guid": "00000000-0000-0000-0000-000000000000",
+                    "string": "Hello world!",
+                    "encodedText": "Hello cruel world!",
+                    "dictionary": {
+                      "key": "value",
+                      "anotherKey": 123,
+                      "nested": {
+                        "innerKey": "innerValue"
+                      }
+                    },
+                    "array": [
+                      1,
+                      "two",
+                      3.1,
+                      {
+                        "key": "value",
+                        "innerArray": [
+                          4,
+                          5,
+                          6
+                        ]
+                      }
+                    ]
+                  }
+                }
+                """
+            );
     }
 
     [Fact]
@@ -837,6 +918,6 @@ public class Utf8JsonWriterExtensionsTests
             );
 
         // Assert
-        act.Should().Throw<NotSupportedException>();
+        act.Should().Throw<ArgumentException>();
     }
 }
