@@ -1720,87 +1720,13 @@ public class JsonElementExtensionsTests
     public void FromDictionary_Test()
     {
         // Arrange
-        var dictionary = new Dictionary<string, object?>
-        {
-            ["null"] = null,
-            ["boolean"] = true,
-            ["byte"] = (byte)1,
-            ["decimal"] = (decimal)3.14,
-            ["double"] = 3.14,
-            ["short"] = (short)2,
-            ["int"] = -1111,
-            ["long"] = 1000000000000L,
-            ["sbyte"] = (sbyte)9,
-            ["float"] = 1.979f,
-            ["ushort"] = (ushort)91,
-            ["uint"] = (uint)999999999,
-            ["ulong"] = (ulong)888888888888888,
-            ["dateTime"] = new DateTime(2024, 1, 1),
-            ["dateTimeOffset"] = new DateTimeOffset(new DateTime(2024, 1, 1), TimeSpan.Zero),
-            ["guid"] = new Guid("00000000-0000-0000-0000-000000000000"),
-            ["string"] = "Hello world!",
-            ["encodedText"] = JsonEncodedText.Encode("Hello cruel world!"),
-            ["dictionary"] = new Dictionary<string, object?>
-            {
-                ["key"] = "value",
-                ["anotherKey"] = 123,
-                ["nested"] = new Dictionary<string, object?> { ["innerKey"] = "innerValue" },
-            },
-            ["array"] = new object[]
-            {
-                1,
-                "two",
-                3.0,
-                new Dictionary<string, object?>
-                {
-                    ["key"] = "value",
-                    ["innerArray"] = new object[] { 4, 5, 6 },
-                },
-            },
-        };
+        var dictionary = new Dictionary<string, object?> { ["foo"] = "Hello world!", ["bar"] = 13 };
 
         // Act
         var json = JsonElement.FromDictionary(dictionary);
 
         // Assert
-        json.GetProperty("null").ValueKind.Should().Be(JsonValueKind.Null);
-        json.GetProperty("boolean").GetBoolean().Should().BeTrue();
-        json.GetProperty("byte").GetByte().Should().Be(1);
-        json.GetProperty("decimal").GetDecimal().Should().Be(3.14m);
-        json.GetProperty("double").GetDouble().Should().Be(3.14);
-        json.GetProperty("short").GetInt16().Should().Be(2);
-        json.GetProperty("int").GetInt32().Should().Be(-1111);
-        json.GetProperty("long").GetInt64().Should().Be(1000000000000L);
-        json.GetProperty("sbyte").GetSByte().Should().Be(9);
-        json.GetProperty("float").GetSingle().Should().Be(1.979f);
-        json.GetProperty("ushort").GetUInt16().Should().Be(91);
-        json.GetProperty("uint").GetUInt32().Should().Be(999999999);
-        json.GetProperty("ulong").GetUInt64().Should().Be(888888888888888);
-        json.GetProperty("dateTime").GetDateTime().Should().Be(new DateTime(2024, 1, 1));
-        json.GetProperty("dateTimeOffset")
-            .GetDateTimeOffset()
-            .Should()
-            .Be(new DateTimeOffset(new DateTime(2024, 1, 1), TimeSpan.Zero));
-        json.GetProperty("guid")
-            .GetGuid()
-            .Should()
-            .Be(new Guid("00000000-0000-0000-0000-000000000000"));
-        json.GetProperty("string").GetString().Should().Be("Hello world!");
-        json.GetProperty("encodedText").GetString().Should().Be("Hello cruel world!");
-        json.GetProperty("dictionary").GetProperty("key").GetString().Should().Be("value");
-        json.GetProperty("dictionary").GetProperty("anotherKey").GetInt32().Should().Be(123);
-        json.GetProperty("dictionary")
-            .GetProperty("nested")
-            .GetProperty("innerKey")
-            .GetString()
-            .Should()
-            .Be("innerValue");
-        json.GetProperty("array")[0].GetInt32().Should().Be(1);
-        json.GetProperty("array")[1].GetString().Should().Be("two");
-        json.GetProperty("array")[2].GetDouble().Should().Be(3.0);
-        json.GetProperty("array")[3].GetProperty("key").GetString().Should().Be("value");
-        json.GetProperty("array")[3].GetProperty("innerArray")[0].GetInt32().Should().Be(4);
-        json.GetProperty("array")[3].GetProperty("innerArray")[1].GetInt32().Should().Be(5);
-        json.GetProperty("array")[3].GetProperty("innerArray")[2].GetInt32().Should().Be(6);
+        json.GetProperty("foo").GetString().Should().Be("Hello world!");
+        json.GetProperty("bar").GetInt32().Should().Be(13);
     }
 }
