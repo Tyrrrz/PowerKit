@@ -139,6 +139,12 @@ var http = new HttpClient();
 
 // Send a GET request and retrieve JSON directly
 var json = await http.GetJsonAsync("..."); // returns JsonElement
+```
+
+```csharp
+using PowerKit.Json.Extensions;
+
+var http = new HttpClient();
 
 // Read JSON from content
 using var request = new HttpRequestMessage(HttpMethod.Post, "...");

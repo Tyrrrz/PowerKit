@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace PowerKit.Json.Extensions;
@@ -263,6 +265,99 @@ public static class Utf8JsonWriterExtensions
         {
             writer.WritePropertyName(propertyName);
             writer.WriteStringValue(value);
+        }
+
+        /// <summary>
+        /// Writes <paramref name="value" /> as a JSON boolean, or a JSON null if <paramref name="value" /> is null.
+        /// </summary>
+        public void WriteValue(object? value)
+        {
+            switch (value)
+            {
+                case null:
+                    writer.WriteNullValue();
+                    break;
+                case bool actualValue:
+                    writer.WriteBooleanValue(actualValue);
+                    break;
+                case byte actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case decimal actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case double actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case short actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case int actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case long actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case sbyte actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case float actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case ushort actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case uint actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case ulong actualValue:
+                    writer.WriteNumberValue(actualValue);
+                    break;
+                case DateTime actualValue:
+                    writer.WriteStringValue(actualValue);
+                    break;
+                case DateTimeOffset actualValue:
+                    writer.WriteStringValue(actualValue);
+                    break;
+                case Guid actualValue:
+                    writer.WriteStringValue(actualValue);
+                    break;
+                case string actualValue:
+                    writer.WriteStringValue(actualValue);
+                    break;
+                case JsonEncodedText actualValue:
+                    writer.WriteStringValue(actualValue);
+                    break;
+                case IEnumerable<KeyValuePair<string, object?>> actualValue:
+                    writer.WriteStartObject();
+                    foreach (var item in actualValue)
+                    {
+                        writer.WritePropertyName(item.Key);
+                        WriteValue(writer, item.Value);
+                    }
+                    writer.WriteEndObject();
+                    break;
+                case IEnumerable actualValue:
+                    writer.WriteStartArray();
+                    foreach (var item in actualValue)
+                    {
+                        WriteValue(writer, item);
+                    }
+                    writer.WriteEndArray();
+                    break;
+                default:
+                    throw new ArgumentException(
+                        $"Unsupported value type: '{value?.GetType().FullName}'.",
+                        nameof(value)
+                    );
+            }
+        }
+
+        /// <inheritdoc cref="WriteValue(Utf8JsonWriter, object?)" />.
+        public void Write(string propertyName, object? value)
+        {
+            writer.WritePropertyName(propertyName);
+            writer.WriteValue(value);
         }
     }
 }
