@@ -79,7 +79,7 @@ public class DisposableTests
             .Throw<AggregateException>()
             .And.InnerExceptions.Should()
             .ContainSingle()
-            .And.BeOfType<InvalidOperationException>();
+            .And.AllBeOfType<InvalidOperationException>();
 
         disposed.Should().Equal(0, 1, 2);
     }
