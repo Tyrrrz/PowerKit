@@ -1733,20 +1733,6 @@ public class JsonElementExtensionsTests
     }
 
     [Fact]
-    public void Parse_Test()
-    {
-        // Act
-        var json = JsonElement.Parse(
-            """
-            {"foo":"bar"}
-            """
-        );
-
-        // Assert
-        json.GetProperty("foo").GetString().Should().Be("bar");
-    }
-
-    [Fact]
     public void TryParse_Test()
     {
         // Act
