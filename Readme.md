@@ -1,13 +1,11 @@
 # PowerKit
 
 [![Status](https://img.shields.io/badge/status-active-47c219.svg)](https://github.com/Tyrrrz/.github/blob/prime/docs/project-status.md)
-[![Made in Ukraine](https://img.shields.io/badge/made_in-ukraine-ffd700.svg?labelColor=0057b7)](https://tyrrrz.me/ukraine)
 [![Build](https://img.shields.io/github/actions/workflow/status/Tyrrrz/PowerKit/main.yml?branch=prime)](https://github.com/Tyrrrz/PowerKit/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/Tyrrrz/PowerKit/prime)](https://codecov.io/gh/Tyrrrz/PowerKit)
 [![Version](https://img.shields.io/nuget/v/PowerKit.svg)](https://nuget.org/packages/PowerKit)
 [![Downloads](https://img.shields.io/nuget/dt/PowerKit.svg)](https://nuget.org/packages/PowerKit)
 [![Discord](https://img.shields.io/discord/869237470565392384?label=discord)](https://discord.gg/2SUWKFnHSm)
-[![Fuck Russia](https://img.shields.io/badge/fuck-russia-e4181c.svg?labelColor=000000)](https://twitter.com/tyrrrz/status/1495972128977571848)
 
 <table>
     <tr>
@@ -19,22 +17,14 @@
     <img src="favicon.png" alt="Icon" />
 </p>
 
+> **Made in 🇺🇦 Ukraine — [despite Russia's best efforts](https://tyrrrz.me/ukraine)**.
+> Using this project or its source code comes with the implicit agreement that you condemn Russia's war of aggression against Ukraine, recognize Russia as a terrorist state, and support Ukraine's territorial integrity.
+
 **PowerKit** (formerly [**Tyrrrz.Extensions**](https://nuget.org/packages/Tyrrrz.Extensions)) is a collection of general-purpose utilities and extensions for rapid development with .NET.
 
-**Related packages**:
+**See also**:
 
-- 📦 [PowerKit.Json](PowerKit.Json) — provides extensions for `System.Text.Json` types
-
-## Terms of use<sup>[[?]](https://github.com/Tyrrrz/.github/blob/prime/docs/why-so-political.md)</sup>
-
-By using this project or its source code, for any purpose and in any shape or form, you grant your **implicit agreement** to all the following statements:
-
-- You **condemn Russia and its military aggression against Ukraine**
-- You **recognize that Russia is an occupant that unlawfully invaded a sovereign state**
-- You **support Ukraine's territorial integrity, including its claims over temporarily occupied territories of Crimea and Donbas**
-- You **reject false narratives perpetuated by Russian state propaganda**
-
-To learn more about the war and how you can help, [click here](https://tyrrrz.me/ukraine). Glory to Ukraine! 🇺🇦
+- 📦 [PowerKit.Json](PowerKit.Json) — provides utilities and extensions for `System.Text.Json` types
 
 ## Install
 
